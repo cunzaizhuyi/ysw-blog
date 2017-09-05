@@ -390,9 +390,14 @@
 
       
         
-          
-            <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="WebAssembly工作原理"><a href="#WebAssembly工作原理" class="headerlink" title="WebAssembly工作原理"></a>WebAssembly工作原理</h3><h3 id="WebAssembly工具集"><a href="#WebAssembly工具集" class="headerlink" title="WebAssembly工具集"></a>WebAssembly工具集</h3><h3 id="WebAssembly模块库ammo介绍"><a href="#WebAssembly模块库ammo介绍" class="headerlink" title="WebAssembly模块库ammo介绍"></a>WebAssembly模块库ammo介绍</h3>
-          
+          <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="WebAssembly工作原理"><a href="#WebAssembly工作原理" class="headerlink" title="WebAssembly工作原理"></a>WebAssembly工作原理</h3><h3 id="WebAssembly工具集"><a href="#WebAssembly工具集" class="headerlink" title="WebAssembly工具集"></a>WebAssembly工具集</h3><h3 id="WebAssembly模块库ammo介绍"><a href="#WebAssembly模块库ammo介绍" class="headerlink" title="WebAssembly模块库ammo介绍"></a>WebAssembly模块库ammo介绍</h3>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/05/webassembly/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -531,8 +536,7 @@
 
       
         
-          
-            <h1 id="从事件链角度解析video-dev-hls-js库"><a href="#从事件链角度解析video-dev-hls-js库" class="headerlink" title="从事件链角度解析video-dev/hls.js库"></a>从事件链角度解析video-dev/hls.js库</h1><h2 id="src-hls-js文件"><a href="#src-hls-js文件" class="headerlink" title="src/hls.js文件"></a>src/hls.js文件</h2><p>1、new Hls()语句执行过程没有监听器执行；</p>
+          <h1 id="从事件链角度解析video-dev-hls-js库"><a href="#从事件链角度解析video-dev-hls-js库" class="headerlink" title="从事件链角度解析video-dev/hls.js库"></a>从事件链角度解析video-dev/hls.js库</h1><h2 id="src-hls-js文件"><a href="#src-hls-js文件" class="headerlink" title="src/hls.js文件"></a>src/hls.js文件</h2><p>1、new Hls()语句执行过程没有监听器执行；</p>
 <p>2、涉及三个入口事件触发，分别是manifest_loading、media_attaching和destroying；</p>
 <p>3、暴露的两个主要API：loadSource()用于加载.m3u8文件路径；attachMedia()挂载media元素。</p>
 <h2 id="xxx-controller-js和xxx-loader-js两类文件执行过程"><a href="#xxx-controller-js和xxx-loader-js两类文件执行过程" class="headerlink" title="xxx-controller.js和xxx-loader.js两类文件执行过程"></a>xxx-controller.js和xxx-loader.js两类文件执行过程</h2><h4 id="基本原理："><a href="#基本原理：" class="headerlink" title="基本原理："></a>基本原理：</h4><p>首先有一个<strong>入口事件</strong>，比如是hls源文件中触发的manifest_loading，因此执行该 controller和loader文件 中对应的事件处理函数（或称<strong>监听器</strong>，以on开头的函数），<br>该函数内部可能又有新的事件触发，执行该函数新的监听器。</p>
@@ -986,8 +990,13 @@
 </tbody>
 </table>
 <h4 id="timeline-controller-js文件（表3-9）"><a href="#timeline-controller-js文件（表3-9）" class="headerlink" title="timeline-controller.js文件（表3.9）"></a>timeline-controller.js文件（表3.9）</h4><p>见表3.5</p>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/03/hls/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
