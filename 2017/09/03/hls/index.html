@@ -103,7 +103,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="从事件链角度解析video-dev/hls.js库src/hls.js文件1、new Hls()语句执行过程没有监听器执行； 2、涉及三个入口事件触发，分别是manifest_loading、media_attaching和destroying； 3、暴露的两个主要API：loadSource()用于加载.m3u8文件路径；attachMedia()挂载media元素。 xxx-controlle">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-05T11:42:00.896Z">
+<meta property="og:updated_time" content="2017-09-05T11:43:49.290Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从事件链角度解析video-dev&#x2F;hls.js库">
 <meta name="twitter:description" content="从事件链角度解析video-dev/hls.js库src/hls.js文件1、new Hls()语句执行过程没有监听器执行； 2、涉及三个入口事件触发，分别是manifest_loading、media_attaching和destroying； 3、暴露的两个主要API：loadSource()用于加载.m3u8文件路径；attachMedia()挂载media元素。 xxx-controlle">
@@ -393,6 +393,7 @@
 <p>3、暴露的两个主要API：loadSource()用于加载.m3u8文件路径；attachMedia()挂载media元素。</p>
 <h2 id="xxx-controller-js和xxx-loader-js两类文件执行过程"><a href="#xxx-controller-js和xxx-loader-js两类文件执行过程" class="headerlink" title="xxx-controller.js和xxx-loader.js两类文件执行过程"></a>xxx-controller.js和xxx-loader.js两类文件执行过程</h2><h4 id="基本原理："><a href="#基本原理：" class="headerlink" title="基本原理："></a>基本原理：</h4><p>首先有一个<strong>入口事件</strong>，比如是hls源文件中触发的manifest_loading，因此执行该 controller和loader文件 中对应的事件处理函数（或称<strong>监听器</strong>，以on开头的函数），<br>该函数内部可能又有新的事件触发，执行该函数新的监听器。</p>
 <h4 id="文件分析："><a href="#文件分析：" class="headerlink" title="文件分析："></a>文件分析：</h4><p>每个文件通过构造函数注册事件监听器，监听器函数以onXXXX命名（这个由src/event-handler.js的处理逻辑完成），<br>监听器内部可能有新的事件触发，如有，通过hls.trigger()函数表示，该函数第一个参数是触发的事件类型，事件类型在src/event.js文件里面定义。<br>这个新触发的函数的监听器有可能就在该文件内部，也有可能在另外一个文件。<br><br><br>举个例子，src/hls.js-&gt;loadSource()函数内部触发Event.MANIFEST_LOADING事件，通过表1可知，playlist-loader.js的构造函数<br>内部注册了Event.MANIFEST_LOADING事件的监听器，所以会调用playlist-loader.js内部的onManifestLoading()函数，而onManifestLoading()函数通过调用load()继而调用loadsuccess()<br>触发了Event.MANIFEST_LOADED事件，通过熟悉源代码，我们知道，audio-track-controller.js的构造函数里注册了<br>Event.MANIFEST_LOADED事件的监听器onManifestLoaded(),因此该监听器执行，该监听器内部又触发了Event.AUDIO_TRACKS_UPDATED事件，<br>而通过audio-track-controller.js构造函数中注册的监听器列表我们知道，audio-track-controller.js文件没有注册Event.AUDIO_TRACKS_UPDATED事件的监听器，<br>通过在dist/hls.js中查找，发现Event.AUDIO_TRACKS_UPDATED事件的监听器定义在audio-stream-controller.js文件中。<br>不过因我们没有在audio-stream-controller.js中找到onAudioTracksUpdated()监听器，因此这条事件触发链到此中断。<br><br><br></p>
+<a id="more"></a>
 <h2 id="src-hls-js的两个入口事件"><a href="#src-hls-js的两个入口事件" class="headerlink" title="src/hls.js的两个入口事件"></a>src/hls.js的两个入口事件</h2><p>manifest_loading、media_attaching和destroying，前两个重要，起着将几乎全部事件（大约53个）串联起来的作用。<br>有五个文件注册了manifest_loading事件的监听器，4个文件注册了media_attaching事件的监听器。见下表。</p>
 <h4 id="manifest-loading事件（表1）"><a href="#manifest-loading事件（表1）" class="headerlink" title="manifest_loading事件（表1）"></a>manifest_loading事件（表1）</h4><table>
 <thead>
@@ -842,7 +843,6 @@
 </tbody>
 </table>
 <h4 id="timeline-controller-js文件（表3-9）"><a href="#timeline-controller-js文件（表3-9）" class="headerlink" title="timeline-controller.js文件（表3.9）"></a>timeline-controller.js文件（表3.9）</h4><p>见表3.5</p>
-<a id="more"></a>
 
       
     </div>
