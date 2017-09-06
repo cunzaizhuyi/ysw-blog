@@ -104,8 +104,8 @@
 <meta property="og:description" content="WebAssembly介绍1、WebAssembly工作原理几个概念S-表达式、类汇编语言、wast、 2、WebAssembly工具集WebAssembly API一览   一级API 二级API 描述     table set、get、grow    memory buffer、grow    instantiate">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png">
-<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png">
-<meta property="og:updated_time" content="2017-09-06T12:02:57.033Z">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png">
+<meta property="og:updated_time" content="2017-09-06T12:09:18.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webassembly">
 <meta name="twitter:description" content="WebAssembly介绍1、WebAssembly工作原理几个概念S-表达式、类汇编语言、wast、 2、WebAssembly工具集WebAssembly API一览   一级API 二级API 描述     table set、get、grow    memory buffer、grow    instantiate">
@@ -425,9 +425,9 @@
 <a id="more"></a>
 <h3 id="3、一个简单Demo"><a href="#3、一个简单Demo" class="headerlink" title="3、一个简单Demo"></a>3、一个简单Demo</h3><h3 id="4、基于WebAssembly模块库ammo-js的Demo"><a href="#4、基于WebAssembly模块库ammo-js的Demo" class="headerlink" title="4、基于WebAssembly模块库ammo.js的Demo"></a>4、基于WebAssembly模块库ammo.js的Demo</h3><h4 id="Demo介绍"><a href="#Demo介绍" class="headerlink" title="Demo介绍"></a>Demo介绍</h4><p>基于three.js构建了三维场景，场景中有一个图片纹理拼成的ground地面，和两个THREE.Mesh()方法创建的<br>球体，这两个球体在地面上一左一右有固定的位置。</p>
 <p>然后使用ammo构建了一个刚体动力学环境，这是一个有重力、考虑物体惯性等的物理环境，在这个环境中创建了<br>一个球体（界面中不可见），给该球体设置了一些刚体动力学的参数，如平移、旋转等，设置完这些参数再使用相反的<br>API获取这些参数，然后把这些参数赋给three.js创建的第二个球体（图1中右边那个），一秒后重新渲染threejs场景，该球体<br>则获得了一个平移的参数，移动到相应的（本例中是更靠右）的位置。</p>
-<div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png" alt=""><br><br>图1 使用ammo库前<br></div>
+<div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png"><br><br>图1 使用ammo库前<br></div>
 
-<p><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png" alt=""></div></p>
+<p><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png"></div></p>
 <p>图2 调用ammo相关代码后<br></p>
 <h4 id="Demo源代码地址"><a href="#Demo源代码地址" class="headerlink" title="Demo源代码地址"></a>Demo源代码地址</h4><p><a href="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/index.html" target="_blank" rel="external">https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/index.html</a></p>
 <p>如需测试使用，请注意替换掉以下两行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;../../builds/ammo.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script src=&quot;../js/three/three.min.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
