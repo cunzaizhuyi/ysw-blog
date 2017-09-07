@@ -390,8 +390,15 @@
 
       
         
-          <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="几个概念"><a href="#几个概念" class="headerlink" title="几个概念"></a>几个概念</h4><p>S-表达式、类汇编语言、wast、</p>
-<h3 id="2、WebAssembly工具集"><a href="#2、WebAssembly工具集" class="headerlink" title="2、WebAssembly工具集"></a>2、WebAssembly工具集</h3><h3 id="WebAssembly-API一览"><a href="#WebAssembly-API一览" class="headerlink" title="WebAssembly API一览"></a>WebAssembly API一览</h3><table>
+          <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="分点介绍"><a href="#分点介绍" class="headerlink" title="分点介绍"></a>分点介绍</h4><h5 id="官方解读"><a href="#官方解读" class="headerlink" title="官方解读"></a>官方解读</h5><p>它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与<br>碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，<br>OK，既然是经过编译而得来，可以将WebAssembly理解为是该库的低级语言代码版本，是一种类汇编语言。</p>
+<h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
+<h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly代码文件格式与阅读-&gt;.wasm文件和.wast文件</strong></p>
+<p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
+<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分用js写，而后依靠浏览器解释执行，会比较消耗性能的工作，比如视频解码，OpenGL，OpenCV等。</p>
+<h3 id="2、WebAssembly工具集"><a href="#2、WebAssembly工具集" class="headerlink" title="2、WebAssembly工具集"></a>2、WebAssembly工具集</h3><p>emscripten:是基于llvm的一系列编译工具的集合，包括llvm,clang等。下载比较费时，且易出错。<br>该工具集的一大作用是将c/c++编写的库编译成wasm格式的代码。<br>通过命令行进行命令操作。</p>
+<p>目前来说，WebAssembly程序要和js程序结合，互相调用，所以将合适的其他语言的库编译移植到web端，算是开发<br>过程中的一部分相对独立的工作，正好emscripten工具也是命令行方式来工作。<br>真正开发时，是直接拿已编译好的现成的移植代码加载到js代码中，来开发。</p>
+<p>开发带有WebAssembly的程序需要开发者具备移植代码库的API使用能力。阅读其他语言代码或API、Document等的能力。</p>
+<h3 id="WebAssembly-API一览"><a href="#WebAssembly-API一览" class="headerlink" title="WebAssembly API一览"></a>WebAssembly API一览</h3><table>
 <thead>
 <tr>
 <th>一级API</th>
