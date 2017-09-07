@@ -103,13 +103,13 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png">
-<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png">
-<meta property="og:updated_time" content="2017-09-07T01:35:25.661Z">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png?raw=true">
+<meta property="og:updated_time" content="2017-09-07T01:59:57.272Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webassembly">
 <meta name="twitter:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
-<meta name="twitter:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true">
 
 
 
@@ -398,12 +398,12 @@
       
         <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="分点介绍"><a href="#分点介绍" class="headerlink" title="分点介绍"></a>分点介绍</h4><h5 id="官方解读"><a href="#官方解读" class="headerlink" title="官方解读"></a>官方解读</h5><p>它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与<br>碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，<br>OK，既然是经过编译而得来，可以将WebAssembly理解为是该库的低级语言代码版本，是一种类汇编语言。</p>
 <h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
-<h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly代码文件格式与阅读-&gt;.wasm文件和.wast文件</strong></p>
+<h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly文件格式与源码阅读-&gt;.wasm文件和.wast文件</strong></p>
 <p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
-<h4 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分用js写，而后依靠浏览器解释执行，会比较消耗性能的工作，比如视频解码，OpenGL，OpenCV等。</p>
-<h3 id="2、WebAssembly工具集"><a href="#2、WebAssembly工具集" class="headerlink" title="2、WebAssembly工具集"></a>2、WebAssembly工具集</h3><p>emscripten:是基于llvm的一系列编译工具的集合，包括llvm,clang等。下载比较费时，且易出错。<br>该工具集的一大作用是将c/c++编写的库编译成wasm格式的代码。<br>通过命令行进行命令操作。</p>
-<p>目前来说，WebAssembly程序要和js程序结合，互相调用，所以将合适的其他语言的库编译移植到web端，算是开发<br>过程中的一部分相对独立的工作，正好emscripten工具也是命令行方式来工作。<br>真正开发时，是直接拿已编译好的现成的移植代码加载到js代码中，来开发。</p>
-<p>开发带有WebAssembly的程序需要开发者具备移植代码库的API使用能力。阅读其他语言代码或API、Document等的能力。</p>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分 <strong><em>用js写，而后依靠浏览器解释执行，会比较消耗性能</em></strong> 的工作，比如视频解码，OpenGL，OpenCV等。</p>
+<h3 id="2、WebAssembly工具集"><a href="#2、WebAssembly工具集" class="headerlink" title="2、WebAssembly工具集"></a>2、WebAssembly工具集</h3><p>emscripten:是基于LLVM的一系列编译工具的集合，包括LLVM,clang等。下载比较费时，且易出错。<br>该工具集的一大作用是将c/c++编写的库编译成wasm格式的代码。<br>使用方式是通过命令行进行命令操作。</p>
+<p>目前来说，WebAssembly程序的工作方式是和js程序相结合，互相调用，所以将合适的其他语言的库编译移植到web的过程，算是开发<br>中的相对独立的一块工作，正好emscripten工具也是命令行方式来工作。<br>真正开发时，更多的是直接拿已编译好的现成的移植代码加载到js代码中，来开发。</p>
+<p>开发带有WebAssembly的程序需要开发者具备使用移植代码库的API使用能力或者说阅读其他语言代码的能力。</p>
 <h3 id="WebAssembly-API一览"><a href="#WebAssembly-API一览" class="headerlink" title="WebAssembly API一览"></a>WebAssembly API一览</h3><table>
 <thead>
 <tr>
@@ -414,37 +414,63 @@
 </thead>
 <tbody>
 <tr>
-<td>table</td>
+<td>table()</td>
 <td>set、get、grow</td>
-<td></td>
+<td>方法</td>
 </tr>
 <tr>
-<td>memory</td>
+<td>memory()</td>
 <td>buffer、grow</td>
 <td></td>
 </tr>
 <tr>
-<td>instantiate</td>
+<td>instantiate()</td>
 <td></td>
+<td></td>
+</tr>
+<tr>
+<td>CompileError()</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>LinkError()</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>RuntimeError()</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>module</td>
+<td></td>
+<td>属性</td>
+</tr>
+<tr>
+<td>instance</td>
+<td></td>
+<td>属性</td>
 </tr>
 </tbody>
 </table>
 <a id="more"></a>
 <h3 id="3、一个简单Demo"><a href="#3、一个简单Demo" class="headerlink" title="3、一个简单Demo"></a>3、一个简单Demo</h3><h3 id="4、基于WebAssembly模块库ammo-js的Demo"><a href="#4、基于WebAssembly模块库ammo-js的Demo" class="headerlink" title="4、基于WebAssembly模块库ammo.js的Demo"></a>4、基于WebAssembly模块库ammo.js的Demo</h3><h4 id="Demo介绍"><a href="#Demo介绍" class="headerlink" title="Demo介绍"></a>Demo介绍</h4><p>基于three.js构建了三维场景，场景中有一个图片纹理拼成的ground地面，和两个THREE.Mesh()方法创建的<br>球体，这两个球体在地面上一左一右有固定的位置。</p>
 <p>然后使用ammo构建了一个刚体动力学环境，这是一个有重力、考虑物体惯性等的物理环境，在这个环境中创建了<br>一个球体（界面中不可见），给该球体设置了一些刚体动力学的参数，如平移、旋转等，设置完这些参数再使用相反的<br>API获取这些参数，然后把这些参数赋给three.js创建的第二个球体（图1中右边那个），一秒后重新渲染threejs场景，该球体<br>则获得了一个平移的参数，移动到相应的（本例中是更靠右）的位置。</p>
-<div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png"><br><br>图1 使用ammo库前<br></div>
+<div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true"><br><br>图1 使用ammo库前<br></div>
 
-<p><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png"></div></p>
+<p><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png?raw=true"></div></p>
 <p>图2 调用ammo相关代码后<br></p>
 <h4 id="Demo源代码地址"><a href="#Demo源代码地址" class="headerlink" title="Demo源代码地址"></a>Demo源代码地址</h4><p><a href="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/index.html" target="_blank" rel="external">https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/index.html</a></p>
 <p>如需测试使用，请注意替换掉以下两行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;script src=&quot;../../builds/ammo.js&quot;&gt;&lt;/script&gt;</div><div class="line">&lt;script src=&quot;../js/three/three.min.js&quot;&gt;&lt;/script&gt;</div></pre></td></tr></table></figure></p>
-<h4 id="本Demo参考链接"><a href="#本Demo参考链接" class="headerlink" title="本Demo参考链接"></a>本Demo参考链接</h4><p>（1）<a href="http://bulletphysics.org/Bullet/BulletFull/index.html" target="_blank" rel="external">http://bulletphysics.org/Bullet/BulletFull/index.html</a> bullet类库API</p>
-<p>（2）<a href="https://github.com/kripken/ammo.js" target="_blank" rel="external">https://github.com/kripken/ammo.js</a> ammo库github地址</p>
-<h3 id="5、WebAssembly资源推荐"><a href="#5、WebAssembly资源推荐" class="headerlink" title="5、WebAssembly资源推荐"></a>5、WebAssembly资源推荐</h3><p>（1）<a href="http://webassembly.org/" target="_blank" rel="external">http://webassembly.org/</a>  英文官网</p>
-<p>（2）<a href="http://webassembly.org.cn/" target="_blank" rel="external">http://webassembly.org.cn/</a>  中文官网</p>
-<p>（3）<a href="https://developer.mozilla.org/zh-CN/docs/WebAssembly" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/WebAssembly</a> MDN网址</p>
-<p>（4）<a href="https://github.com/mbasso/awesome-wasm" target="_blank" rel="external">https://github.com/mbasso/awesome-wasm</a> 资料齐全</p>
-<p>（5）<a href="https://segmentfault.com/a/1190000008402872" target="_blank" rel="external">https://segmentfault.com/a/1190000008402872</a> 一篇讲解详细的博客</p>
+<h4 id="本Demo参考链接"><a href="#本Demo参考链接" class="headerlink" title="本Demo参考链接"></a>本Demo参考链接</h4><p>（1）Bullet类库API <a href="http://bulletphysics.org/Bullet/BulletFull/index.html" target="_blank" rel="external">http://bulletphysics.org/Bullet/BulletFull/index.html</a></p>
+<p>（2）Ammo库地址 <a href="https://github.com/kripken/ammo.js" target="_blank" rel="external">https://github.com/kripken/ammo.js</a></p>
+<h3 id="5、WebAssembly资源推荐"><a href="#5、WebAssembly资源推荐" class="headerlink" title="5、WebAssembly资源推荐"></a>5、WebAssembly资源推荐</h3><p>（1）英文官网 <a href="http://webassembly.org/" target="_blank" rel="external">http://webassembly.org/</a></p>
+<p>（2）中文官网 <a href="http://webassembly.org.cn/" target="_blank" rel="external">http://webassembly.org.cn/</a></p>
+<p>（3）MDN网址 <a href="https://developer.mozilla.org/zh-CN/docs/WebAssembly" target="_blank" rel="external">https://developer.mozilla.org/zh-CN/docs/WebAssembly</a></p>
+<p>（4）资料齐全 <a href="https://github.com/mbasso/awesome-wasm" target="_blank" rel="external">https://github.com/mbasso/awesome-wasm</a></p>
+<p>（5）一篇讲解详细的博客 <a href="https://segmentfault.com/a/1190000008402872" target="_blank" rel="external">https://segmentfault.com/a/1190000008402872</a></p>
 
       
     </div>
@@ -674,7 +700,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebAssembly介绍"><span class="nav-number">1.</span> <span class="nav-text">WebAssembly介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、WebAssembly工作原理"><span class="nav-number">1.1.</span> <span class="nav-text">1、WebAssembly工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分点介绍"><span class="nav-number">1.1.1.</span> <span class="nav-text">分点介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#官方解读"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">官方解读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#另类理解"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">另类理解</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#两类文件"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">两类文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#流程"><span class="nav-number">1.1.2.</span> <span class="nav-text">流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、WebAssembly工具集"><span class="nav-number">1.2.</span> <span class="nav-text">2、WebAssembly工具集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebAssembly-API一览"><span class="nav-number">1.3.</span> <span class="nav-text">WebAssembly API一览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、一个简单Demo"><span class="nav-number">1.4.</span> <span class="nav-text">3、一个简单Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、基于WebAssembly模块库ammo-js的Demo"><span class="nav-number">1.5.</span> <span class="nav-text">4、基于WebAssembly模块库ammo.js的Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo介绍"><span class="nav-number">1.5.1.</span> <span class="nav-text">Demo介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo源代码地址"><span class="nav-number">1.5.2.</span> <span class="nav-text">Demo源代码地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本Demo参考链接"><span class="nav-number">1.5.3.</span> <span class="nav-text">本Demo参考链接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、WebAssembly资源推荐"><span class="nav-number">1.6.</span> <span class="nav-text">5、WebAssembly资源推荐</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#WebAssembly介绍"><span class="nav-number">1.</span> <span class="nav-text">WebAssembly介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、WebAssembly工作原理"><span class="nav-number">1.1.</span> <span class="nav-text">1、WebAssembly工作原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分点介绍"><span class="nav-number">1.1.1.</span> <span class="nav-text">分点介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#官方解读"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">官方解读</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#另类理解"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">另类理解</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#两类文件"><span class="nav-number">1.1.1.3.</span> <span class="nav-text">两类文件</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流程"><span class="nav-number">1.1.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、WebAssembly工具集"><span class="nav-number">1.2.</span> <span class="nav-text">2、WebAssembly工具集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WebAssembly-API一览"><span class="nav-number">1.3.</span> <span class="nav-text">WebAssembly API一览</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、一个简单Demo"><span class="nav-number">1.4.</span> <span class="nav-text">3、一个简单Demo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、基于WebAssembly模块库ammo-js的Demo"><span class="nav-number">1.5.</span> <span class="nav-text">4、基于WebAssembly模块库ammo.js的Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo介绍"><span class="nav-number">1.5.1.</span> <span class="nav-text">Demo介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Demo源代码地址"><span class="nav-number">1.5.2.</span> <span class="nav-text">Demo源代码地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#本Demo参考链接"><span class="nav-number">1.5.3.</span> <span class="nav-text">本Demo参考链接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、WebAssembly资源推荐"><span class="nav-number">1.6.</span> <span class="nav-text">5、WebAssembly资源推荐</span></a></li></ol></li></ol></div>
             
 
           </div>
