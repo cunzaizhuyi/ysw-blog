@@ -103,13 +103,15 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/3.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/webassembly-seq.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png?raw=true">
-<meta property="og:updated_time" content="2017-09-07T09:15:02.553Z">
+<meta property="og:updated_time" content="2017-09-07T12:53:57.600Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webassembly">
 <meta name="twitter:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
-<meta name="twitter:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/3.png?raw=true">
 
 
 
@@ -400,7 +402,9 @@
 <h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
 <h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly文件格式与源码阅读-&gt;.wasm文件和.wast文件</strong></p>
 <p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
-<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分 <strong><em>用js写，而后依靠浏览器解释执行，会比较消耗性能</em></strong> 的工作，比如视频解码，OpenGL，OpenCV等。</p>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分 <strong><em>用js写，而后依靠浏览器解释执行，会比较消耗性能</em></strong> 的工作，比如视频解码，OpenGL，OpenCV等。<br>简单来说，加载运行wasm代码的过程如下图所示。</p>
+<div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/3.png?raw=true"><br></div><br>详细的过程以及每个过程调用的API如下图。<br><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/webassembly-seq.png?raw=true"><br></div>
+
 <h3 id="2、WebAssembly工具集"><a href="#2、WebAssembly工具集" class="headerlink" title="2、WebAssembly工具集"></a>2、WebAssembly工具集</h3><p><strong><em>emscripten</em></strong>:是基于LLVM的一系列编译工具的集合，包括LLVM,clang等。下载比较费时，且易出错。<br>该工具集的一大作用是将c/c++编写的库编译成wasm格式的代码。<br>使用方式是通过命令行进行命令操作。</p>
 <p>目前来说，WebAssembly程序的工作方式是和js程序相结合，互相调用，所以将合适的其他语言的库编译移植到web的过程，算是开发<br>中的相对独立的一块工作，正好emscripten工具也是命令行方式来工作。当然如果移植库需要开发者自己开发，就不算<br>独立，不过这脱离写前端的范畴。<br>真正开发时，更多的是直接拿已编译好的现成的移植代码加载到js代码中，来开发。</p>
 <p>开发带有WebAssembly的程序需要开发者具备使用移植代码库的API使用能力或者说阅读其他语言代码的能力。</p>
