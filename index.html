@@ -423,6 +423,26 @@
 <td></td>
 </tr>
 <tr>
+<td>instance</td>
+<td></td>
+<td>属性</td>
+</tr>
+<tr>
+<td>module</td>
+<td></td>
+<td>对象</td>
+</tr>
+<tr>
+<td>compile()</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>validate()</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
 <td>CompileError()</td>
 <td></td>
 <td></td>
@@ -435,20 +455,11 @@
 <tr>
 <td>RuntimeError()</td>
 <td></td>
-<td></td>
-</tr>
-<tr>
-<td>module</td>
-<td></td>
-<td>属性</td>
-</tr>
-<tr>
-<td>instance</td>
-<td></td>
-<td>属性</td>
 </tr>
 </tbody>
 </table>
+<h4 id="WebAssembly-Mudule和WebAssembly-compile"><a href="#WebAssembly-Mudule和WebAssembly-compile" class="headerlink" title="WebAssembly.Mudule和WebAssembly.compile()"></a>WebAssembly.Mudule和WebAssembly.compile()</h4><p>都是用来把一个wasm的arraybuffer对象编译成一个模块，前者是同步的，后者是异步的，<strong><em>后者使用更多</em></strong>。<br>前者使用方式：new WebAssembly.Mudule(buffer);后者使用方式：WebAssembly.compile(buffer);<br>WebAssembly.Mudule本身也是抽象意义上的模块对象。这两种方式调用以后，返回值都是一个模块对象，该对象<br>有导入对象、导出对象和自定义片段（custom section）。</p>
+<h4 id="WebAssembly-Instance和WebAssembly-instantiate"><a href="#WebAssembly-Instance和WebAssembly-instantiate" class="headerlink" title="WebAssembly.Instance和WebAssembly.instantiate()"></a>WebAssembly.Instance和WebAssembly.instantiate()</h4><p>都是用来做实例化，前者是同步的，后者是异步的，<strong><em>后者使用更多</em></strong>。<br>前者使用方式：new WebAssembly.Instance();后者使用方式：WebAssembly.instantiate()；<br>前者有两个重载，一个是传入buffer和imports对象，这种调用一次性完成了编译和实例化两个步骤，<br>第二个重载是传模块对象和imports对象，这种调用只完成实例化步骤。<br>因此，实际上WebAssembly.instantiate()和WebAssembly.Instance的第二张重载调用功能上更接近。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2017/09/06/webassembly/#more" rel="contents">
