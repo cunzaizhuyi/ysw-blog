@@ -317,7 +317,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/webassembly/" itemprop="url">webassembly</a></h1>
+                <a class="post-title-link" href="/webassembly/" itemprop="url">webassembly介绍</a></h1>
         
 
         <div class="post-meta">
@@ -390,7 +390,7 @@
 
       
         
-          <h2 id="WebAssembly介绍"><a href="#WebAssembly介绍" class="headerlink" title="WebAssembly介绍"></a>WebAssembly介绍</h2><h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="分点介绍"><a href="#分点介绍" class="headerlink" title="分点介绍"></a>分点介绍</h4><h5 id="官方解读"><a href="#官方解读" class="headerlink" title="官方解读"></a>官方解读</h5><p>它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与<br>碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，<br>OK，既然是经过编译而得来，可以将WebAssembly理解为是该库的低级语言代码版本，是一种类汇编语言。</p>
+          <h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="分点介绍"><a href="#分点介绍" class="headerlink" title="分点介绍"></a>分点介绍</h4><h5 id="官方解读"><a href="#官方解读" class="headerlink" title="官方解读"></a>官方解读</h5><p>它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与<br>碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，<br>OK，既然是经过编译而得来，可以将WebAssembly理解为是该库的低级语言代码版本，是一种类汇编语言。</p>
 <h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
 <h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly文件格式与源码阅读-&gt;.wasm文件和.wast文件</strong></p>
 <p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
