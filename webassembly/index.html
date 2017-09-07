@@ -99,7 +99,7 @@
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webassembly">
-<meta property="og:url" content="https://cunzaizhuyi.github.io/2017/09/06/webassembly/index.html">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/webassembly/index.html">
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
 <meta property="og:locale" content="zh-Hans">
@@ -107,7 +107,7 @@
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/webassembly-seq.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/1.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/2.png?raw=true">
-<meta property="og:updated_time" content="2017-09-07T13:06:31.849Z">
+<meta property="og:updated_time" content="2017-09-07T13:14:03.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webassembly">
 <meta name="twitter:description" content="WebAssembly介绍1、WebAssembly工作原理分点介绍官方解读它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，OK，既然是经过编译而得来，可以将WebAssembly理解为">
@@ -141,7 +141,7 @@
 
 
 
-  <link rel="canonical" href="https://cunzaizhuyi.github.io/2017/09/06/webassembly/"/>
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/webassembly/"/>
 
 
 
@@ -304,7 +304,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/2017/09/06/webassembly/">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/webassembly/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="云荒杯倾">
@@ -402,6 +402,7 @@
 <h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
 <h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly文件格式与源码阅读-&gt;.wasm文件和.wast文件</strong></p>
 <p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
+<a id="more"></a>
 <h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><p>某高级语言写的某功能库–&gt;emscripten编译–&gt;.wasm文件–&gt;结合WebAssembly JS API–&gt;浏览器中运行<br>完成一部分 <strong><em>用js写，而后依靠浏览器解释执行，会比较消耗性能</em></strong> 的工作，比如视频解码，OpenGL，OpenCV等。<br>简单来说，加载运行wasm代码的过程如下图所示。</p>
 <div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/3.png?raw=true"><br></div><br>详细的过程以及每个过程调用的API如下图。<br><div align="center"><br><img src="https://github.com/cunzaizhuyi/photos/blob/master/WebAssembly/webassembly-seq.png?raw=true"><br></div>
 
@@ -472,7 +473,6 @@
 </table>
 <h4 id="WebAssembly-Mudule和WebAssembly-compile"><a href="#WebAssembly-Mudule和WebAssembly-compile" class="headerlink" title="WebAssembly.Mudule和WebAssembly.compile()"></a>WebAssembly.Mudule和WebAssembly.compile()</h4><p>都是用来把一个wasm的arraybuffer对象编译成一个模块，前者是同步的，后者是异步的，<strong><em>后者使用更多</em></strong>。<br>前者使用方式：new WebAssembly.Mudule(buffer);后者使用方式：WebAssembly.compile(buffer);<br>WebAssembly.Mudule本身也是抽象意义上的模块对象。这两种方式调用以后，返回值都是一个模块对象，该对象<br>有导入对象、导出对象和自定义片段（custom section）。</p>
 <h4 id="WebAssembly-Instance和WebAssembly-instantiate"><a href="#WebAssembly-Instance和WebAssembly-instantiate" class="headerlink" title="WebAssembly.Instance和WebAssembly.instantiate()"></a>WebAssembly.Instance和WebAssembly.instantiate()</h4><p>都是用来做实例化，前者是同步的，后者是异步的，<strong><em>后者使用更多</em></strong>。<br>前者使用方式：new WebAssembly.Instance();后者使用方式：WebAssembly.instantiate()；<br>前者有两个重载，一个是传入buffer和imports对象，这种调用一次性完成了编译和实例化两个步骤，<br>第二个重载是传模块对象和imports对象，这种调用只完成实例化步骤。<br>因此，实际上WebAssembly.instantiate()和WebAssembly.Instance的第二张重载调用功能上更接近。</p>
-<a id="more"></a>
 <h3 id="4、一个简单Demo"><a href="#4、一个简单Demo" class="headerlink" title="4、一个简单Demo"></a>4、一个简单Demo</h3><p>一段c语言代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">int add (int x, int y) &#123;</div><div class="line">  return x + y;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int square (int x) &#123;</div><div class="line">  return x * x;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>通过emcc工具编译为.wasm文件，<br>编译命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc input.c -s WASM=1 -s SIDE_MODULE=1 -o out.wasm</div></pre></td></tr></table></figure></p>
 <p>上述命令运行后，我们可以得到独立的Wasm文件。如果想看懂这个wasm文件，可以将其装换为wast文本格式，<br>使用上面介绍的工具<strong><em>WABT工具包</em></strong>（<a href="https://github.com/WebAssembly/wabt" target="_blank" rel="external">https://github.com/WebAssembly/wabt</a>),<br>使用这个工具需要安装<br>cmake自己build一下，生成相应的可执行程序，然后用命令行wasm2wast test.wasm -o test.wast就可以查看<br>test.wast了。下面是上面c代码生成的wasm的wast对应文件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">S-表达式形式的wast文件</div><div class="line">(module</div><div class="line">  (type (;0;) (func (param i32 i32) (result i32)))</div><div class="line">  (type (;1;) (func (param i32) (result i32)))</div><div class="line">  (type (;2;) (func))</div><div class="line">  (import &quot;env&quot; &quot;memoryBase&quot; (global (;0;) i32))</div><div class="line">  (import &quot;env&quot; &quot;memory&quot; (memory (;0;) 256))</div><div class="line">  (import &quot;env&quot; &quot;table&quot; (table (;0;) 0 anyfunc))</div><div class="line">  (import &quot;env&quot; &quot;tableBase&quot; (global (;1;) i32))</div><div class="line">  (func (;0;) (type 0) (param i32 i32) (result i32)</div><div class="line">    get_local 1</div><div class="line">    get_local 0</div><div class="line">    i32.add)</div><div class="line">  (func (;1;) (type 1) (param i32) (result i32)</div><div class="line">    get_local 0</div><div class="line">    get_local 0</div><div class="line">    i32.mul)</div><div class="line">  (func (;2;) (type 2)</div><div class="line">    nop)</div><div class="line">  (func (;3;) (type 2)</div><div class="line">    block  ;; label = @1</div><div class="line">      get_global 0</div><div class="line">      set_global 2</div><div class="line">      get_global 2</div><div class="line">      i32.const 5242880</div><div class="line">      i32.add</div><div class="line">      set_global 3</div><div class="line">      call 2</div><div class="line">    end)</div><div class="line">  (global (;2;) (mut i32) (i32.const 0))</div><div class="line">  (global (;3;) (mut i32) (i32.const 0))</div><div class="line">  (export &quot;_add&quot; (func 0))</div><div class="line">  (export &quot;__post_instantiate&quot; (func 3))</div><div class="line">  (export &quot;_square&quot; (func 1))</div><div class="line">  (export &quot;runPostSets&quot; (func 2)))</div></pre></td></tr></table></figure></p>
@@ -550,7 +550,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/03/hls/" rel="next" title="从事件链角度解析video-dev/hls.js库">
+              <a href="/hls/" rel="next" title="从事件链角度解析video-dev/hls.js库">
                 <i class="fa fa-chevron-left"></i> 从事件链角度解析video-dev/hls.js库
               </a>
             
