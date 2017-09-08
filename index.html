@@ -340,6 +340,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -395,7 +417,7 @@
 <p>注意，5和6两个数是随笔写的。然后又报了最后一个错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Uncaught (in promise) LinkError: WebAssembly Instantiation: Import #7 module=&quot;env&quot; function=&quot;abortStackOverflow&quot; error: function import requires a callable</div><div class="line">    at fetch.then.then.then.module (http://localhost:63342/Webapp/ammo.js-master/examples/canvasDemo.html?_ijt=4s8b29jkrks7jco3db94qapjae:43:12)</div><div class="line">    at &lt;anonymous&gt;</div></pre></td></tr></table></figure></p>
 <p>又加了一行：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">imports.env.abortStackOverflow = imports.env.abortStackOverflow||new Function();</div></pre></td></tr></table></figure></p>
 <p>总之，就是报了5个错，在代码里加了5行，解决了问题。把这5行拼一下(实际上代码中他们就是写在一起的)，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">imports.env.DYNAMICTOP_PTR = imports.env.DYNAMICTOP_PTR||0;</div><div class="line">imports.env.tempDoublePtr = imports.env.tempDoublePtr||0;</div><div class="line">imports.env.ABORT = imports.env.ABORT||0;</div><div class="line">imports.global = imports.global||&#123;NaN:5,Infinity:6&#125;;</div><div class="line">imports.env.abortStackOverflow = imports.env.abortStackOverflow||new Function();</div></pre></td></tr></table></figure></p>
-<p>Demo地址：  浏览器运行canvasDemo.html,运行正确，小球从左到右飞进飞出。</p>
+<p><strong>Demo地址：<a href="https://github.com/cunzaizhuyi/blog-assets/tree/master/WebAssembly-LinkError" target="_blank" rel="external">https://github.com/cunzaizhuyi/blog-assets/tree/master/WebAssembly-LinkError</a><br>  浏览器运行canvasDemo.html,运行正确，小球从左到右飞进飞出。</strong></p>
 <h2 id="3、WebAssembly-LinkError-错误"><a href="#3、WebAssembly-LinkError-错误" class="headerlink" title="3、WebAssembly.LinkError()错误"></a>3、WebAssembly.LinkError()错误</h2><p>WebAssembly.LinkError()错误是实例化过程中发生的错误，<a href="https://cunzaizhuyi.github.io/webassembly">https://cunzaizhuyi.github.io/webassembly</a> 这篇文章说过<br>webassembly可以看成es6风格的模块，所以webassembly代码的实例化就类似于new 模块名（）的过程，而实例化有时候需要传参<br>，在webassembly中传的参数一般是一个imports对象，所有参数都包裹在该对象里面，一起传过去就好了。<br>LinkError错误就是经常在importObj对象没有传正确的时候发生的。</p>
 <h2 id="4、wast文件与排错"><a href="#4、wast文件与排错" class="headerlink" title="4、wast文件与排错"></a>4、wast文件与排错</h2><p>研究WebAssembly, 起初可能觉得wast功能比较鸡肋或者多余，但是这些发生错误后，才发现，<br>看懂wast代码还是有必要的（不过亲自写wast代码还是觉得没必要，难度大，而且<br>编写的过程中易出错，使得编码开发比较耗时）。<br>其实Chrome浏览器也提供了wast的查看功能，但是仍然建议安装wabt工具，这样可以随时拿一个wasm文件转成wabt，任性转。<br>有了看懂wast的能力，就可以猜到是哪些行报错的。本例中，就是下面这些行报错的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">//wast格式</div><div class="line">  (import &quot;env&quot; &quot;DYNAMICTOP_PTR&quot; (global (;0;) i32))</div><div class="line">  (import &quot;env&quot; &quot;tempDoublePtr&quot; (global (;1;) i32))</div><div class="line">  (import &quot;env&quot; &quot;ABORT&quot; (global (;2;) i32))</div><div class="line">  (import &quot;global&quot; &quot;NaN&quot; (global (;5;) f64))</div><div class="line">  (import &quot;global&quot; &quot;Infinity&quot; (global (;6;) f64))</div></pre></td></tr></table></figure></p>
 <h2 id="5、排错过程查阅的资料"><a href="#5、排错过程查阅的资料" class="headerlink" title="5、排错过程查阅的资料"></a>5、排错过程查阅的资料</h2><p>（1）<a href="https://github.com/WebAssembly/design/blob/master/JS.md" target="_blank" rel="external">https://github.com/WebAssembly/design/blob/master/JS.md</a><br>在网页搜索linkerror可以看到大部分引发此类错误的原因。</p>
