@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+
+    
+  <url>
+    <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
+    <lastmod>2017-09-08T09:41:56.976Z</lastmod>
+    <data>
+        <display>
+        <title>WebAssembly.LinkError()报错</title>
+        <pubTime>2017-09-08T08:10:38.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="前端" url="https://cunzaizhuyi.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
+    <lastmod>2017-09-08T09:37:59.172Z</lastmod>
+    <data>
+        <display>
+        <title>webassembly介绍</title>
+        <pubTime>2017-09-06T11:31:39.000Z</pubTime>
+        
+        <tag>前端</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="https://cunzaizhuyi.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://cunzaizhuyi.github.io/hls/</loc>
+    <lastmod>2017-09-05T11:45:08.079Z</lastmod>
+    <data>
+        <display>
+        <title>从事件链角度解析video-dev/hls.js库</title>
+        <pubTime>2017-09-03T06:02:01.000Z</pubTime>
+        
+        <tag>video</tag>
+         
+         
+           
+             
+              <breadCrumb title="音视频" url="https://cunzaizhuyi.github.io/categories/%E9%9F%B3%E8%A7%86%E9%A2%91/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+</urlset>
