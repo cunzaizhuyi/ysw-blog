@@ -1941,7 +1941,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #c1ff36;
+  background: #a8ad2f;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2781,6 +2781,9 @@ embed {
 .header-inner {
   width: 100% !important;
   background-color: #c8e5c7;
+}
+.site-subtitle {
+  color: #f16;
 }
 .container {
   background-color: #daf1da !important;
