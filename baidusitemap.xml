@@ -3,15 +3,16 @@
 
 
     
-    
   <url>
-    <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
-    <lastmod>2017-09-10T07:42:26.833Z</lastmod>
+    <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
+    <lastmod>2017-09-12T12:22:51.644Z</lastmod>
     <data>
         <display>
-        <title>WebAssembly.LinkError()报错</title>
-        <pubTime>2017-09-08T08:10:38.000Z</pubTime>
+        <title>webassembly介绍</title>
+        <pubTime>2017-09-06T11:31:39.000Z</pubTime>
         
+        <tag>前端</tag>
+         
          
            
              
@@ -22,16 +23,15 @@
     </url>
 
     
+    
   <url>
-    <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
-    <lastmod>2017-09-08T09:37:59.172Z</lastmod>
+    <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
+    <lastmod>2017-09-10T07:42:26.833Z</lastmod>
     <data>
         <display>
-        <title>webassembly介绍</title>
-        <pubTime>2017-09-06T11:31:39.000Z</pubTime>
+        <title>WebAssembly.LinkError()报错</title>
+        <pubTime>2017-09-08T08:10:38.000Z</pubTime>
         
-        <tag>前端</tag>
-         
          
            
              
