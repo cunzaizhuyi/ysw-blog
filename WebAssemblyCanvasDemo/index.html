@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="1、Demo功能介绍实现了一个圆球在800px  600px画布内随机运动，固定时间间隔随机运动一次，运动方向由x和y轴组成的矢量决定，这个矢量是随机值（后面会称它为*随机矢量），从C语言代码中的随机函数获取，JS代码实现小球的画布渲染、越界纠正等工作。 Demo同时实现了纯JS（即不使用WebAssembly）和WebAssembly两个版本，都在Demo地址中。 2、Demo地址github">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-15T02:07:43.011Z">
+<meta property="og:updated_time" content="2017-09-15T02:13:19.428Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="WebAssembly Demo之Canvas中随机运动圆球">
 <meta name="twitter:description" content="1、Demo功能介绍实现了一个圆球在800px  600px画布内随机运动，固定时间间隔随机运动一次，运动方向由x和y轴组成的矢量决定，这个矢量是随机值（后面会称它为*随机矢量），从C语言代码中的随机函数获取，JS代码实现小球的画布渲染、越界纠正等工作。 Demo同时实现了纯JS（即不使用WebAssembly）和WebAssembly两个版本，都在Demo地址中。 2、Demo地址github">
@@ -418,6 +418,7 @@
 <p>Demo同时实现了纯JS（即不使用WebAssembly）和WebAssembly两个版本，都在Demo地址中。</p>
 <h3 id="2、Demo地址"><a href="#2、Demo地址" class="headerlink" title="2、Demo地址"></a>2、Demo地址</h3><p>github : <a href="https://github.com/cunzaizhuyi/wasm-canvasDemo" target="_blank" rel="external">https://github.com/cunzaizhuyi/wasm-canvasDemo</a></p>
 <h3 id="3、Demo目录结构"><a href="#3、Demo目录结构" class="headerlink" title="3、Demo目录结构"></a>3、Demo目录结构</h3><p>因为demo比较简单，也没有什么js库依赖，所以本库的所有demo都是按照目录区分的（一个目录是一个demo），而没有使用诸如src、doc、dist<br>之类的结构。</p>
+<a id="more"></a>
 <p><strong>canvasDemo-wasm1</strong>：C代码中未加随机时间种子的<strong>一种实现</strong>，因此每次刷新HTML页面实际上产生的是<strong>同一个随机序列</strong>，<br>也就是说<strong>每次刷新页面后，若观察小球的运动轨迹，都是一样的</strong>。不过因为没有随机时间种子，所以，<br>不管JS setInerval设定的时间间隔多短暂，这一个随机序列的每个值都是新鲜随机出来的，即：与上一个随机值<br>重复的概率仅等于随机范围分之一。因此，这种实现下，小球的运动轨迹在canvas内的分布更加的均匀。</p>
 <p><strong>canvasDemo-wasm2</strong> :C代码中加了随机时间种子的<strong>一种实现</strong>，小球移动不均匀，因为随机种子的时间粒度比较粗，而随机运动的<br>时间间隔远小于这个时间粒度，所以同一对随机值（矢量）会连续重复好几次，这就造成了小球某次运行实际上<br>并不随机的效果。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Note:上面两种实现只有下面两句C代码的差别：</div><div class="line">#include&lt;time.h&gt;</div><div class="line">srand(time(NULL))</div></pre></td></tr></table></figure></p>
 <p><strong>canvasDemo-JS</strong>: JS实现的版本。<br><strong>canvasTranslateDemo-wasm</strong>:实现小球从左到右平移运动的demo，wasm实现，使用的wasm的API，没有用胶水代码。<strong>本文<br>不讲这个demo。</strong><br><strong>其他demo</strong>：后面可能会放入一些其他的wasm demo。</p>

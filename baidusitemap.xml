@@ -5,7 +5,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/</loc>
-    <lastmod>2017-09-15T02:07:43.011Z</lastmod>
+    <lastmod>2017-09-15T02:13:19.428Z</lastmod>
     <data>
         <display>
         <title>WebAssembly Demo之Canvas中随机运动圆球</title>
@@ -13,6 +13,24 @@
         
         <tag>前端</tag>
          
+         
+           
+             
+              <breadCrumb title="前端" url="https://cunzaizhuyi.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
+    <lastmod>2017-09-15T02:13:19.389Z</lastmod>
+    <data>
+        <display>
+        <title>WebAssembly.LinkError()报错</title>
+        <pubTime>2017-09-08T08:10:38.000Z</pubTime>
+        
          
            
              
@@ -43,24 +61,6 @@
     </url>
 
     
-    
-  <url>
-    <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
-    <lastmod>2017-09-10T07:42:26.833Z</lastmod>
-    <data>
-        <display>
-        <title>WebAssembly.LinkError()报错</title>
-        <pubTime>2017-09-08T08:10:38.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="前端" url="https://cunzaizhuyi.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>https://cunzaizhuyi.github.io/hls/</loc>
