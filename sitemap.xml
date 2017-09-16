@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
+    
+    <lastmod>2017-09-16T08:43:42.083Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/</loc>
+    
+    <lastmod>2017-09-16T08:43:42.044Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/</loc>
     
     <lastmod>2017-09-15T02:13:19.428Z</lastmod>
@@ -12,13 +26,6 @@
     <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
     
     <lastmod>2017-09-15T02:13:19.389Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
-    
-    <lastmod>2017-09-12T12:22:51.644Z</lastmod>
     
   </url>
   

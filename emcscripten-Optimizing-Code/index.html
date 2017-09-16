@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="作者：云荒杯倾 译文地址: https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="emscripten使用教程之优化你的代码">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="作者：云荒杯倾 译文地址: https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-16T08:43:42.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="emscripten使用教程之优化你的代码">
+<meta name="twitter:description" content="作者：云荒杯倾 译文地址: https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/"/>
+
+
+
+
+
+  <title>emscripten使用教程之优化你的代码 | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">emscripten使用教程之优化你的代码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-16T13:05:50+08:00">
+                2017-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/emcscripten-Optimizing-Code/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="emcscripten-Optimizing-Code/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>作者：云荒杯倾</p>
+<p>译文地址: <a href="https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html" target="_blank" rel="external">https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html</a></p>
+<p>通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，<br>你就可以使用本文提到的技术让你的代码加载和运行的更快。</p>
+<h3 id="1、怎么优化代码"><a href="#1、怎么优化代码" class="headerlink" title="1、怎么优化代码"></a>1、怎么优化代码</h3><p>在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，<br>-O2，-Os，-Oz，-O3。<br>比如，下面代码就是使用-O2级别进行优化编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc -O2 file.cpp</div></pre></td></tr></table></figure></p>
+<p> 随着优化级别增加，渐进引入更加激进的优化方式，从而导致更高的性能和更大的代码体积<br> ，代价是编译时间会增加。<strong>优化项也会引发一些问题。</strong></p>
+<p> 那么，什么时候用什么级别的优化呢？</p>
+<ul>
+<li>第一次移植代码时，运行emcc使用默认settings，不要优化。检查你的代码是否工作<br>并修复问题。</li>
+<li>开发中为了一个较短的编译迭代周期，使用低级别的优化。即-O0或者-O1。</li>
+<li>发布代码时，使用-O2或者-O3。-O3比-O2更加优化，不过需要明显更长的编译时间。</li>
+<li>其他优化在下面部分讨论。<br>除了-Ox选项或级别对所有优化项目是共同的，js优化、llvm优化、llvm link-time优化由各自独立的编译选项来控制。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Note:</div><div class="line">emcc优化标志的意义不同于gcc,clang,或其他编译器的相似名字的选项，因为对JS代码优化</div><div class="line">和对原生代码优化是非常不同的。emcc的优化级别和llvm bitcode优化级别的映射关系写在</div><div class="line">reference那篇文章中。</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="2、高级编译器设置"><a href="#2、高级编译器设置" class="headerlink" title="2、高级编译器设置"></a>2、高级编译器设置</h3><p>你可以给编译器传一些标志进去以影响代码的生成，同事这也影响性能。比如DISABLE_EXCEPTION_CATCHING，<br>这些可以在settings（<a href="https://github.com/kripken/emscripten/blob/master/src/settings.js）" target="_blank" rel="external">https://github.com/kripken/emscripten/blob/master/src/settings.js）</a>  看到。</p>
+<p>一些有用的标志是：</p>
+<ul>
+<li>NO_EXIT_RUNTIME: 编译时使用-s NO_EXIT_RUNTIME=1 ,这样编译器就知道你不想让<br>程序在运行完main（）函数后就结束。此时，编译器就会放弃atexit和全局析构这两个<br>函数的调用（如果你不设置-s NO_EXIT_RUNTIME=1，是会调用的），这样就减小了代码体积，<br>并且加快了启动速度。<br>当你的main（）函数完成但是你仍想要执行代码时，这是有用的，比如在app中使用main loop funciton<br>.<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NOTE：</div><div class="line">如果你的C代码里面有emscripten_set_main_loop()，它被emscripten检测到的话，emscripten也不会</div><div class="line">在main结束调用后关闭运行时，但是呢，你最好还是在编译选项中加-s NO_EXIT_RUNTIME=1吧，</div><div class="line">毕竟这样可以减小生成不必要的代码，是不是？！</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="3、代码大小"><a href="#3、代码大小" class="headerlink" title="3、代码大小"></a>3、代码大小</h3><p>本节将描述与代码大小相关的优化和问题。它们对大小项目都很有用。<br>在小项目或库中，您可以获得最小的封装；在大型项目中，<br>代码的巨大规模可能会导致您本来想要避免的问题(比如慢速启动速度)。</p>
+<h4 id="3-1-内存初始化"><a href="#3-1-内存初始化" class="headerlink" title="3.1 内存初始化"></a>3.1 内存初始化</h4><p>默认情况，emscripten会在.js文件中写静态内存初始化代码。这会导致js文件很大，<br>也会减缓启动速度。由于js引擎对数组大小的限制，这也可能导致js引擎抛出 <strong>array initializer too large</strong> 和<br> <strong>Too much recursion</strong> 两个报错。<br>emcc –memory-init-file 1的设置会将静态内存代码初始化的这一部分代码放到.mem后缀<br>的文件中，和.js文件分开。这个.mem文件会在main()函数被调用，代码执行前异步加载。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">从Emscripten 1.21.1 起，-O2及以上的优化级别默认启动了这项设置。</div></pre></td></tr></table></figure>
+<h4 id="3-2-代码大小和性能的平衡"><a href="#3-2-代码大小和性能的平衡" class="headerlink" title="3.2  代码大小和性能的平衡"></a>3.2  代码大小和性能的平衡</h4><p>你可能希望在项目中编译性能不用怎么好的源文件，那就使用-Os和-Oz吧。其他部分<br>使用-O2。（-Os和-Oz以性能为代码减小代码体积，他们和-O2相似）。<br>注意：-Oz编译比较耗时。</p>
+<h4 id="3-3-其他关于代码大小的小贴士（杂项）"><a href="#3-3-其他关于代码大小的小贴士（杂项）" class="headerlink" title="3.3 其他关于代码大小的小贴士（杂项）"></a>3.3 其他关于代码大小的小贴士（杂项）</h4><p>除了3.1和3.2，下面的建议也可以减小代码大小：</p>
+<ul>
+<li><a href="http://floooh.github.io/2016/08/27/asmjs-diet.html" target="_blank" rel="external">http://floooh.github.io/2016/08/27/asmjs-diet.html</a> 这篇文章很有帮助</li>
+<li>从bitcode到js的编译过程使用 llvm-lto，用法：–llvm-lto 1。</li>
+<li>不允许嵌入/内联代码：-s INLINING_LIMIT=1。</li>
+<li>下面还有6条，不逐一翻译。</li>
+</ul>
+<h3 id="4、大型代码库优化"><a href="#4、大型代码库优化" class="headerlink" title="4、大型代码库优化"></a>4、大型代码库优化</h3><p>上面第三部分介绍的减小代码体积部分对大型代码库很有用，另外，还有一些其他对<br>大型代码库优化有用的主题。</p>
+<h4 id="4-1-分离asm-js文件避免内存峰值"><a href="#4-1-分离asm-js文件避免内存峰值" class="headerlink" title="4.1 分离asm.js文件避免内存峰值"></a>4.1 分离asm.js文件避免内存峰值</h4><p>默认情况下，Emscripten会编译出一个JS文件，包含整个代码库：一个是asm.js代码，<br>一个是运行环境、连接浏览器等胶水代码。对于一个非常大的代码库，这样搞<br>内存使用方面会效率低下，因为所有的代码都在一个脚本就意味着js引擎可能使用一些内存<br>来解析和编译asm，而且在开始运行代码库之前，这部分内存可能不会释放。在大型游戏中，<br>开始运行代码可能需要动态分配一个很大的类型数组作内存，因此您可能会看到内存的“峰值”，<br>在此之后将释放临时的编译内存（解析和编译asm那部分内存）。如果足够大，这个峰值<br>会导致浏览器耗尽内存，无法加载应用程序。这是Chrome的一个已知问题(其他浏览器似乎没有这个问题)。</p>
+<p>一种方法是分离出asm。js到另一个文件，并确保浏览器在编译asm之间有一个事件循环<br>，保证编译asm和运行程序有一个顺序。这可以通过运行emcc –separate-asm来实现。</p>
+<h4 id="4-2-自运行"><a href="#4-2-自运行" class="headerlink" title="4.2 自运行"></a>4.2 自运行</h4><h4 id="4-3-列提纲outlining"><a href="#4-3-列提纲outlining" class="headerlink" title="4.3 列提纲outlining"></a>4.3 列提纲outlining</h4><p>JavaScript引擎通常会慢慢地编译非常大的函数(相对于它们的大小)，<br>并不能有效地(或根本)对它们进行优化。解决这个问题的方法之一是使用“列提纲”:<br>将它们分解成更小的函数，可以更有效地编译和优化。<br>“列提纲”增加了总体代码的大小，并且可以使一些代码变得不那么优化。尽管如此，<br>“列提纲”有时可以提高启动速度和运行时速度。要了解更多信息，请阅读：<br><a href="http://mozakai.blogspot.com/2013/08/outlining-workaround-for-jits-and-big.html。" target="_blank" rel="external">http://mozakai.blogspot.com/2013/08/outlining-workaround-for-jits-and-big.html。</a></p>
+<p>OUTLINING_LIMIT选项定义了emscripten是否会分解一个函数为众多小函数的值。<br>怎么选一个合适的大小值进行拆解，怎么决定哪些函数被拆解，请看：<br><a href="https://github.com/kripken/emscripten/blob/master/src/settings.js" target="_blank" rel="external">https://github.com/kripken/emscripten/blob/master/src/settings.js</a></p>
+<h4 id="4-4-激进地消除变量"><a href="#4-4-激进地消除变量" class="headerlink" title="4.4 激进地消除变量"></a>4.4 激进地消除变量</h4><p>激进的变量消除尝试尽可能地去删除变量，甚至愿意付出重复表达式这种方法<br>（会增加代码大小）的代价。如果你有非常大的函数，这可以提高速度。<br>例如，它可以使sqlite(它有一个巨大的解释器循环，有数千行)快7%。</p>
+<h3 id="5、其他优化问题"><a href="#5、其他优化问题" class="headerlink" title="5、其他优化问题"></a>5、其他优化问题</h3><h4 id="5-1-C-异常"><a href="#5-1-C-异常" class="headerlink" title="5.1 C++异常"></a>5.1 C++异常</h4><p>在- o1(及以上)中默认关闭c++异常。<br>这防止了try - catch块的生成，它使代码运行得更快，也使得代码更小。</p>
+<p>要在优化的代码中重新启用异常，请运行emcc命令- s DISABLE_EXCEPTION_CATCHING= 0</p>
+<h4 id="5-2-内存增长"><a href="#5-2-内存增长" class="headerlink" title="5.2 内存增长"></a>5.2 内存增长</h4><p>使用- s ALLOW_MEMORY_GROWTH= 1命令的编译允许根据应用程序的需求改变内存总量。<br>这对于预先不知道需要多少内存的应用程序很有用，但是它禁用了一些优化。(目前正在进行改进。)</p>
+<h4 id="5-3-内联-嵌套"><a href="#5-3-内联-嵌套" class="headerlink" title="5.3 内联/嵌套"></a>5.3 内联/嵌套</h4><p>内联通常产生较大的函数，因为这些可以使编译器的优化更加有效。<br>不幸的是，大型函数在运行时比多个较小的函数要慢，因为JavaScript引擎通常<br>不优化大函数(因为害怕长时间JIT)，或者优化它们导致明显的停顿。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">- o1和- o2默认会内联函数。讽刺的是，在某些情况下，这实际上会降低性能!</div></pre></td></tr></table></figure></p>
+<h4 id="5-4-查看“代码优化通过”记录"><a href="#5-4-查看“代码优化通过”记录" class="headerlink" title="5.4 查看“代码优化通过”记录"></a>5.4 查看“代码优化通过”记录</h4><p>启用调试模式(EMCC_DEBUG)将每种通过的JavaScript优化输出到文件。</p>
+<h3 id="6、不安全的优化"><a href="#6、不安全的优化" class="headerlink" title="6、不安全的优化"></a>6、不安全的优化</h3><p>你可能想试一些不安全的优化项：</p>
+<ul>
+<li>-s FORCE_ALIGNED_MEMORY=1: 使所有内存存取完全对齐。这会破坏那些实际上<br>不需要内存对齐的代码。</li>
+<li>–llvm-lto 1：可以使llvm link-time得到优化，有些情况下有用。但是他们有一些已知的<br>问题，所以代码必须被充分地测试。更多请见<a href="https://kripken.github.io/emscripten-site/docs/tools_reference/emcc.html#emcc-llvm-lto" target="_blank" rel="external">https://kripken.github.io/emscripten-site/docs/tools_reference/emcc.html#emcc-llvm-lto</a></li>
+<li>–closure 1: 可以减小胶水代码的体积，减少启动时间。但是如果你没有做<br>正确的closure complier，可能有问题。</li>
+</ul>
+<h3 id="7、性能分析"><a href="#7、性能分析" class="headerlink" title="7、性能分析"></a>7、性能分析</h3><p>现代浏览器有JavaScript profiler，可以帮助查找代码中较慢的部分。<br>由于每个浏览器的分析器都有限制，所以建议在多个浏览器中进行分析。<br>为了确保已编译的代码包含足够的信息进行分析，<br>可以使用下面标志设定编译命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc -O2 --profiling file.cpp</div></pre></td></tr></table></figure></p>
+<h3 id="8、排查不佳的性能"><a href="#8、排查不佳的性能" class="headerlink" title="8、排查不佳的性能"></a>8、排查不佳的性能</h3><p>emscrip10编译的代码目前可以实现本地构建的大约一半的速度。<br>如果性能明显低于预期，您还可以运行下面的其他故障排除步骤:</p>
+<ul>
+<li>构建项目是一个两阶段的过程:将源代码文件编译成LLVM，并从LLVM生成JavaScript。<br>您是否在两个步骤中使用相同的优化值(- o2或- o3)?</li>
+<li>在多个浏览器上进行测试。如果在一个浏览器上性能可以接受，在另一个浏览器上<br>明显较差，那么可以给我们提交一个bug报告，注意写清楚出问题的浏览器和其他相关信息。</li>
+<li>代码是否在Firefox中验证正确(在火狐控制台查看是否有：“成功编译asm.js代码”信息输出)。<br>如果您在使用最新版本的Firefox和Emscripten时看到验证错误，请提交一个错误报告。</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/WebAssemblyCanvasDemo/" rel="next" title="WebAssembly Demo之Canvas中随机运动圆球">
+                <i class="fa fa-chevron-left"></i> WebAssembly Demo之Canvas中随机运动圆球
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、怎么优化代码"><span class="nav-number">1.</span> <span class="nav-text">1、怎么优化代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、高级编译器设置"><span class="nav-number">2.</span> <span class="nav-text">2、高级编译器设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、代码大小"><span class="nav-number">3.</span> <span class="nav-text">3、代码大小</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-内存初始化"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 内存初始化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-代码大小和性能的平衡"><span class="nav-number">3.2.</span> <span class="nav-text">3.2  代码大小和性能的平衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-其他关于代码大小的小贴士（杂项）"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 其他关于代码大小的小贴士（杂项）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、大型代码库优化"><span class="nav-number">4.</span> <span class="nav-text">4、大型代码库优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#4-1-分离asm-js文件避免内存峰值"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 分离asm.js文件避免内存峰值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-2-自运行"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 自运行</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-3-列提纲outlining"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 列提纲outlining</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-4-激进地消除变量"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 激进地消除变量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、其他优化问题"><span class="nav-number">5.</span> <span class="nav-text">5、其他优化问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-1-C-异常"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 C++异常</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-2-内存增长"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 内存增长</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-3-内联-嵌套"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 内联/嵌套</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-4-查看“代码优化通过”记录"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 查看“代码优化通过”记录</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6、不安全的优化"><span class="nav-number">6.</span> <span class="nav-text">6、不安全的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7、性能分析"><span class="nav-number">7.</span> <span class="nav-text">7、性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8、排查不佳的性能"><span class="nav-number">8.</span> <span class="nav-text">8、排查不佳的性能</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
