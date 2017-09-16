@@ -105,18 +105,18 @@
 
 
 
-<meta name="description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐进">
+<meta name="description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。 比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐">
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="emscripten使用教程之优化你的代码">
 <meta property="og:url" content="https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐进">
+<meta property="og:description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。 比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T08:55:04.160Z">
+<meta property="og:updated_time" content="2017-09-16T09:16:53.104Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="emscripten使用教程之优化你的代码">
-<meta name="twitter:description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐进">
+<meta name="twitter:description" content="作者：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。 比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐">
 
 
 
@@ -418,7 +418,8 @@
 <p><a href="https://kripken.github.io/emscripten-site/docs/optimizing/Optimizing-Code.html" target="_blank" rel="external">译文地址</a></p>
 <p>通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，<br>你就可以使用本文提到的技术让你的代码加载和运行的更快。</p>
 <h3 id="1、怎么优化代码"><a href="#1、怎么优化代码" class="headerlink" title="1、怎么优化代码"></a>1、怎么优化代码</h3><hr>
-<p>在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，<br>-O2，-Os，-Oz，-O3。<br>比如，下面代码就是使用-O2级别进行优化编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc -O2 file.cpp</div></pre></td></tr></table></figure></p>
+<p>在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，<br>-O2，-Os，-Oz，-O3。</p>
+<p>比如，下面代码就是使用-O2级别进行优化编译<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc -O2 file.cpp</div></pre></td></tr></table></figure></p>
 <p> 随着优化级别增加，渐进引入更加激进的优化方式，从而导致更高的性能和更大的代码体积<br> ，代价是编译时间会增加。<strong>优化项也会引发一些问题。</strong></p>
 <a id="more"></a>
 <p> 那么，什么时候用什么级别的优化呢？</p>
@@ -426,7 +427,7 @@
 <li>第一次移植代码时，运行emcc使用默认settings，不要优化。检查你的代码是否工作<br>并修复问题。</li>
 <li>开发中为了一个较短的编译迭代周期，使用低级别的优化。即-O0或者-O1。</li>
 <li>发布代码时，使用-O2或者-O3。-O3比-O2更加优化，不过需要明显更长的编译时间。</li>
-<li>其他优化在下面部分讨论。<br>除了-Ox选项或级别对所有优化项目是共同的，js优化、llvm优化、llvm link-time优化由各自独立的编译选项来控制。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Note:</div><div class="line">emcc优化标志的意义不同于gcc,clang,或其他编译器的相似名字的选项，因为对JS代码优化</div><div class="line">和对原生代码优化是非常不同的。emcc的优化级别和llvm bitcode优化级别的映射关系写在</div><div class="line">reference那篇文章中。</div></pre></td></tr></table></figure>
+<li>其他优化在下面部分讨论。<br>除了-Ox选项或级别对所有优化项目是共同的，js优化、llvm优化、llvm link-time优化由各自独立的编译选项来控制。<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"> Note:</div><div class="line">emcc优化标志的意义不同于gcc,clang,或其他编译器的相似名字的选项，因为对JS代码优化和对原生代码优化是非常不同的。</div><div class="line">emcc的优化级别和llvm bitcode优化级别的映射关系写在reference那篇文章中。</div></pre></td></tr></table></figure>
 </li>
 </ul>
 <h3 id="2、高级编译器设置"><a href="#2、高级编译器设置" class="headerlink" title="2、高级编译器设置"></a>2、高级编译器设置</h3><hr>
