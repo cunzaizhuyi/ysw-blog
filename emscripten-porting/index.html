@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="emscripten代码移植考虑的点作者：云荒杯倾该主题涵盖了在将C、C++代码移植到Emscripten时需要考虑的核心考虑问题，以及一般的编码和调试指南。共有以下内容。 代码可移植性与限制emscripten的运行环境连接C++与JavaScript文件和文件系统多媒体数据和图形调试多线程编程支持移植SIMD代码AsyncifyEmterpreter每一部分内容都比较多，本文主要讲第一部分，代">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-16T13:55:19.944Z">
+<meta property="og:updated_time" content="2017-09-16T13:58:04.647Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="emscripten代码移植">
 <meta name="twitter:description" content="emscripten代码移植考虑的点作者：云荒杯倾该主题涵盖了在将C、C++代码移植到Emscripten时需要考虑的核心考虑问题，以及一般的编码和调试指南。共有以下内容。 代码可移植性与限制emscripten的运行环境连接C++与JavaScript文件和文件系统多媒体数据和图形调试多线程编程支持移植SIMD代码AsyncifyEmterpreter每一部分内容都比较多，本文主要讲第一部分，代">
@@ -416,6 +416,7 @@
         <h2 id="emscripten代码移植考虑的点"><a href="#emscripten代码移植考虑的点" class="headerlink" title="emscripten代码移植考虑的点"></a>emscripten代码移植考虑的点</h2><p><strong>作者：云荒杯倾</strong><br>该主题涵盖了在将C、C++代码移植到Emscripten时需要考虑的核心考虑问题，以及一般的编码和调试指南。<br>共有以下内容。</p>
 <h5 id="代码可移植性与限制"><a href="#代码可移植性与限制" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h5><h5 id="emscripten的运行环境"><a href="#emscripten的运行环境" class="headerlink" title="emscripten的运行环境"></a>emscripten的运行环境</h5><h5 id="连接C-与JavaScript"><a href="#连接C-与JavaScript" class="headerlink" title="连接C++与JavaScript"></a>连接C++与JavaScript</h5><h5 id="文件和文件系统"><a href="#文件和文件系统" class="headerlink" title="文件和文件系统"></a>文件和文件系统</h5><h5 id="多媒体数据和图形"><a href="#多媒体数据和图形" class="headerlink" title="多媒体数据和图形"></a>多媒体数据和图形</h5><h5 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h5><h5 id="多线程编程支持"><a href="#多线程编程支持" class="headerlink" title="多线程编程支持"></a>多线程编程支持</h5><h5 id="移植SIMD代码"><a href="#移植SIMD代码" class="headerlink" title="移植SIMD代码"></a>移植SIMD代码</h5><h5 id="Asyncify"><a href="#Asyncify" class="headerlink" title="Asyncify"></a>Asyncify</h5><h5 id="Emterpreter"><a href="#Emterpreter" class="headerlink" title="Emterpreter"></a>Emterpreter</h5><p>每一部分内容都比较多，本文主要讲第一部分，代码可移植性与限制。下面是正文：</p>
 <h3 id="代码可移植性与限制-1"><a href="#代码可移植性与限制-1" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h3><p>emscripten几乎可以编译任何可移植的c/c++代码到JavaScript。但由于浏览器环境限制和emscripten编译<br>出来的代码的限制，一些代码为了被编译需要被改变，本文就帮我们找出这部分代码。</p>
+<a id="more"></a>
 <h4 id="1、关于可移植性的指导"><a href="#1、关于可移植性的指导" class="headerlink" title="1、关于可移植性的指导"></a>1、关于可移植性的指导</h4><hr>
 <p>本节解释了哪些类型的代码是不可移植的(或者更难于移植)；哪些代码可以编译，但会运行得很慢。开发人员<br>可以使用这些信息来评估移植代码和重写代码的工作量。</p>
 <h5 id="1-1-不能编译的代码"><a href="#1-1-不能编译的代码" class="headerlink" title="1.1 不能编译的代码"></a>1.1 不能编译的代码</h5><p>为了使Emscripten工作，下面类型的代码需要重写。(理论上，在使用模拟的情况下，可以使用Emscripten<br>解决这些问题，但速度非常慢。)</p>

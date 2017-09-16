@@ -411,60 +411,16 @@
 
       
         
-          
-            <h2 id="emscripten代码移植考虑的点"><a href="#emscripten代码移植考虑的点" class="headerlink" title="emscripten代码移植考虑的点"></a>emscripten代码移植考虑的点</h2><p><strong>作者：云荒杯倾</strong><br>该主题涵盖了在将C、C++代码移植到Emscripten时需要考虑的核心考虑问题，以及一般的编码和调试指南。<br>共有以下内容。</p>
+          <h2 id="emscripten代码移植考虑的点"><a href="#emscripten代码移植考虑的点" class="headerlink" title="emscripten代码移植考虑的点"></a>emscripten代码移植考虑的点</h2><p><strong>作者：云荒杯倾</strong><br>该主题涵盖了在将C、C++代码移植到Emscripten时需要考虑的核心考虑问题，以及一般的编码和调试指南。<br>共有以下内容。</p>
 <h5 id="代码可移植性与限制"><a href="#代码可移植性与限制" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h5><h5 id="emscripten的运行环境"><a href="#emscripten的运行环境" class="headerlink" title="emscripten的运行环境"></a>emscripten的运行环境</h5><h5 id="连接C-与JavaScript"><a href="#连接C-与JavaScript" class="headerlink" title="连接C++与JavaScript"></a>连接C++与JavaScript</h5><h5 id="文件和文件系统"><a href="#文件和文件系统" class="headerlink" title="文件和文件系统"></a>文件和文件系统</h5><h5 id="多媒体数据和图形"><a href="#多媒体数据和图形" class="headerlink" title="多媒体数据和图形"></a>多媒体数据和图形</h5><h5 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h5><h5 id="多线程编程支持"><a href="#多线程编程支持" class="headerlink" title="多线程编程支持"></a>多线程编程支持</h5><h5 id="移植SIMD代码"><a href="#移植SIMD代码" class="headerlink" title="移植SIMD代码"></a>移植SIMD代码</h5><h5 id="Asyncify"><a href="#Asyncify" class="headerlink" title="Asyncify"></a>Asyncify</h5><h5 id="Emterpreter"><a href="#Emterpreter" class="headerlink" title="Emterpreter"></a>Emterpreter</h5><p>每一部分内容都比较多，本文主要讲第一部分，代码可移植性与限制。下面是正文：</p>
 <h3 id="代码可移植性与限制-1"><a href="#代码可移植性与限制-1" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h3><p>emscripten几乎可以编译任何可移植的c/c++代码到JavaScript。但由于浏览器环境限制和emscripten编译<br>出来的代码的限制，一些代码为了被编译需要被改变，本文就帮我们找出这部分代码。</p>
-<h4 id="1、关于可移植性的指导"><a href="#1、关于可移植性的指导" class="headerlink" title="1、关于可移植性的指导"></a>1、关于可移植性的指导</h4><hr>
-<p>本节解释了哪些类型的代码是不可移植的(或者更难于移植)；哪些代码可以编译，但会运行得很慢。开发人员<br>可以使用这些信息来评估移植代码和重写代码的工作量。</p>
-<h5 id="1-1-不能编译的代码"><a href="#1-1-不能编译的代码" class="headerlink" title="1.1 不能编译的代码"></a>1.1 不能编译的代码</h5><p>为了使Emscripten工作，下面类型的代码需要重写。(理论上，在使用模拟的情况下，可以使用Emscripten<br>解决这些问题，但速度非常慢。)</p>
-<ul>
-<li><p>代码是多线程的，并使用共享状态。JavaScript有线程(web workers)，但它们不能共享状态。<br>它们传递消息postMessage()。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Note:</div><div class="line">如果JavaScript标准机构将共享状态添加到webworker中，支持多线程代码将成为可能。</div></pre></td></tr></table></figure>
-</li>
-<li><p>代码依赖于大端序架构。emscripten编译的代码目前需要一个little-endian主机运行，这种主机占了连接到互联网<br>的99%的机器。这是因为JavaScript类型化数组服从主机字节序，LLVM需要知道目标字节序是什么。</p>
-</li>
-<li><p>依赖于x86对齐方式的代码。x86允许未对齐的内存读写(例如，您可以从一个非偶数地址读取一个16位的值)，<br>但是其他的架构不是。对于emscripten生成的JavaScript，其内存对齐方式是未定义的。如果您使用<br>SAFE_HEAP = 1构建您的代码，那么您将得到一个清晰的运行时异常，参见<br><a href="https://kripken.github.io/emscripten-site/docs/porting/Debugging.html#debugging" target="_blank" rel="external">调试</a>。</p>
-</li>
-<li><p>使用本机环境的底层特性的代码，例如setjmp / longjmp涉及的本地堆栈操作。(we support proper setjmp/longjmp, i.e.,<br>jumping down the stack, but not jumping up to an unwound stack, which is undefined behavior).</p>
-</li>
-<li><p>扫描寄存器或堆栈的代码。这不会起作用，因为在寄存器或堆栈上的变量可能被放置到一个并不能被扫描的js局部变量里保存。</p>
-</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">如果你是一个喜欢自己写垃圾回收程序的程序员，可能对这类代码比较熟。。。</div></pre></td></tr></table></figure>
-<ul>
-<li>具有特定于体系结构的内联汇编(比如包含x86代码的asm())的代码是不可移植的。这段代码需要用可移植的<br>C或c++来替换。有时，代码库会将可移植的代码和可选的内联程序集写在一起作为优化，你需要找到一个选项<br>使内联汇编代码不可用。</li>
-</ul>
-<h5 id="1-2-能编译但是运行得比较慢的代码"><a href="#1-2-能编译但是运行得比较慢的代码" class="headerlink" title="1.2 能编译但是运行得比较慢的代码"></a>1.2 能编译但是运行得比较慢的代码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Note:</div><div class="line">当你要优化代码的时候，就会知道了解这些事项是有用的。</div></pre></td></tr></table></figure>
-<p>下面类型的代码会被编译，但是可能运行的很慢：</p>
-<ul>
-<li><strong>64位整型变量</strong>。数学运算(+，-，*，/)是慢的，因为它们是被模拟的。这是因为JavaScript没有本地64位int类型，<br>因此这是不可避免的。</li>
-<li><strong>C++异常</strong>。在JavaScript中，这些代码通常会使JavaScript引擎关闭各种优化。因此，在- o1和上面的默认情况下，<br>异常会被关闭。要重新启用它们，请运行emcc与- s DISABLE_EXCEPTION_CATCHING= 0。</li>
-<li>setjmp also prevents relooping around it,，迫使我们使用一种效率较低的方法来模拟控制流。</li>
-</ul>
-<h4 id="2、API限制"><a href="#2、API限制" class="headerlink" title="2、API限制"></a>2、API限制</h4><hr>
-<p>浏览器环境和JavaScript不同于C/C++通常运行的本地环境。这些差异对如何调用和使用本地API施加了一些<br>限制。本部分列出了一些比较明显的限制。</p>
-<h5 id="2-1-网络"><a href="#2-1-网络" class="headerlink" title="2.1 网络"></a>2.1 网络</h5><p>Emscripten支持<strong>libc库</strong>的网络函数，但您必须限制他们是异步(非阻塞)操作。这是因为底层的JavaScript<br>网络函数是异步的。</p>
-<h5 id="2-2-文件系统"><a href="#2-2-文件系统" class="headerlink" title="2.2 文件系统"></a>2.2 文件系统</h5><p>Emscripten支持libc文件系统函数，C / c++代码可以以正常方式编写。</p>
-<p>在浏览器环境中运行的代码是沙盒sandboxed，并且不直接访问本地文件系统。然后，Emscripten就创建了一个虚拟文件<br>系统，它可以预装数据，或者链接到url来懒加载。这会影响同步文件系统函数调用以及一个项目如何被编译。关于这方面，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/files/file_systems_overview.html#file-system-overview" target="_blank" rel="external">文件系统概述</a>。</p>
-<h5 id="2-3-主函数死循环"><a href="#2-3-主函数死循环" class="headerlink" title="2.3 主函数死循环"></a>2.3 主函数死循环</h5><p>浏览器事件模型使用合作模式的多任务处理——每个事件都有一个运行的“turn”，然后必须将控制权返回给浏览器<br>事件循环，这样其他事件就可以处理了。HTML页面挂起的一个常见原因是JavaScript未完成并且未将控制权返回给<br>浏览器。</p>
-<p>这将影响<strong>死循环的主函数</strong>的代码编写。有关更多信息，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment" target="_blank" rel="external">Emscripten Runtime环境</a>。</p>
-<h4 id="3、函数指针的问题"><a href="#3、函数指针的问题" class="headerlink" title="3、函数指针的问题"></a>3、函数指针的问题</h4><hr>
-<p>明天再写，</p>
-<h4 id="4、特定浏览器限制"><a href="#4、特定浏览器限制" class="headerlink" title="4、特定浏览器限制"></a>4、特定浏览器限制</h4><hr>
-<p>本页面列出了一些 与emscripten编译出来的应用程序和游戏相关的 主要浏览器的最新版本之间的差异:</p>
-<ul>
-<li><p>函数emscripten_get_now()以毫秒的形式返回一个wallclock time。<br>Opera 12.16和Windows谷歌Chrome 28.0.1500.95有一个限制，即计时器的精度仅为毫秒。<br>在其他主流浏览器上(IE10,firefox22，非windows的Chrome 28)，也都是亚毫秒精度。</p>
-</li>
-<li><p>WebGL并没有在Internet Explorer得到完全支持(至少在IE12之前)。</p>
-</li>
-<li><p>Opera 12.16对W3C的File API的支持有限。特别是它不支持createObjectURL函数，<br>这意味着不可能使用浏览器的图像编解码器来解码Emscripten虚拟文件系统中的预加载文件。</p>
-</li>
-<li><p>Emscripten中OpenAL和SDL audio的支持依赖于<a href="http://caniuse.com/#feat=audio-api" target="_blank" rel="external">Web Audio API</a>。</p>
-</li>
-</ul>
-
-          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/emscripten-porting/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
