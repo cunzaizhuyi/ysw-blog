@@ -1941,7 +1941,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #52ffff;
+  background: #602f8b;
 }
 .links-of-blogroll {
   font-size: 13px;
@@ -2792,4 +2792,9 @@ embed {
   font-family: cursive;
   line-height: 50px;
   font-size: 30px;
+}
+hr {
+  margin-top: 5px !important;
+  margin-bottom: 15px !important;
+  background: #000 !important;
 }
