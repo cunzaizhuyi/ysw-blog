@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-17T12:07:30.953Z">
+<meta property="og:updated_time" content="2017-09-17T12:08:27.162Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之Emscripten的运行时环境（二）">
 <meta name="twitter:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
@@ -418,6 +418,7 @@
 <p>Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。</p>
 <p>本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。</p>
 <h3 id="1、输入-输出"><a href="#1、输入-输出" class="headerlink" title="1、输入/输出"></a>1、输入/输出</h3><p>Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对音频、键盘、鼠标、<br>操纵杆和图形硬件的底层访问。使用了SDL的应用程序通常不需要为了在浏览器中运行做输入/输出方面的更改。</p>
+<a id="more"></a>
 <p>不过，我们对glut, glfw, glew 和 xlib等库有一些支持上的限制。</p>
 <p>不使用SDL或其他api的应用程序可以使用Emscripten特有的API来输入和输出，他们是:</p>
 <ul>
