@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-17T12:11:40.046Z">
+<meta property="og:updated_time" content="2017-09-17T12:13:43.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之Emscripten的运行时环境（二）">
 <meta name="twitter:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
@@ -427,7 +427,7 @@
 </ul>
 <h3 id="2、文件系统"><a href="#2、文件系统" class="headerlink" title="2、文件系统"></a>2、文件系统</h3><p>很多C/C++代码使用libc和libcxx中的同步文件系统APIs来访问本地文件系统中的代码。这是有问题的，因为浏览器是不会让代码<strong>直接访问</strong>主机系统上的文件的，而且JavaScript只支持异步文件访问（在web worker之外）。</p>
 <p>Emscripten 提供了libc和libcxx的一种实现，并且提供了一个虚拟文件系统，这样正常的C/C++代码可以在不需要修改的情况下被编译然后运行。开发者需要做的只是将文件集合在预加载阶段打包放到这个虚拟文件系统。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">文件数据在  “编译期间”  打包，并在 “ 代码运行之前 ” 使用异步JavaScript api下载到虚拟文件系统中。编译后的代码发出“文件”调用操作，实际上只是调用程序内存。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">文件数据在  “编译期间”  打包，并在 “ 代码运行之前 ” 使用异步JavaScript api下载到虚拟文件系统中。</div><div class="line">编译后的代码发出“文件”调用操作，实际上只是调用程序内存。</div></pre></td></tr></table></figure>
 <p>默认文件系统(MEMFS)在内存存储文件，如果文件做了修改但是页面reload了，则修改的工作就白做了。如果想永久地存储文件的更改，那么开发人员可以安装IDBFS文件系统，该系统允许在浏览器中持久化数据。<br>如果是在node.js中运行代码，开发人员可以安装NODEFS，它可以让代码直接访问本地文件系统。</p>
 <p>Emscripten也有一个API支持同步文件获取。</p>
 <p><a href="https://kripken.github.io/emscripten-site/docs/porting/files/index.html#packaging-code-index" target="_blank" rel="external">更多信息</a></p>
@@ -451,7 +451,7 @@
 <p>*emscripten_async_call()让你在特定间隔调用一个函数。这个是在模拟requestAnimationFrame（默认）和setTimeout。</p>
 <p>这里有很多其他方法来<a href="https://kripken.github.io/emscripten-site/docs/api_reference/emscripten.h.html#emscripten-h-browser-execution-environment" target="_blank" rel="external">控制执行</a></p>
 <h3 id="5、Emscripten中内存表示"><a href="#5、Emscripten中内存表示" class="headerlink" title="5、Emscripten中内存表示"></a>5、Emscripten中内存表示</h3><p>Emscripten中内存模型是Typed Arrays Mode 2。他使用单种类型数组表达内存，不过提供了多种类型视图来读取内存。（HEAPU8、HEAPU16、HEAPU32等）。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">Typed Arrays Mode 2是Fastcomp编译器支持的唯一内存模型，它是旧编译器的默认内存模型。与本项目所尝试的其他内存模型相比，它适用于许多的任意编译后的代码，而且速度相对较快。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">Typed Arrays Mode 2是Fastcomp编译器支持的唯一内存模型，它是旧编译器的默认内存模型。</div><div class="line">与本项目所尝试的其他内存模型相比，它适用于许多的任意编译后的代码，而且速度相对较快。</div></pre></td></tr></table></figure>
 <p>这个模型以与普通C和C++相同的方式在内存中lays out items，它和C/C++使用相同数量的内存。</p>
 <p>这个模型允许您使用违背 load-store consistency假设的代码。由于不同的视图显示了相同的数据，所以您可以(比方说)编写一个32位的整数，然后从中间读取一个字节，它就像在大多数平台上本地构建C或C++那样工作。</p>
 
