@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-17T08:57:36.961Z">
+<meta property="og:updated_time" content="2017-09-17T09:01:40.816Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之代码可移植性与限制（一）">
 <meta name="twitter:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、">
@@ -445,7 +445,7 @@
 <ul>
 <li><p><strong>64位整型变量</strong>。数学运算(+，-，*，/)是慢的，因为它们是被模拟的。这是因为JavaScript没有本地64位int类型，因此这是不可避免的。</p>
 </li>
-<li><p><strong>C++异常</strong>。在JavaScript中，这些代码通常会使JavaScript引擎关闭各种优化。因此，在- o1和上面的默认情况下，异常会被关闭。<br>要重新启用它们，请运行emcc与- s DISABLE_EXCEPTION_CATCHING= 0。</p>
+<li><p><strong>C++异常</strong>。在JavaScript中，这些代码通常会使JavaScript引擎关闭各种优化。因此，在- o1和上面的默认情况下，异常会被关闭。要重新启用它们，请运行emcc与- s DISABLE_EXCEPTION_CATCHING= 0。</p>
 </li>
 <li><p>setjmp also prevents relooping around it，迫使我们使用一种效率较低的方法来模拟控制流。</p>
 </li>
@@ -454,18 +454,18 @@
 <p>浏览器环境和JavaScript不同于C/C++通常运行的本地环境。这些差异对如何调用和使用本地API施加了一些限制。本部分列出了一些比较明显的限制。</p>
 <h4 id="2-1-网络"><a href="#2-1-网络" class="headerlink" title="2.1 网络"></a>2.1 网络</h4><p>Emscripten支持<strong>libc库</strong>的网络函数，但您必须限制他们是异步(非阻塞)操作。这是因为底层的JavaScript网络函数是异步的。</p>
 <h4 id="2-2-文件系统"><a href="#2-2-文件系统" class="headerlink" title="2.2 文件系统"></a>2.2 文件系统</h4><p>Emscripten支持libc文件系统函数，C /C++代码可以以正常方式编写。</p>
-<p>在浏览器环境中运行的代码是沙盒sandboxed，并且不直接访问本地文件系统。然后，Emscripten就创建了一个虚拟文件<br>系统，它可以预装数据，或者链接到url来懒加载。这会影响同步文件系统函数调用以及一个项目如何被编译。关于这方面，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/files/file_systems_overview.html#file-system-overview" target="_blank" rel="external">文件系统概述</a>。</p>
+<p>在浏览器环境中运行的代码是沙盒sandboxed，并且不直接访问本地文件系统。然后，Emscripten就创建了一个虚拟文件系统，它可以预装数据，<br>或者链接到url来懒加载。这会影响同步文件系统函数调用以及一个项目如何被编译。关于这方面，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/files/file_systems_overview.html#file-system-overview" target="_blank" rel="external">文件系统概述</a>。</p>
 <h4 id="2-3-主函数死循环"><a href="#2-3-主函数死循环" class="headerlink" title="2.3 主函数死循环"></a>2.3 主函数死循环</h4><p>浏览器事件模型使用合作模式的多任务处理——每个事件都有一个运行的“turn”，然后必须将控制权返回给浏览器事件循环，这样其他事件就可以处理了。<br>HTML页面挂起的一个常见原因是JavaScript未完成并且未将控制权返回给浏览器。</p>
 <p>这将影响<strong>含有死循环的主函数</strong>的代码编写。有关更多信息，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment" target="_blank" rel="external">Emscripten Runtime环境</a>。</p>
 <h3 id="3、函数指针的问题"><a href="#3、函数指针的问题" class="headerlink" title="3、函数指针的问题"></a>3、函数指针的问题</h3><hr>
-<p>函数指针有三个主要的问题：<br>1、<strong>指针类型转换</strong>会引起指针调用失败。<br>针对函数声明时的签名不同，函数指针会被存储到不同的表中。当一个函数被调用时，它会在与当前函数指针签名关联的表中搜索它。如果你进行了指针类型转换，<br>而指针和所有的表并没有被修改，则调用代码将在错误的表中查找。而错误的表中实际上很可能并没有一个叫该名字的指针，这样就出错了。</p>
+<p>函数指针有三个主要的问题：<br>1、<strong>指针类型转换</strong>会引起指针调用失败。<br>针对函数声明时的签名不同，函数指针会被存储到不同的表中。当一个函数被调用时，它会在与当前函数指针签名关联的表中搜索它。如果你进行了指针类型转换，而指针和所有的表并没有被修改，<br>则调用代码将在错误的表中查找。而错误的表中实际上很可能并没有一个叫该名字的指针，这样就出错了。</p>
 <p>例如，一个声明为int(int)(返回int，接收int)的函数，会被添加到表FUNCTION_TABLE_ii。如果您将一个指向该函数指针投射到void(int)(不返回，接收int)，<br>那么代码将在FUNCTION_TABLE_vi中查找函数。</p>
 <p>你可能看到编译警告：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">warning: implicit declaration of function</div></pre></td></tr></table></figure></p>
 <p>推荐的解决方案是重构代码以避免这种情况，如下面的<strong>Asm指针转换</strong>所描述的那样。</p>
-<p>2、当你使用-o2以及更高优化级别的时候，<strong>比较不同类型的函数指针</strong>会产生错误的结果，而错误的函数指针可能更具误导性。要检查你的代码<br>出问题的原因，可以将aliasing_function_pointer设为零，<br>(- s aliasing_function_pointer= 0)进行编译。</p>
+<p>2、当你使用-o2以及更高优化级别的时候，<strong>比较不同类型的函数指针</strong>会产生错误的结果，而错误的函数指针可能更具误导性。要检查你的代码<br>出问题的原因，可以将aliasing_function_pointer设为零，(- s aliasing_function_pointer= 0)进行编译。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">在asm.js中，函数指针存储在特定函数类型的表中。如FUNCTION_TABLE_ii。</div><div class="line"></div><div class="line">在较低级别的优化中，每个函数指针在所有函数类型表上都有一个惟一的索引值(一个函数指针只在其中一个表的某个索引位置存在，在所有其他表中</div><div class="line">这个索引位置都是一个空槽)。因此，比较函数指针(索引)能给出了一个准确的结果，但如果是试图在错误的表中调用函数指针，将会抛出一个错误，因为该索引是空的。</div><div class="line"></div><div class="line">在-o2和更高级别的优化设置下，表被优化，以至于所有函数指针都在顺序索引中。这是一个有用的优化，因为如果没有所有空槽，表就更紧凑，</div><div class="line">但它确实意味着函数索引不再是“全局”的惟一（因为一个函数指针在这张表中的索引位置与在另一张表中的索引位置不同了）。此时需要一张特定的表</div><div class="line">和在这样表中的特定位置索引才能够唯一索引到一个函数。</div><div class="line"></div><div class="line">因此，高级别的优化编译：</div><div class="line">1、由于不同类型的函数可以有相同的索引(尽管在不同的表中)，函数指针的比较可能会产生错误的结果。</div><div class="line">2、函数指针代码中的错误更难于调试，因为它们导致错误的代码被调用，而不是显式的错误(就像在表中的“漏洞”中那样)。</div></pre></td></tr></table></figure>
 <p>3、<strong>结构体按值传递</strong>时，老版本的clang会为c和c++代码生成两种不同的代码，这两种格式的代码不兼容，你可能会收到一个警告。<br>解决方案是按引用传递结构体，或者不要在有结构体的位置混淆c和c++（比如，重命名.c为.cpp）。</p>
-<h4 id="Asm指针转换"><a href="#Asm指针转换" class="headerlink" title="Asm指针转换"></a>Asm指针转换</h4><p>如上所述，在asm.js模式下，函数指针必须使用正确的类型调用，否则调用将失败。这是因为在函数声明的时候，每个函数指针会基于这个函数的签名<br>被存储在一个特定的表中: 将指针转换为另一个类型会导致调用代码在错误的位置（表）查找函数指针。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">对于每种类型的函数指针都有一个单独的表，可以让JavaScript引擎知道每个函数指针调用的确切类型，这样也好进而优化他们。</div></pre></td></tr></table></figure></p>
+<h4 id="Asm指针转换"><a href="#Asm指针转换" class="headerlink" title="Asm指针转换"></a>Asm指针转换</h4><p>如上所述，在asm.js模式下，函数指针必须使用正确的类型调用，否则调用将失败。这是因为在函数声明的时候，每个函数指针会基于这个函数的签名被存储在一个特定的表中: 将指针转换为另一个类型会导致调用代码在错误的位置（表）查找函数指针。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">对于每种类型的函数指针都有一个单独的表，可以让JavaScript引擎知道每个函数指针调用的确切类型，这样也好进而优化他们。</div></pre></td></tr></table></figure></p>
 <p>有三种解决办法，优先选择第二种：</p>
 <ul>
 <li>调用者在函数指针被调用之前把指针类型再转回原来的指针类型，这是有问题的因为这需要调用者知道它原来的类型是什么，而调用者实际上并不知道一个指针之前的类型是什么。</li>
