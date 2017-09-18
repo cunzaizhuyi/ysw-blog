@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emscripten代码移植之embind（三）">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-embind-three/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-18T13:47:20.577Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emscripten代码移植之embind（三）">
+<meta name="twitter:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-embind-three/"/>
+
+
+
+
+
+  <title>Emscripten代码移植之embind（三） | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-embind-three/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Emscripten代码移植之embind（三）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-18T21:40:59+08:00">
+                2017-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/em-port-embind-three/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-embind-three/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>翻译：云荒杯倾</strong></p>
+<p>Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。</p>
+<p>Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。</p>
+<p>本文展示了如何使用EMSCRIPTEN_BINDINGS()块来创建函数、类、值类型、指针(包括原始和智能指针)、枚举和常量的绑定，以及如何为抽象类创建绑定，这些抽象类可以在JavaScript中被重写。它还简要介绍了如何管理传递给JavaScript的c++对象句柄的内存。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">Embind的灵感来自 Boost.Python，他们使用非常相似的方法定义绑定。</div></pre></td></tr></table></figure>
+<a id="more"></a>
+<h2 id="一个简单例子"><a href="#一个简单例子" class="headerlink" title="一个简单例子"></a>一个简单例子</h2><p>下面的代码使用EMSCRIPTEN_BINDINGS()暴露了C++ lerp()函数给JavaScript。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// quick_example.cpp</div><div class="line">#include &lt;emscripten/bind.h&gt;</div><div class="line"></div><div class="line">using namespace emscripten;</div><div class="line"></div><div class="line">float lerp(float a, float b, float t) &#123;</div><div class="line">    return (1 - t) * a + t * b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDINGS(my_module) &#123;</div><div class="line">    function(&quot;lerp&quot;, &amp;lerp);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>为了使用embind编译上例，请调用emcc的bing选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc --bind -o quick_example.js quick_example.cpp</div></pre></td></tr></table></figure></p>
+<p>生成的quick_example.js文件可以作为node模块加载，也可以使用<script>加载：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> &lt;!doctype html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">  &lt;script src=&quot;quick_example.js&quot;&gt;&lt;/script&gt;</div><div class="line">  &lt;script&gt;</div><div class="line">    console.log(&apos;lerp result: &apos; + Module.lerp(1, 2, 0.5));</div><div class="line">  &lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure></p>
+<p>当quick_example.js文件初始化加载后， EMSCRIPTEN_BINDINGS()中代码会运行。</p>
+<p>所有通过Embind暴露的symblols都可以在Module对象获取。</p>
+<h2 id="类"><a href="#类" class="headerlink" title="类"></a>类</h2><p>暴露一个类给JavaScript需要比较复杂的绑定语句，比如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line">class MyClass &#123;</div><div class="line">public:</div><div class="line">  MyClass(int x, std::string y)</div><div class="line">    : x(x)</div><div class="line">    , y(y)</div><div class="line">  &#123;&#125;</div><div class="line"></div><div class="line">  void incrementX() &#123;</div><div class="line">    ++x;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  int getX() const &#123; return x; &#125;</div><div class="line">  void setX(int x_) &#123; x = x_; &#125;</div><div class="line"></div><div class="line">  static std::string getStringFromInstance(const MyClass&amp; instance) &#123;</div><div class="line">    return instance.y;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">private:</div><div class="line">  int x;</div><div class="line">  std::string y;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">// Binding code</div><div class="line">EMSCRIPTEN_BINDINGS(my_class_example) &#123;</div><div class="line">  class_&lt;MyClass&gt;(&quot;MyClass&quot;)</div><div class="line">    .constructor&lt;int, std::string&gt;()</div><div class="line">    .function(&quot;incrementX&quot;, &amp;MyClass::incrementX)</div><div class="line">    .property(&quot;x&quot;, &amp;MyClass::getX, &amp;MyClass::setX)</div><div class="line">    .class_function(&quot;getStringFromInstance&quot;, &amp;MyClass::getStringFromInstance)</div><div class="line">    ;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>绑定块在一个临时class_对象上定义了成员函数调用链（Boost.Python也是同样风格）。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">你应该只绑定那些你实际需要的项（将它作为一个规则或原则），因为每个绑定会增加代码大小。比如，内部方法和私有变量可以很少绑定。</div></pre></td></tr></table></figure></p>
+<p>在JavaScript中定义和使用MyClass实例的代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">var instance = new Module.MyClass(10, &quot;hello&quot;);</div><div class="line">instance.incrementX();</div><div class="line">instance.x; // 12</div><div class="line">instance.x = 20; // 20</div><div class="line">Module.MyClass.getStringFromInstance(instance); // &quot;hello&quot;</div><div class="line">instance.delete();</div></pre></td></tr></table></figure></p>
+<h2 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h2><p>因为JavaScript，尤其是ECMA-262 Edition 5.1,不支持 finalizers or weak references with callbacks，因此Emscripten没有办法调用C++对象的析构函数。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">警告：</div><div class="line">JavaScript代码必须明确删除C++对象的句柄，否则Emscripten堆会无限增长。</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">var x = new Module.MyClass;</div><div class="line">x.method();</div><div class="line">x.delete();</div><div class="line"></div><div class="line">var y = Module.myFunctionThatReturnsClassInstance();</div><div class="line">y.method();</div><div class="line">y.delete();</div></pre></td></tr></table></figure>
+<h2 id="值类型"><a href="#值类型" class="headerlink" title="值类型"></a>值类型</h2><p>对基本类型进行手动内存管理是麻烦的，所以embind对值类型提供了支持。包括Value arrays和 value objects，分别对应js的array和object。</p>
+<p>示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">struct Point2f &#123;</div><div class="line">    float x;</div><div class="line">    float y;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">struct PersonRecord &#123;</div><div class="line">    std::string name;</div><div class="line">    int age;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">PersonRecord findPersonAtLocation(Point2f);</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDINGS(my_value_example) &#123;</div><div class="line">    value_array&lt;Point2f&gt;(&quot;Point2f&quot;)</div><div class="line">        .element(&amp;Point2f::x)</div><div class="line">        .element(&amp;Point2f::y)</div><div class="line">        ;</div><div class="line"></div><div class="line">    value_object&lt;PersonRecord&gt;(&quot;PersonRecord&quot;)</div><div class="line">        .field(&quot;name&quot;, &amp;PersonRecord::name)</div><div class="line">        .field(&quot;age&quot;, &amp;PersonRecord::age)</div><div class="line">        ;</div><div class="line"></div><div class="line">    function(&quot;findPersonAtLocation&quot;, &amp;findPersonAtLocation);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>以下代码就不需要担心手动生命周期管理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">var person = Module.findPersonAtLocation([10.2, 156.5]);</div><div class="line">console.log(&apos;Found someone! Their name is &apos; + person.name + &apos; and they are &apos; + person.age + &apos; years old&apos;);</div></pre></td></tr></table></figure></p>
+<h2 id="高级类概念（todo）"><a href="#高级类概念（todo）" class="headerlink" title="高级类概念（todo）"></a>高级类概念（todo）</h2><h2 id="重载函数"><a href="#重载函数" class="headerlink" title="重载函数"></a>重载函数</h2><p>构造函数和函数可以根据参数数量重载，但embind不支持根据参数类型重载。当你指定一个重载，请使用select_overload()帮助函数选中合适的签名。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">struct HasOverloadedMethods &#123;</div><div class="line">    void foo();</div><div class="line">    void foo(int i);</div><div class="line">    void foo(float f) const;</div><div class="line">&#125;;</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDING(overloads) &#123;</div><div class="line">    class_&lt;HasOverloadedMethods&gt;(&quot;HasOverloadedMethods&quot;)</div><div class="line">        .function(&quot;foo&quot;, select_overload&lt;void()&gt;(&amp;HasOverloadedMethods::foo))</div><div class="line">        .function(&quot;foo_int&quot;, select_overload&lt;void(int)&gt;(&amp;HasOverloadedMethods::foo))</div><div class="line">        .function(&quot;foo_float&quot;, select_overload&lt;void(float)const&gt;(&amp;HasOverloadedMethods::foo))</div><div class="line">        ;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="枚举"><a href="#枚举" class="headerlink" title="枚举"></a>枚举</h2><p>embind支持C++98枚举和C++11枚举类。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">enum OldStyle &#123;</div><div class="line">    OLD_STYLE_ONE,</div><div class="line">    OLD_STYLE_TWO</div><div class="line">&#125;;</div><div class="line"></div><div class="line">enum class NewStyle &#123;</div><div class="line">    ONE,</div><div class="line">    TWO</div><div class="line">&#125;;</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDINGS(my_enum_example) &#123;</div><div class="line">    enum_&lt;OldStyle&gt;(&quot;OldStyle&quot;)</div><div class="line">        .value(&quot;ONE&quot;, OLD_STYLE_ONE)</div><div class="line">        .value(&quot;TWO&quot;, OLD_STYLE_TWO)</div><div class="line">        ;</div><div class="line">    enum_&lt;NewStyle&gt;(&quot;NewStyle&quot;)</div><div class="line">        .value(&quot;ONE&quot;, NewStyle::ONE)</div><div class="line">        .value(&quot;TWO&quot;, NewStyle::TWO)</div><div class="line">        ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>JavaScript调用方式如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Module.OldStyle.ONE;</div><div class="line">Module.NewStyle.TWO;</div></pre></td></tr></table></figure></p>
+<h2 id="常量"><a href="#常量" class="headerlink" title="常量"></a>常量</h2><p>向JavaScript暴露一个常量：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">EMSCRIPTEN_BINDINGS(my_constant_example) &#123;</div><div class="line">    constant(&quot;SOME_CONSTANT&quot;, SOME_CONSTANT);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="内存视图"><a href="#内存视图" class="headerlink" title="内存视图"></a>内存视图</h2><p>在某些情况下，将原始二进制数据以一个类型化数组的形式直接暴露给JavaScript代码是有价值的。这对于直接从堆上上传大型WebGL纹理非常有用。</p>
+<p>内存视图应该像指针一样对待;生命周期和有效性不由运行时管理的，如果底层对象被修改或重新分配，则很容易损坏数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">#include &lt;emscripten/bind.h&gt;</div><div class="line">#include &lt;emscripten/val.h&gt;</div><div class="line"></div><div class="line">using namespace emscripten;</div><div class="line"></div><div class="line">unsigned char *byteBuffer = /* ... */;</div><div class="line">size_t bufferLength = /* ... */;</div><div class="line"></div><div class="line">val getBytes() &#123;</div><div class="line">    return val(typed_memory_view(bufferLength, byteBuffer));</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDINGS(memory_view_example) &#123;</div><div class="line">    function(&quot;getBytes&quot;, &amp;getBytes);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>下面JavaScript代码接收类型数组视图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var myUint8Array = Module.getBytes()</div><div class="line">var xhr = new XMLHttpRequest();</div><div class="line">xhr.open(&apos;POST&apos;, /* ... */);</div><div class="line">xhr.send(myUint8Array);</div></pre></td></tr></table></figure></p>
+<h2 id="使用val将JavaScript翻译为C"><a href="#使用val将JavaScript翻译为C" class="headerlink" title="使用val将JavaScript翻译为C++"></a>使用val将JavaScript翻译为C++</h2><p>Embind提供了一个c++类，<strong>emscripten::val</strong>，您可以使用它将JavaScript代码转换为c++。使用val，可以在c++中调用JavaScript对象，读取和写入它们的属性，或者强制它们成为c++值，比如bool、int或std::string。</p>
+<p>下面代码展示了你可以通过val在C++中调用JavaScript的 Web Audio API。<br>首先看一下js的代码，展示js怎么用这个API：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">// Get web audio api context</div><div class="line">var AudioContext = window.AudioContext || window.webkitAudioContext;</div><div class="line"></div><div class="line">// Got an AudioContext: Create context and OscillatorNode</div><div class="line">var context = new AudioContext();</div><div class="line">var oscillator = context.createOscillator();</div><div class="line"></div><div class="line">// Configuring oscillator: set OscillatorNode type and frequency</div><div class="line">oscillator.type = &apos;triangle&apos;;</div><div class="line">oscillator.frequency.value = 261.63; // value in hertz - middle C</div><div class="line"></div><div class="line">// Playing</div><div class="line">oscillator.connect(context.destination);</div><div class="line">oscillator.start();</div><div class="line"></div><div class="line">// All done!</div></pre></td></tr></table></figure></p>
+<p>然后使用val将代码翻译成c++，如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">#include &lt;emscripten/val.h&gt;</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;math.h&gt;</div><div class="line"></div><div class="line">using namespace emscripten;</div><div class="line"></div><div class="line">int main() &#123;</div><div class="line">  val AudioContext = val::global(&quot;AudioContext&quot;);</div><div class="line">  if (!AudioContext.as&lt;bool&gt;()) &#123;</div><div class="line">    printf(&quot;No global AudioContext, trying webkitAudioContext\n&quot;);</div><div class="line">    AudioContext = val::global(&quot;webkitAudioContext&quot;);</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  printf(&quot;Got an AudioContext\n&quot;);</div><div class="line">  val context = AudioContext.new_();</div><div class="line">  val oscillator = context.call&lt;val&gt;(&quot;createOscillator&quot;);</div><div class="line"></div><div class="line">  printf(&quot;Configuring oscillator\n&quot;);</div><div class="line">  oscillator.set(&quot;type&quot;, val(&quot;triangle&quot;));</div><div class="line">  oscillator[&quot;frequency&quot;].set(&quot;value&quot;, val(261.63)); // Middle C</div><div class="line"></div><div class="line">  printf(&quot;Playing\n&quot;);</div><div class="line">  oscillator.call&lt;void&gt;(&quot;connect&quot;, context[&quot;destination&quot;]);</div><div class="line">  oscillator.call&lt;void&gt;(&quot;start&quot;, 0);</div><div class="line"></div><div class="line">  printf(&quot;All done!\n&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先使用global()取全局AudioContext对象（如果不存在就取webkitAudioContext对象），然后使用new_()创建实例，从实例我们可以创建oscillator，设置set()它的属性，然后播放。</p>
+<h2 id="内建类型转换"><a href="#内建类型转换" class="headerlink" title="内建类型转换"></a>内建类型转换</h2><p>embind为许多标准C++类型提供类型转换</p>
+<table>
+<thead>
+<tr>
+<th>C++类型</th>
+<th>JavaScript类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>void</td>
+<td>undefined</td>
+</tr>
+<tr>
+<td>bool</td>
+<td>true or false</td>
+</tr>
+<tr>
+<td>char</td>
+<td>number</td>
+</tr>
+<tr>
+<td>signed char</td>
+<td>number</td>
+</tr>
+<tr>
+<td>unsigned char</td>
+<td>number</td>
+</tr>
+<tr>
+<td>short</td>
+<td>number</td>
+</tr>
+<tr>
+<td>ungigned short</td>
+<td>number</td>
+</tr>
+<tr>
+<td>int</td>
+<td>number</td>
+</tr>
+<tr>
+<td>unsigned int</td>
+<td>number</td>
+</tr>
+<tr>
+<td>log</td>
+<td>number</td>
+</tr>
+<tr>
+<td>unsigned long</td>
+<td>number</td>
+</tr>
+<tr>
+<td>float</td>
+<td>number</td>
+</tr>
+<tr>
+<td>double</td>
+<td>number</td>
+</tr>
+<tr>
+<td>std::string</td>
+<td>ArrayBuffer, Uint8Array, Uint8ClampedArray, Int8Array, or String</td>
+</tr>
+<tr>
+<td>std::wstring</td>
+<td>String (UTF-16 code units)</td>
+</tr>
+<tr>
+<td>emscripten::val</td>
+<td>anything</td>
+</tr>
+</tbody>
+</table>
+<p>为了方便，embind还提供了工厂函数用来注册std::vector<T>（register_vector()）和std::map<K, V>（register_map()）类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">EMSCRIPTEN_BINDINGS(stl_wrappers) &#123;</div><div class="line">    register_vector&lt;int&gt;(&quot;VectorInt&quot;);</div><div class="line">    register_map&lt;int,int&gt;(&quot;MapIntInt&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>在撰写本文时，还没有对标准基准测试或相对于WebIDL Binder的全面的embind性能测试。</p>
+<p>简单函数的调用开销在200ns左右。虽然还有进一步优化的空间，但到目前为止，它在实际应用程序中的性能已经被证明是完全可以接受的。</p>
+<hr>
+<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第二篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
+</script></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/em-port-codeinteract-three/" rel="next" title="Emscripten代码移植之连接C++和JavaScript（三）">
+                <i class="fa fa-chevron-left"></i> Emscripten代码移植之连接C++和JavaScript（三）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单例子"><span class="nav-text">一个简单例子</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="翻译：云荒杯倾 Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。 JavaScript使用ccall/cwrap调用编译的c函数JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T12:50:00.158Z">
+<meta property="og:updated_time" content="2017-09-18T13:47:20.607Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之连接C++和JavaScript（三）">
 <meta name="twitter:description" content="翻译：云荒杯倾 Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。 JavaScript使用ccall/cwrap调用编译的c函数JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。">
@@ -466,7 +466,7 @@
 <p>JavaScript对象ENV包含虚拟化环境变量，通过修改它可以将变量传递给编译后的代码。必须注意确保ENV变量在修改前已由Emscripten初始化。Module.preRun可以做这个。</p>
 <p>例如，要设置一个环境变量MY_FILE_ROOT为“/ usr/lib/test/”，您可以将以下JavaScript添加到Module设置代码中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Module.preRun.push(function() &#123;ENV.MY_FILE_ROOT = &quot;/usr/lib/test&quot;&#125;)</div></pre></td></tr></table></figure></p>
 <h2 id="C-和JavaScript绑定—WebIDL-Binder和Embind-todo"><a href="#C-和JavaScript绑定—WebIDL-Binder和Embind-todo" class="headerlink" title="C++和JavaScript绑定—WebIDL Binder和Embind(todo)"></a>C++和JavaScript绑定—WebIDL Binder和Embind(todo)</h2><hr>
-<h2 id="Emscripten代码移植主题系列文章"><a href="#Emscripten代码移植主题系列文章" class="headerlink" title="Emscripten代码移植主题系列文章"></a>Emscripten代码移植主题系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三篇文章。<br>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第四篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
+<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第一篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
 
       
     </div>
@@ -530,6 +530,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/em-port-embind-three/" rel="prev" title="Emscripten代码移植之embind（三）">
+                Emscripten代码移植之embind（三） <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -617,7 +621,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -698,7 +702,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript使用ccall-cwrap调用编译的c函数"><span class="nav-text">JavaScript使用ccall/cwrap调用编译的c函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodejs与C-C-API交互"><span class="nav-text">Nodejs与C/C++ API交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript“直接”调用编译的C-C-代码"><span class="nav-text">JavaScript“直接”调用编译的C/C++代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-调用JavaScript"><span class="nav-text">C/C++调用JavaScript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript中实现C-API"><span class="nav-text">JavaScript中实现C API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript对库文件的限制-todo"><span class="nav-text">JavaScript对库文件的限制(todo)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用JavaScript函数作为C中的函数指针"><span class="nav-text">调用JavaScript函数作为C中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript进行内存访问"><span class="nav-text">JavaScript进行内存访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#影响执行行为"><span class="nav-text">影响执行行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-和JavaScript绑定—WebIDL-Binder和Embind-todo"><span class="nav-text">C++和JavaScript绑定—WebIDL Binder和Embind(todo)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten代码移植主题系列文章"><span class="nav-text">Emscripten代码移植主题系列文章</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript使用ccall-cwrap调用编译的c函数"><span class="nav-text">JavaScript使用ccall/cwrap调用编译的c函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodejs与C-C-API交互"><span class="nav-text">Nodejs与C/C++ API交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript“直接”调用编译的C-C-代码"><span class="nav-text">JavaScript“直接”调用编译的C/C++代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-调用JavaScript"><span class="nav-text">C/C++调用JavaScript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript中实现C-API"><span class="nav-text">JavaScript中实现C API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript对库文件的限制-todo"><span class="nav-text">JavaScript对库文件的限制(todo)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用JavaScript函数作为C中的函数指针"><span class="nav-text">调用JavaScript函数作为C中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript进行内存访问"><span class="nav-text">JavaScript进行内存访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#影响执行行为"><span class="nav-text">影响执行行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-和JavaScript绑定—WebIDL-Binder和Embind-todo"><span class="nav-text">C++和JavaScript绑定—WebIDL Binder和Embind(todo)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten代码移植系列文章"><span class="nav-text">Emscripten代码移植系列文章</span></a></li></ol></div>
             
 
           </div>
