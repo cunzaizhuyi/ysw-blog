@@ -105,18 +105,18 @@
 
 
 
-<meta name="description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、">
+<meta name="description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaS">
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Emscripten代码移植之代码可移植性与限制（一）">
-<meta property="og:url" content="https://cunzaizhuyi.github.io/emscripten-porting/index.html">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-one/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、">
+<meta property="og:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaS">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-17T09:04:03.760Z">
+<meta property="og:updated_time" content="2017-09-18T12:35:13.684Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之代码可移植性与限制（一）">
-<meta name="twitter:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、">
+<meta name="twitter:description" content="Emscripten代码移植之代码可移植性与限制（一）作者：云荒杯倾 译文地址原文地址 Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaS">
 
 
 
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href="https://cunzaizhuyi.github.io/emscripten-porting/"/>
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-one/"/>
 
 
 
@@ -309,7 +309,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/emscripten-porting/">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-one/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="云荒杯倾">
@@ -380,8 +380,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/emscripten-porting/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="emscripten-porting/" itemprop="commentsCount"></span>
+                <a href="/em-port-one/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-one/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -416,6 +416,7 @@
       
         <h2 id="Emscripten代码移植之代码可移植性与限制（一）"><a href="#Emscripten代码移植之代码可移植性与限制（一）" class="headerlink" title="Emscripten代码移植之代码可移植性与限制（一）"></a>Emscripten代码移植之代码可移植性与限制（一）</h2><p><strong>作者：云荒杯倾</strong></p>
 <p><a href="https://cunzaizhuyi.github.io/emscripten-porting/">译文地址</a><br><a href="https://kripken.github.io/emscripten-site/docs/porting/guidelines/index.html" target="_blank" rel="external">原文地址</a></p>
+<p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。</p>
 <p>Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。<br>共有以下主题。</p>
 <h3 id="代码可移植性与限制、emscripten的运行环境、连接C-与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、Emterpreter"><a href="#代码可移植性与限制、emscripten的运行环境、连接C-与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、Emterpreter" class="headerlink" title="代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、Emterpreter"></a>代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、Emterpreter</h3><p>每一部分内容都比较多，本文主要讲第一部分，代码可移植性与限制。下面是正文：</p>
 <h3 id="代码可移植性与限制"><a href="#代码可移植性与限制" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h3><p>Emscripten几乎可以编译任何可移植的c/c++代码到JavaScript。但由于浏览器环境限制和Emscripten编译出来的代码的限制，一些代码为了能被编译需要做改动，本文就帮我们找出这部分代码。</p>
@@ -548,7 +549,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/wasm-Runtime-Env/" rel="prev" title="Emscripten代码移植之Emscripten的运行时环境（二）">
+              <a href="/em-Runtime-Env-two/" rel="prev" title="Emscripten代码移植之Emscripten的运行时环境（二）">
                 Emscripten代码移植之Emscripten的运行时环境（二） <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -638,7 +639,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">9</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

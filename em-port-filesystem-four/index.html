@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emscripten代码移植之文件和文件系统">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-filesystem-four/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/emscripten/file-system.png?raw=true">
+<meta property="og:updated_time" content="2017-09-18T12:29:22.961Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emscripten代码移植之文件和文件系统">
+<meta name="twitter:description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/emscripten/file-system.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-filesystem-four/"/>
+
+
+
+
+
+  <title>Emscripten代码移植之文件和文件系统 | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Emscripten代码移植之文件和文件系统</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-18T14:11:50+08:00">
+                2017-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/em-port-filesystem-four/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-filesystem-four/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是Emscripten代码移植主题系列的第四篇文章。</p>
+<p>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/emscripten-porting/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/wasm-Runtime-Env/">Emscripten的运行时环境</a></p>
+<p>这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：</p>
+<ul>
+<li><strong>文件系统概览</strong>：总体介绍Emscripten支持的文件操作。</li>
+<li><strong>打包文件</strong>：怎样使用emcc来打包编译后的代码所需要的文件。</li>
+<li><strong>同步虚拟XHR后台文件系统使用</strong>：介绍如何使用XHR通过http完成二进制数据的懒加载。</li>
+</ul>
+<p>下面逐一讲这三部分。</p>
+<h2 id="1、文件系统概述"><a href="#1、文件系统概述" class="headerlink" title="1、文件系统概述"></a>1、文件系统概述</h2><hr>
+<p>分两部分，一部分介绍Emscripten的文件系统运行环境，一部分介绍Emscripten 文件系统体系架构。</p>
+<h3 id="Emscripten的文件系统运行环境"><a href="#Emscripten的文件系统运行环境" class="headerlink" title="Emscripten的文件系统运行环境"></a>Emscripten的文件系统运行环境</h3><a id="more"></a>
+<p>原生代码和JS使用的文件存取模式有很大的不同。原生代码使用libc和libcxx库调用同步文件APIs，而JS中除了web worker都是只允许异步文件获取的。另外，因为JS处在浏览器沙箱环境中，它并不是直接对主机的文件系统进行存取操作的。</p>
+<p>Emscripten提供了一个虚拟的文件系统模拟本地文件系统，所以原生代码可以可以在很少或者不需要修改的情况下使用同步文件APIs。</p>
+<p><strong>打包文件</strong>可以让你指定你需要的文件，通过emcc将他们打包进虚拟文件系统。对于开发者来说，打包文件这一部分的知识是需要了解的。</p>
+<h3 id="Emscripten文件系统体系架构"><a href="#Emscripten文件系统体系架构" class="headerlink" title="Emscripten文件系统体系架构"></a>Emscripten文件系统体系架构</h3><p>下面列出了<strong>Emscripten文件系统</strong>的主要元素。大多数原生代码都是调用libc和libcxx库的同步文件API的，接下来他们将依次调用底层的文件系统API，默认使用MEMFS虚拟文件系统。</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/emscripten/file-system.png?raw=true" alt="文件系统体系结构"></p>
+<p>当运行时初始化时，MEMFS挂载在根目录下。而添加到MEMFS的文件是在<strong>编译期间</strong>通过emcc打包进来的。<strong>当HTML页面加载完成后</strong>，JS使用同步XHR异步加载（load）这些文件。只有当异步加载完成，文件在虚拟文件系统可用的时候，才能执行<strong>编译代码</strong>。</p>
+<p>因为MEMFS实际上存在内存中，页面reload完成的时候，所有写入的数据都会丢失掉。如果想持久化这些写入的东西，请在浏览器中挂载IDBFS文件系统，或者Nodejs中挂载NODEFS。NODEFS可以访问本地文件系统。你可以通过自己写JS的方式挂载新的文件系统，然后执行这些文件系统中的适合你的文件操作。</p>
+<p>如果你需要从网络取其他文件到文件系统，请使用 Emscripten Asynchronous File System API中的emscripten_wget()和其他方法。这些方法是同步的，应用程序必须等待回调完成完成。</p>
+<h2 id="2、打包文件"><a href="#2、打包文件" class="headerlink" title="2、打包文件"></a>2、打包文件</h2><hr>
+<p>有<strong>预加载（preloading）</strong>和<strong>嵌入(embedding)</strong>两种可交换的打包方式。嵌入式是将具体文件与编译生生的JS文件混到一起，放同一个文件。而预加载可以将文件单独打包到一个文件中。嵌入的方式比预加载低效，使用情况是要打包的文件数量和文件大小都比较小。</p>
+<p>emcc使用<strong>文件打包器</strong>打包文件，然后在创建和加载文件系统的时候生成文件系统调用。虽然emcc是推荐的打包工具，但是你也可以直接手动使用<strong>文件打包器</strong>进行自行打包。</p>
+<h3 id="用emcc打包"><a href="#用emcc打包" class="headerlink" title="用emcc打包"></a>用emcc打包</h3><p>打包文件最简单的方式是在编译的时候通过emcc打包。preload和embed代表你选择的打包方式。</p>
+<p>下面是一个示例打包命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc file.cpp -o file.html --preload-file asset_dir</div></pre></td></tr></table></figure>
+<p>这个命令会生成file.html，file.js，file.data。这个.data文件包含了asset_dir目录下的所有文件，通过file.js来加载它。</p>
+<p>下面这个命令展示了嵌入方式打包。此时，emcc生成file.html，file.js。 asset_dir/ 目录中的内容都直接被打包进file.js了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc file.cpp -o file.html --embed-file asset_dir</div></pre></td></tr></table></figure></p>
+<p>默认下，要打包的文件应该嵌套在或就在<strong>编译命令此时cd的目录</strong>下。运行时，虚拟文件系统会映射同样的要打包文件的目录结构。虚拟文件系统的根目录对应着<strong>编译命令此时cd的目录</strong>。</p>
+<p>举例，有dir1/dir2/dir3/asset_dir/的一个目录结构，dir2是要编译的项目，我们要打包asset_dir的话，就用相对路径dir3/asset_dir/。emcc的命令窗口在dir2目录打开。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc file.cpp -o file.html --preload-file dir3/asset_dir</div></pre></td></tr></table></figure></p>
+<p>打包编译完成后，在虚拟文件系统中也是通过dir3/asset_dir这样的路径来找asset_dir文件夹。相似的，如果我们是在dir2下打包了一个文件的话，项目运行时就应该在虚拟文件系统的根目录下来找dir2目录。</p>
+<p>打包时，还有一个<strong>@符号的用法</strong>，它是指将任何本地文件系统中任何目录下的文件映射到编译后的虚拟文件系统中的某路径。</p>
+<h3 id="用文件打包器打包"><a href="#用文件打包器打包" class="headerlink" title="用文件打包器打包"></a>用文件打包器打包</h3><p>除了通过emcc命令编译时打包，你也可以手动运行<strong>文件打包器</strong>file_packager.py来打包。</p>
+<p>打包器会成.data文化和.js文件。.js文件包含使用.data文件的代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">* 使用文件打包器打包使你不用非要在编译的时候（用emccd来编译）打包。</div><div class="line">* 使用文件打包器可对多个数据文件逐一打包，然后输出很多.js文件。</div></pre></td></tr></table></figure>
+<h3 id="改变-data文件的位置"><a href="#改变-data文件的位置" class="headerlink" title="改变.data文件的位置"></a>改变.data文件的位置</h3><p>默认下，.data文件和.js文件通过相同URL加载。有时候让你的数据文件和其他类型文件分开，处在不同位置是有用的。</p>
+<p>使用 Module.filePackagePrefixURL完成存储前的路径修改。这个属性要在加载它的<script>中指定。</p>
+<h3 id="在虚拟文件系统中修改文件位置"><a href="#在虚拟文件系统中修改文件位置" class="headerlink" title="在虚拟文件系统中修改文件位置"></a>在虚拟文件系统中修改文件位置</h3><p>默认打包方法是将要打包的文件目录映射到虚拟文件系统的根目录，目录的结构也映射。而用@符号可以显示指定在运行时某个路径下资源应该位于虚拟文件系统的哪里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">之所以搞一个@符号，是因为有时候要打包的文件并不在或者并不嵌套在编译时目录下。因为不能在虚拟文件系统中映射它的位置。</div></pre></td></tr></table></figure>
+<p>举例，我们通过以下命令可以将../../asset_dir这一一个目录搞成虚拟文件系统中的根目录。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc file.cpp -o file.html --preload-file ../../asset_dir@/</div></pre></td></tr></table></figure></p>
+<p>也可以将一个文件映射成新的路径及文件名，下面就是将本地文件系统中的路径../res/gen123.png编译后变成虚拟文件系统中的/main.png。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc file.cpp -o file.html --embed-file ../res/gen123.png@main.png</div></pre></td></tr></table></figure></p>
+<h3 id="合法字符集"><a href="#合法字符集" class="headerlink" title="合法字符集"></a>合法字符集</h3><p>文件名可以是A-Z, a-z, 0-9，空格，（!#$%&amp;’()+,-.;=@[]^_`{}~）括号中的字符也可以。<br>如果你主机系统支持的话，这些字符也可以：”<em>&lt;&gt;?|，这些在Windows中不行。<br>如果想用@，有时候需要转义，使用@@，这是为了避免@被理解成<em>*路径映射</em></em>（上面讲的）。<br>/, \ 和: 不能用。</p>
+<h3 id="监视文件的调用"><a href="#监视文件的调用" class="headerlink" title="监视文件的调用"></a>监视文件的调用</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note：</div><div class="line">只打包你程序真正需要的文件，别打包其他，这样可以减少代码体积，提高启动速度。</div></pre></td></tr></table></figure>
+<p>运行期有一个打印选项可以查看哪些文件被用到。通过定义Module.logReadFiles对象来使用。 每当读到一个文件时，Module.printErr会被调用一次。</p>
+<p>另一个方法是在你编译出来的JS中查看FS.readFiles()。这是个对象，它的键都是它读的文件。你会发现它比上面的打印方法更简单，因为它是直接记录了文件，而不是上面那种<strong><em>只是有可能的</em></strong>文件存取。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note：</div><div class="line">你也可以修改或删除FS.readFiles()对象，当你想看在两个时间点之间都有哪些文件被读取的时候，这样做是对的。</div></pre></td></tr></table></figure>
+<h2 id="3、虚拟-同步XHR-后台文件系统的使用"><a href="#3、虚拟-同步XHR-后台文件系统的使用" class="headerlink" title="3、虚拟 同步XHR 后台文件系统的使用"></a>3、虚拟 同步XHR 后台文件系统的使用</h2><hr>
+<p>Emscripten支持使用XHR从HTTP服务器中延迟加载二进制数据。此功能可用于创建从编译代码中进行<strong>同步文件访问</strong>的后端。</p>
+<p>后端可以提高启动时间，因为在编译的代码运行之前，整个文件系统不需要预加载。如果web服务器支持字节服务，那么它也是非常有效的—–—在这种情况下，Emscripten可以读取实际需要的文件部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">警告：</div><div class="line">由于浏览器限制，这个机制只能用到web workers中</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">如果不支持字节服务，那么在读取单个字节时，Emscripten将不得不加载整个文件(无论大小)。</div></pre></td></tr></table></figure>
+</script></p>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/em-Runtime-Env-two/" rel="next" title="Emscripten代码移植之Emscripten的运行时环境（二）">
+                <i class="fa fa-chevron-left"></i> Emscripten代码移植之Emscripten的运行时环境（二）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/em-port-codeinteract-three/" rel="prev" title="Emscripten代码移植之连接C++和JavaScript（三）">
+                Emscripten代码移植之连接C++和JavaScript（三） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、文件系统概述"><span class="nav-text">1、文件系统概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Emscripten的文件系统运行环境"><span class="nav-text">Emscripten的文件系统运行环境</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Emscripten文件系统体系架构"><span class="nav-text">Emscripten文件系统体系架构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、打包文件"><span class="nav-text">2、打包文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用emcc打包"><span class="nav-text">用emcc打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用文件打包器打包"><span class="nav-text">用文件打包器打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改变-data文件的位置"><span class="nav-text">改变.data文件的位置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

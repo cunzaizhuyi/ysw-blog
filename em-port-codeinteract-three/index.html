@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="这是Emscripten代码移植主题系列的第三篇文章。第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境  Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。 JavaScript使用ccall/cwrap调用编译的c函数JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emscripten代码移植之连接C++和JavaScript（三）">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-codeinteract-three/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="这是Emscripten代码移植主题系列的第三篇文章。第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境  Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。 JavaScript使用ccall/cwrap调用编译的c函数JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-18T12:39:03.979Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emscripten代码移植之连接C++和JavaScript（三）">
+<meta name="twitter:description" content="这是Emscripten代码移植主题系列的第三篇文章。第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境  Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。 JavaScript使用ccall/cwrap调用编译的c函数JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/"/>
+
+
+
+
+
+  <title>Emscripten代码移植之连接C++和JavaScript（三） | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Emscripten代码移植之连接C++和JavaScript（三）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-18T17:10:12+08:00">
+                2017-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/em-port-codeinteract-three/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-codeinteract-three/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是Emscripten代码移植主题系列的第三篇文章。<br>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/emscripten-porting/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/wasm-Runtime-Env/">Emscripten的运行时环境</a></p>
+<hr>
+<p>Emscripten提供了多种方法来连接和交互JavaScript和编译的C或c++，本文逐一介绍。</p>
+<h2 id="JavaScript使用ccall-cwrap调用编译的c函数"><a href="#JavaScript使用ccall-cwrap调用编译的c函数" class="headerlink" title="JavaScript使用ccall/cwrap调用编译的c函数"></a>JavaScript使用ccall/cwrap调用编译的c函数</h2><p>JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。</p>
+<a id="more"></a>
+<p>ccall()用具体的参数和返回值调用一个编译的C函数，而cwrap()是一个编译的C函数的包裹，调用它会返回一个JavaScript可以调用的函数。如果你打算多次调用一个函数的话，cwrap()用处更大。</p>
+<p>举个例子， 下面代码是tests/hello_function.cpp文件。int_sqrt()函数外面套了个extern “C”是为了防止C++对它的名字改编。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#include &lt;math.h&gt;</div><div class="line"></div><div class="line">extern &quot;C&quot; &#123;</div><div class="line"></div><div class="line">int int_sqrt(int x) &#123;</div><div class="line">  return sqrt(x);</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用的编译命令为：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc tests/hello_function.cpp -o function.html -s EXPORTED_FUNCTIONS=&quot;[&apos;_int_sqrt&apos;]&quot;</div></pre></td></tr></table></figure></p>
+<p>编译完，你可以使用JavaScript调用cwrap()拿到int_sqrt函数。继而可以进行其他操作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int_sqrt = Module.cwrap(&apos;int_sqrt&apos;, &apos;number&apos;, [&apos;number&apos;])</div><div class="line">int_sqrt(12)</div><div class="line">int_sqrt(28)</div></pre></td></tr></table></figure></p>
+<p>第一个参数是函数名，第二个参数是函数返回类型，第三个是参数类型。<br>返回类型和参数类型中可以用<strong>类型</strong>有三个，分别是number，string和array。number（是js中的number，对应着C中的整型，浮点型，一般指针），string(是JavaScript中的string，对应着C中的char<em>,C中char</em>表示一个字符串)，array（是js中的数组或类型数组，对应C中的数组；如果是类型数组，必须为Uint8Array或者Int8Array）。</p>
+<p>编译完，你可以运行function.html，在浏览器先看一看，实际上啥也没有，因为tests/hello_function.cpp文件没有主函数（main()）。打开一个js开发环境，敲下下面上面的几行，就能看到运行结果，12开方为3,28开方得5。</p>
+<p>ccall()类似，不过还要接受其他参数。下面代码就是直接用int_sqrt计算28的开方。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">// Call C from JavaScript</div><div class="line">var result = Module.ccall(&apos;int_sqrt&apos;, // name of C function</div><div class="line">  &apos;number&apos;, // return type</div><div class="line">  [&apos;number&apos;], // argument types</div><div class="line">  [28]); // arguments</div><div class="line"></div><div class="line">// result is 5</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">使用 ccall()或者cwrap()的注意事项：</div><div class="line">    *  这些方法用于编译的C函数，对进行过函数名改编的C++函数不工作。</div><div class="line">    *  推荐你导出你要用JavaScript调用的函数。</div><div class="line">        A.导出是在编译阶段做的。比如-s EXPORTED_FUNCTIONS=&apos;[&quot;_main&quot;,&quot;_other_function&quot;]&apos;               导出了main()和other_function()。</div><div class="line">        B.导出时给函数名加下划线“_”，见A。</div><div class="line">        C.A中把main也导出了，如果你不导出main，mian就会变成无效代码，这个导出列表应该是完整             的可以keepalive的函数列表。</div><div class="line">        D.Emscripten会做无效代码清除以减小生成的代码体积，所以请确保导出了所有你想用js调的函             数。</div><div class="line">        E.如果编译是优化编译-O2级别及以上，会进行代码改编，包括函数名。但是通过-s                       EXPORTED_FUNCTIONS导出的函数可以继续使用原来的函数名。</div><div class="line">        F.如果你想导出一个js库函数（比如，src/library*.js这样的），除了用EXPORTED_FUNCTIONS             ，还得用DEFAULT_LIBRARY_FUNCS_TO_INCLUDE。</div><div class="line">    *  使用Module.ccall调用，不要直接用ccall。前者在代码进行的是 优化编译 的情况下也工作。</div></pre></td></tr></table></figure>
+<h2 id="Nodejs与C-C-API交互"><a href="#Nodejs与C-C-API交互" class="headerlink" title="Nodejs与C/C++ API交互"></a>Nodejs与C/C++ API交互</h2><p>如果你有个C库，暴露了一些程序/函数。如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">//api_example.c</div><div class="line">#include &lt;stdio.h&gt;</div><div class="line">#include &lt;emscripten.h&gt;</div><div class="line"></div><div class="line">EMSCRIPTEN_KEEPALIVE</div><div class="line">void sayHi() &#123;</div><div class="line">  printf(&quot;Hi!\n&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMSCRIPTEN_KEEPALIVE</div><div class="line">int daysInWeek() &#123;</div><div class="line">  return 7;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>使用编译命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc api_example.c -o api_example.js</div></pre></td></tr></table></figure></p>
+<p>可以用以下代码执行这个库中的函数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">var em_module = require(&apos;./api_example.js&apos;);</div><div class="line"></div><div class="line">em_module._sayHi(); // direct calling works</div><div class="line">em_module.ccall(&quot;sayHi&quot;); // using ccall etc. also work</div><div class="line">console.log(em_module._daysInWeek()); // values can be returned, etc.</div></pre></td></tr></table></figure></p>
+<p>这就是简单的编译C函数和Node的交互。</p>
+<h2 id="JavaScript“直接”调用编译的C-C-代码"><a href="#JavaScript“直接”调用编译的C-C-代码" class="headerlink" title="JavaScript“直接”调用编译的C/C++代码"></a>JavaScript“直接”调用编译的C/C++代码</h2><p>C中的函数编译为js中函数后，其实你可以直接调的，比如C中有个a()，在编译后js用_a()来调，不用非要使用ccall()和cwarp()，不过有时候直接调用会稍微复杂点。可能需要你调试一下。</p>
+<p>注意上面的<em>a()中的“</em>”，直接调的话是一般是要加的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">用ccall()和cwarp()来调，就不用加下划线。C中是什么函数名，就js使用什么函数名，传给ccall()或cwarp()。</div></pre></td></tr></table></figure>
+<p>直接调的时候，多多注意函数的参数，确保他们有意义。如果是整型和浮点数原样传递，指针参数在编译后要按简单整数来传。</p>
+<p> Pointer_stringify()将C指针转为字符串，将字符串转为指针，请用 <code>ptr =</code> allocate(intArrayFromString(someString), ‘i8’, ALLOC_NORMAL).</p>
+<p>还有一些转换字符串的函数，可以在preamble.js中找。</p>
+<h2 id="C-C-调用JavaScript"><a href="#C-C-调用JavaScript" class="headerlink" title="C/C++调用JavaScript"></a>C/C++调用JavaScript</h2><p>Emscripten提供两种方法让C/C++调用JavaScript，一种是使用 emscripten_run_script()运行js脚本，一种是写“内联JavaScript”。</p>
+<p>emscripten_run_script()最直接，但略慢的方式。它是通过eval()来实现的。举例，在C代码中插下面一行代码，将来编译后就能在浏览器弹出alert()。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emscripten_run_script(&quot;alert(&apos;hi&apos;)&quot;);</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">因为alert函数只有浏览器中有，node中没有，所以一个通用的方式是用Module.print().</div></pre></td></tr></table></figure>
+<p>第二种，用EM_ASM()和其他相关宏写<strong>内联JavaScript</strong>，这种方式就稍微快一点。使用这种方式实现上面那个alert，代码就是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">#include &lt;emscripten.h&gt;</div><div class="line"></div><div class="line">    int main() &#123;</div><div class="line">      EM_ASM(</div><div class="line">        alert(&apos;hello world!&apos;);</div><div class="line">        throw &apos;all done&apos;;</div><div class="line">      );</div><div class="line">      return 0;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>你也可以在C中传值给JavaScript，那就用EM<em>ASM</em>（比EM<em>ASM多了“</em>”），举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">EM_ASM_(&#123;</div><div class="line">  Module.print(&apos;I received: &apos; + $0);</div><div class="line">&#125;, 100);</div></pre></td></tr></table></figure></p>
+<p>输出：I received: 100。</p>
+<p>也可以有返回值，用EM_ASM_INT。举例<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">int x = EM_ASM_INT(&#123;</div><div class="line">  Module.print(&apos;I received: &apos; + $0);</div><div class="line">  return $0 + 1;</div><div class="line">&#125;, 100);</div><div class="line">printf(&quot;%d\n&quot;, x);</div></pre></td></tr></table></figure></p>
+<p>返回101。<br>更多内容参见<a href="https://kripken.github.io/emscripten-site/docs/api_reference/emscripten.h.html#c.EM_ASM_" target="_blank" rel="external">emscripten.h部分的API文档</a>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">* 如果返回值是int或double,你要指定不同宏，是EM_ASM_INT还是EM_ASM_DOUBLE。</div><div class="line">* 输入参数用$0，$1等形式表示。</div><div class="line">* 返回值用于js传给c数据。</div><div class="line">* 好好看一下上面几段代码中&#123;&#125;的用法，它用来区分哪里是参数，哪里是输入值。</div><div class="line">* 使用 EM_ASM 注意用‘’，不要用“”。否则会有语法错误。</div></pre></td></tr></table></figure>
+<h2 id="JavaScript中实现C-API"><a href="#JavaScript中实现C-API" class="headerlink" title="JavaScript中实现C API"></a>JavaScript中实现C API</h2><p>在JavaScript中实现C API是有可能的。Emscripten的很多库，比如SDL1 and OpenGL就用到这个方法。</p>
+<p>可以写js API 让C/C++来调用，为实现它，你要定义接口，用extern来标记它是个外部API。然后默认情况系，你去library.js里面实现这个接口。编译时，编译器会寻找这些js库。</p>
+<p>默认下，接口实现代码要写在library.js里面。你也可以使用编译选项–js-library把实现接口的代码放到自定义.js文件中。</p>
+<p>举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">extern void my_js(void);</div><div class="line"></div><div class="line">int main() &#123;</div><div class="line">  my_js();</div><div class="line">  return 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">如果你用的C++，请用extern &quot;C&quot; &#123;&#125;把extern void my_js();括起来。如下：</div><div class="line">        extern &quot;C&quot; &#123;</div><div class="line">          extern void my_js();</div><div class="line">        &#125;</div></pre></td></tr></table></figure>
+<p>上面定义了接口，并且还在main里面调用了。下面就去library.js这个默认库里面实现这个接口，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">my_js: function() &#123;</div><div class="line">  alert(&apos;hi&apos;);</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>这样就相当于在C中调用一个JS库的API。</p>
+<h3 id="JavaScript对库文件的限制-todo"><a href="#JavaScript对库文件的限制-todo" class="headerlink" title="JavaScript对库文件的限制(todo)"></a>JavaScript对库文件的限制(todo)</h3><h2 id="调用JavaScript函数作为C中的函数指针"><a href="#调用JavaScript函数作为C中的函数指针" class="headerlink" title="调用JavaScript函数作为C中的函数指针"></a>调用JavaScript函数作为C中的函数指针</h2><p>使用Runtime.addFunction返回一个整数来表示一个函数指针。把这个整数传给C代码，然后C代码调用那个值，则传给Runtime.addFunction的JavaScript函数就被调用。</p>
+<p>当你用Runtime.addFunction，会有一个数组来存这些函数。这个数组的大小必须被明确指定，这可以通过编译设置项RESERVED_FUNCTION_POINTERS来做。举例,保存20个函数大小。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc ... -s RESERVED_FUNCTION_POINTERS=20 ...</div></pre></td></tr></table></figure>
+<h2 id="JavaScript进行内存访问"><a href="#JavaScript进行内存访问" class="headerlink" title="JavaScript进行内存访问"></a>JavaScript进行内存访问</h2><p>你可以使用getValue(ptr,type)和setValue(ptr,value,type)访问内存。第一个参数ptr是一个指针(代表一个内存地址的数字)。类型type必须为LLVM IR类型，i8、i16、i32、i64、float、double或类似i8 <em>(或只有 </em>)的指针类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">这是一个比ccall()和cwrap()更底层的操作</div></pre></td></tr></table></figure></p>
+<p>您还可以通过操纵表示内存的数组来直接访问内存。这是不推荐的，除非您确定您知道自己在做什么，并且它比getValue()和setValue()需要更多开销。</p>
+<p>如果您想从JavaScript导入大量数据让编译代码进行处理，那么可能需要这样做。例如，下面的代码分配一个缓冲区，在其中放一些数据，调用C函数来处理数据，最后释放缓冲区。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">var buf = Module._malloc(myTypedArray.length*myTypedArray.BYTES_PER_ELEMENT);</div><div class="line">Module.HEAPU8.set(myTypedArray, buf);</div><div class="line">Module.ccall(&apos;my_function&apos;, &apos;number&apos;, [&apos;number&apos;], [buf]);</div><div class="line">Module._free(buf);</div></pre></td></tr></table></figure>
+<p>这里my_function是一个C函数，它接收一个整数参数(或者一个指针，它们都是32位的整数)，并返回一个整数。可能是int my_function(char * buf)这样。</p>
+<h2 id="影响执行行为"><a href="#影响执行行为" class="headerlink" title="影响执行行为"></a>影响执行行为</h2><p>Module是一个全局JavaScript对象，它有很多Emscripten生成的代码在执行的时候会调用的属性。</p>
+<p>开发者可以提供Module的实现以控制Emscripten消息通知的显示行为，主循环运行前加载哪些文件，以及其他很多行为。</p>
+<h2 id="环境变量"><a href="#环境变量" class="headerlink" title="环境变量"></a>环境变量</h2><p>有时，编译代码需要访问环境变量(例如，在C中调用getenv()函数)。emscripten生成的JavaScript无法直接访问计算机的环境变量，因此提供了一个“虚拟化”的环境。</p>
+<p>JavaScript对象ENV包含虚拟化环境变量，通过修改它可以将变量传递给编译后的代码。必须注意确保ENV变量在修改前已由Emscripten初始化。Module.preRun可以做这个。</p>
+<p>例如，要设置一个环境变量MY_FILE_ROOT为“/ usr/lib/test/”，您可以将以下JavaScript添加到Module设置代码中:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Module.preRun.push(function() &#123;ENV.MY_FILE_ROOT = &quot;/usr/lib/test&quot;&#125;)</div></pre></td></tr></table></figure></p>
+<h2 id="C-和JavaScript绑定—WebIDL-Binder和Embind-todo"><a href="#C-和JavaScript绑定—WebIDL-Binder和Embind-todo" class="headerlink" title="C++和JavaScript绑定—WebIDL Binder和Embind(todo)"></a>C++和JavaScript绑定—WebIDL Binder和Embind(todo)</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/em-port-filesystem-four/" rel="next" title="Emscripten代码移植之文件和文件系统">
+                <i class="fa fa-chevron-left"></i> Emscripten代码移植之文件和文件系统
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript使用ccall-cwrap调用编译的c函数"><span class="nav-text">JavaScript使用ccall/cwrap调用编译的c函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nodejs与C-C-API交互"><span class="nav-text">Nodejs与C/C++ API交互</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript“直接”调用编译的C-C-代码"><span class="nav-text">JavaScript“直接”调用编译的C/C++代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C-调用JavaScript"><span class="nav-text">C/C++调用JavaScript</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript中实现C-API"><span class="nav-text">JavaScript中实现C API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#JavaScript对库文件的限制-todo"><span class="nav-text">JavaScript对库文件的限制(todo)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用JavaScript函数作为C中的函数指针"><span class="nav-text">调用JavaScript函数作为C中的函数指针</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JavaScript进行内存访问"><span class="nav-text">JavaScript进行内存访问</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#影响执行行为"><span class="nav-text">影响执行行为</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量"><span class="nav-text">环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-和JavaScript绑定—WebIDL-Binder和Embind-todo"><span class="nav-text">C++和JavaScript绑定—WebIDL Binder和Embind(todo)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
