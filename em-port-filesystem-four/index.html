@@ -105,19 +105,19 @@
 
 
 
-<meta name="description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta name="description" content="翻译：云荒杯倾 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完成二进制数据的懒加载。  下面逐一讲这三部分。 1、文件系统概述 分两部分，一部分介绍Emscripten的文件系统运行">
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Emscripten代码移植之文件和文件系统">
+<meta property="og:title" content="Emscripten代码移植之文件和文件系统（四）">
 <meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-filesystem-four/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta property="og:description" content="翻译：云荒杯倾 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完成二进制数据的懒加载。  下面逐一讲这三部分。 1、文件系统概述 分两部分，一部分介绍Emscripten的文件系统运行">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/emscripten/file-system.png?raw=true">
-<meta property="og:updated_time" content="2017-09-18T12:29:22.961Z">
+<meta property="og:updated_time" content="2017-09-18T12:50:00.061Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Emscripten代码移植之文件和文件系统">
-<meta name="twitter:description" content="这是Emscripten代码移植主题系列的第四篇文章。 第一篇文章介绍代码可移植性与限制第二篇文章介绍Emscripten的运行时环境 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完">
+<meta name="twitter:title" content="Emscripten代码移植之文件和文件系统（四）">
+<meta name="twitter:description" content="翻译：云荒杯倾 这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：  文件系统概览：总体介绍Emscripten支持的文件操作。 打包文件：怎样使用emcc来打包编译后的代码所需要的文件。 同步虚拟XHR后台文件系统使用：介绍如何使用XHR通过http完成二进制数据的懒加载。  下面逐一讲这三部分。 1、文件系统概述 分两部分，一部分介绍Emscripten的文件系统运行">
 <meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/emscripten/file-system.png?raw=true">
 
 
@@ -154,7 +154,7 @@
 
 
 
-  <title>Emscripten代码移植之文件和文件系统 | 云荒杯倾</title>
+  <title>Emscripten代码移植之文件和文件系统（四） | 云荒杯倾</title>
   
 
 
@@ -328,7 +328,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Emscripten代码移植之文件和文件系统</h1>
+          <h1 class="post-title" itemprop="name headline">Emscripten代码移植之文件和文件系统（四）</h1>
         
 
         <div class="post-meta">
@@ -416,8 +416,7 @@
       
 
       
-        <p>这是Emscripten代码移植主题系列的第四篇文章。</p>
-<p>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/emscripten-porting/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/wasm-Runtime-Env/">Emscripten的运行时环境</a></p>
+        <p><strong>翻译：云荒杯倾</strong></p>
 <p>这部分是关于如何在 Emscripten编译的代码中使用文件。包括以下部分：</p>
 <ul>
 <li><strong>文件系统概览</strong>：总体介绍Emscripten支持的文件操作。</li>
@@ -467,6 +466,8 @@
 <p>后端可以提高启动时间，因为在编译的代码运行之前，整个文件系统不需要预加载。如果web服务器支持字节服务，那么它也是非常有效的—–—在这种情况下，Emscripten可以读取实际需要的文件部分。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">警告：</div><div class="line">由于浏览器限制，这个机制只能用到web workers中</div></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">如果不支持字节服务，那么在读取单个字节时，Emscripten将不得不加载整个文件(无论大小)。</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Emscripten代码移植主题系列文章"><a href="#Emscripten代码移植主题系列文章" class="headerlink" title="Emscripten代码移植主题系列文章"></a>Emscripten代码移植主题系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第四篇文章。<br>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第四篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
 </script></p>
       
     </div>
@@ -521,7 +522,7 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/em-Runtime-Env-two/" rel="next" title="Emscripten代码移植之Emscripten的运行时环境（二）">
+              <a href="/em-port-RuntimeEnv-two/" rel="next" title="Emscripten代码移植之Emscripten的运行时环境（二）">
                 <i class="fa fa-chevron-left"></i> Emscripten代码移植之Emscripten的运行时环境（二）
               </a>
             

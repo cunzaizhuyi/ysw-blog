@@ -105,17 +105,17 @@
 
 
 
-<meta name="description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
+<meta name="description" content="翻译：云荒杯倾 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Emscripten代码移植之Emscripten的运行时环境（二）">
-<meta property="og:url" content="https://cunzaizhuyi.github.io/em-Runtime-Env-two/index.html">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
+<meta property="og:description" content="翻译：云荒杯倾 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-17T12:13:43.335Z">
+<meta property="og:updated_time" content="2017-09-18T12:50:00.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之Emscripten的运行时环境（二）">
-<meta name="twitter:description" content="作者：云荒杯倾 这是Emscripten代码移植主题系列的第二篇文章。第一篇文章是代码可移植性与限制 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为">
+<meta name="twitter:description" content="翻译：云荒杯倾 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对">
 
 
 
@@ -145,7 +145,7 @@
 
 
 
-  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-Runtime-Env-two/"/>
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/"/>
 
 
 
@@ -308,7 +308,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-Runtime-Env-two/">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="云荒杯倾">
@@ -379,8 +379,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/em-Runtime-Env-two/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-Runtime-Env-two/" itemprop="commentsCount"></span>
+                <a href="/em-port-RuntimeEnv-two/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-RuntimeEnv-two/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -413,8 +413,7 @@
       
 
       
-        <p><strong>作者：云荒杯倾</strong></p>
-<p>这是<strong>Emscripten代码移植主题</strong>系列的第二篇文章。<br>第一篇文章是<a href="https://cunzaizhuyi.github.io/emscripten-porting/">代码可移植性与限制</a></p>
+        <p><strong>翻译：云荒杯倾</strong></p>
 <p>Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。</p>
 <p>本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。</p>
 <h3 id="1、输入-输出"><a href="#1、输入-输出" class="headerlink" title="1、输入/输出"></a>1、输入/输出</h3><p>Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对音频、键盘、鼠标、操纵杆和图形硬件的底层访问。使用了SDL的应用程序通常不需要为了在浏览器中运行做输入/输出方面的更改。</p>
@@ -454,6 +453,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">NOTE:</div><div class="line">Typed Arrays Mode 2是Fastcomp编译器支持的唯一内存模型，它是旧编译器的默认内存模型。</div><div class="line">与本项目所尝试的其他内存模型相比，它适用于许多的任意编译后的代码，而且速度相对较快。</div></pre></td></tr></table></figure>
 <p>这个模型以与普通C和C++相同的方式在内存中lays out items，它和C/C++使用相同数量的内存。</p>
 <p>这个模型允许您使用违背 load-store consistency假设的代码。由于不同的视图显示了相同的数据，所以您可以(比方说)编写一个32位的整数，然后从中间读取一个字节，它就像在大多数平台上本地构建C或C++那样工作。</p>
+<hr>
+<h2 id="Emscripten代码移植主题系列文章"><a href="#Emscripten代码移植主题系列文章" class="headerlink" title="Emscripten代码移植主题系列文章"></a>Emscripten代码移植主题系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第二篇文章。<br>第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第四篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
 
       
     </div>
@@ -512,8 +513,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/em-port-filesystem-four/" rel="prev" title="Emscripten代码移植之文件和文件系统">
-                Emscripten代码移植之文件和文件系统 <i class="fa fa-chevron-right"></i>
+              <a href="/em-port-filesystem-four/" rel="prev" title="Emscripten代码移植之文件和文件系统（四）">
+                Emscripten代码移植之文件和文件系统（四） <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -683,7 +684,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、输入-输出"><span class="nav-text">1、输入/输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、文件系统"><span class="nav-text">2、文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、浏览器主循环"><span class="nav-text">3、浏览器主循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-C-中实现异步主循环"><span class="nav-text">C/C++中实现异步主循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、执行生命周期"><span class="nav-text">4、执行生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、Emscripten中内存表示"><span class="nav-text">5、Emscripten中内存表示</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、输入-输出"><span class="nav-text">1、输入/输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、文件系统"><span class="nav-text">2、文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、浏览器主循环"><span class="nav-text">3、浏览器主循环</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#C-C-中实现异步主循环"><span class="nav-text">C/C++中实现异步主循环</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4、执行生命周期"><span class="nav-text">4、执行生命周期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5、Emscripten中内存表示"><span class="nav-text">5、Emscripten中内存表示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten代码移植主题系列文章"><span class="nav-text">Emscripten代码移植主题系列文章</span></a></div>
             
 
           </div>
