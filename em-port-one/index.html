@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="Emscripten代码移植之代码可移植性与限制（一）翻译：云荒杯倾 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-19T14:01:53.829Z">
+<meta property="og:updated_time" content="2017-09-19T14:04:06.459Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之代码可移植性与限制（一）">
 <meta name="twitter:description" content="Emscripten代码移植之代码可移植性与限制（一）翻译：云荒杯倾 Emscripten代码移植主题涵盖了将C、C++代码移植到Emscripten时需要考虑的所有核心考虑问题，以及一般的编码和调试指南。共有以下主题。 代码可移植性与限制、emscripten的运行环境、连接C++与JavaScript、文件和文件系统、多媒体数据和图形、调试、多线程编程支持、移植SIMD代码、Asyncify、">
@@ -455,7 +455,7 @@
 <h4 id="2-2-文件系统"><a href="#2-2-文件系统" class="headerlink" title="2.2 文件系统"></a>2.2 文件系统</h4><p>Emscripten支持libc文件系统函数，C /C++代码可以以正常方式编写。</p>
 <p>在浏览器环境中运行的代码是沙盒sandboxed，并且不直接访问本地文件系统。然后，Emscripten就创建了一个虚拟文件系统，它可以预装数据，或者链接到url来懒加载。这会影响同步文件系统函数调用以及一个项目如何被编译。关于这方面，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/files/file_systems_overview.html#file-system-overview" target="_blank" rel="external">文件系统概述</a>。</p>
 <h4 id="2-3-应用程序主循环"><a href="#2-3-应用程序主循环" class="headerlink" title="2.3 应用程序主循环"></a>2.3 应用程序主循环</h4><p>浏览器事件模型使用合作模式的多任务处理——每个事件都有一个运行的“turn”，然后必须将控制权返回给浏览器事件循环，这样其他事件就可以处理了。<br>HTML页面挂起的一个常见原因是JavaScript未完成并且未将控制权返回给浏览器。</p>
-<p>这将影响<strong>含有死循环的主函数</strong>的代码编写。有关更多信息，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment" target="_blank" rel="external">Emscripten Runtime环境</a>。</p>
+<p>这将影响<strong>含有死循环的主循环</strong>的应用程序的代码编写。有关更多信息，请参见<a href="https://kripken.github.io/emscripten-site/docs/porting/emscripten-runtime-environment.html#emscripten-runtime-environment" target="_blank" rel="external">Emscripten Runtime环境</a>。</p>
 <h3 id="3、函数指针的问题"><a href="#3、函数指针的问题" class="headerlink" title="3、函数指针的问题"></a>3、函数指针的问题</h3><hr>
 <p>函数指针有三个主要的问题：<br>1、<strong>指针类型转换</strong>会引起指针调用失败。<br>针对函数声明时的签名不同，函数指针会被存储到不同的表中。当一个函数被调用时，它会在与当前函数指针签名关联的表中搜索它。如果你进行了指针类型转换，而指针和所有的表并没有被修改，<br>则调用代码将在错误的表中查找。而错误的表中实际上很可能并没有一个叫该名字的指针，这样就出错了。</p>
 <p>例如，一个声明为int(int)(返回int，接收int)的函数，会被添加到表FUNCTION_TABLE_ii。如果您将一个指向该函数指针投射到void(int)(不返回，接收int)，<br>那么代码将在FUNCTION_TABLE_vi中查找函数。</p>
