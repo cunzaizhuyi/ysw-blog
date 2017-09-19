@@ -112,7 +112,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="翻译：云荒杯倾 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T13:47:20.512Z">
+<meta property="og:updated_time" content="2017-09-19T13:46:42.801Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之Emscripten的运行时环境（二）">
 <meta name="twitter:description" content="翻译：云荒杯倾 Emscripten运行时环境与大多数C/C++应用程序所期望的环境不同。Emscripten努力抽象和减轻这些差异，因此在一般的代码中，可以用很少或没有更改来编译。 本文描述了一些差异和由此产生的API限制，并概述了您可能需要对C/C++代码做出的一些更改。 1、输入/输出Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对">
@@ -454,7 +454,7 @@
 <p>这个模型以与普通C和C++相同的方式在内存中lays out items，它和C/C++使用相同数量的内存。</p>
 <p>这个模型允许您使用违背 load-store consistency假设的代码。由于不同的视图显示了相同的数据，所以您可以(比方说)编写一个32位的整数，然后从中间读取一个字节，它就像在大多数平台上本地构建C或C++那样工作。</p>
 <hr>
-<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第二个主题。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
+<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第二个主题。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a><br>第六个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-debug-six">Emscripten如何调试代码</a></p>
 
       
     </div>
@@ -603,7 +603,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="翻译：云荒杯倾 调试Emscripten代码的主要优点之一是，源代码既可以在本地平台上进行调试，也可以使用web浏览器日益强大的工具集——包括调试器、分析器和其他工具。 Emscripten提供了许多帮助调试的功能和工具:  编译器调试信息flags，允许您在已编译的代码中保存调试信息，甚至创建源映射，以便在浏览器中调试时可以单步调试c++源代码。 调试模式，它产生调试日志和存储 编译时产生的中间">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Emscripten教程之如何调试代码">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/em-port-debug-six/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="翻译：云荒杯倾 调试Emscripten代码的主要优点之一是，源代码既可以在本地平台上进行调试，也可以使用web浏览器日益强大的工具集——包括调试器、分析器和其他工具。 Emscripten提供了许多帮助调试的功能和工具:  编译器调试信息flags，允许您在已编译的代码中保存调试信息，甚至创建源映射，以便在浏览器中调试时可以单步调试c++源代码。 调试模式，它产生调试日志和存储 编译时产生的中间">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-19T13:47:09.575Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Emscripten教程之如何调试代码">
+<meta name="twitter:description" content="翻译：云荒杯倾 调试Emscripten代码的主要优点之一是，源代码既可以在本地平台上进行调试，也可以使用web浏览器日益强大的工具集——包括调试器、分析器和其他工具。 Emscripten提供了许多帮助调试的功能和工具:  编译器调试信息flags，允许您在已编译的代码中保存调试信息，甚至创建源映射，以便在浏览器中调试时可以单步调试c++源代码。 调试模式，它产生调试日志和存储 编译时产生的中间">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/em-port-debug-six/"/>
+
+
+
+
+
+  <title>Emscripten教程之如何调试代码 | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-debug-six/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Emscripten教程之如何调试代码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-19T21:46:25+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/em-port-debug-six/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="em-port-debug-six/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>翻译：云荒杯倾</strong></p>
+<p>调试Emscripten代码的主要优点之一是，源代码既可以在本地平台上进行调试，也可以使用web浏览器日益强大的工具集——包括调试器、分析器和其他工具。</p>
+<p>Emscripten提供了许多帮助调试的功能和工具:</p>
+<ul>
+<li><strong>编译器调试信息flags</strong>，允许您在已编译的代码中保存调试信息，甚至创建源映射，以便在浏览器中调试时可以单步调试c++源代码。</li>
+<li><strong>调试模式</strong>，它产生调试日志和存储 编译时产生的中间文件 进行分析。</li>
+<li><strong>编译器设置</strong>，使运行时检查内存访问和公共分配错误。</li>
+<li>还支持手动打印调试emscripten生成代码，这在某些方面甚至比本地平台工作效果更好。</li>
+<li><strong>自动调试器</strong>，它会自动地使用LLVM的中间代码写到内存。</li>
+</ul>
+<p>本文描述了由Emscripten提供的用于调试的主要工具和设置，以及如何调试一些Emscripten特有的问题。</p>
+<a id="more"></a>
+<h2 id="调试信息"><a href="#调试信息" class="headerlink" title="调试信息"></a>调试信息</h2><p>默认下，如果是优化编译，Emcc会删除大部分调试信息。Optimisation级-01和以上删除LLVM调试信息，也禁用了运行时断言检查。优化级别-02以上，代码被压缩编译器改编，变得几乎不可读。</p>
+<p><strong>emcc -g标志</strong>可用于在编译的输出中保存调试信息。默认情况下，此选项保护空白、函数名和变量名。</p>
+<p>你可以使用五个级别中的一个来指定标记:-g0、-g1、-g2、-g3和-g4。每个级别都在最后编译，以在编译后的输出中逐步提供更多的调试信息。g3标志提供与-g标志相同级别的调试信息。</p>
+<p>g4选项提供了最多的调试信息—–—它生成了源映射(source  map)，允许您在Firefox、Chrome或Safari浏览器的调试器中查看和调试C/C++源代码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">当你既用调试flag又用优化flag时，有些优化可能会被禁掉，比如，如果你使用-O3 -g4 编译，为了给你提供足够多的调试信息，有一些-O3的优化就得禁用掉。</div></pre></td></tr></table></figure>
+<h2 id="调试模式（EMCC-DEBUG）"><a href="#调试模式（EMCC-DEBUG）" class="headerlink" title="调试模式（EMCC_DEBUG）"></a>调试模式（EMCC_DEBUG）</h2><p><strong>EMCC_DEBUG环境变量</strong>可以用来设置启用/不启用Emscripten的调试模式:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># Linux or Mac OS X</div><div class="line">EMCC_DEBUG=1 ./emcc tests/hello_world.cpp -o hello.html</div><div class="line"></div><div class="line"># Windows</div><div class="line">set EMCC_DEBUG=1</div><div class="line">emcc tests/hello_world.cpp -o hello.html</div><div class="line">set EMCC_DEBUG=0</div></pre></td></tr></table></figure></p>
+<p>使用EMCC_DEBUG = 1设置，emcc会产生调试输出文件，并为编译器的各个编译阶段生成中间文件。<br>EMCC_DEBUG= 2还为每趟JavaScript优化器遍历（pass）生成中间文件。</p>
+<p>调试日志和中间文件输出到TEMP_DIR/emscripten_temp，其中TEMP_DIR默认在/tmp(/tmp的位置在.emscripten配置文件定义)。</p>
+<p>可以对调试日志进行分析，以对每个步骤中所做的更改进行分析和检查。</p>
+<h2 id="编译器设置"><a href="#编译器设置" class="headerlink" title="编译器设置"></a>编译器设置</h2><p>Emscripten有许多可以用于调试的编译器设置。使用emcc -s选项选择这些设置，他们将覆盖任何优化标志。例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc -01 -s ASSERTIONS=1 tests/hello_world</div></pre></td></tr></table></figure></p>
+<p>最重要的设置是：</p>
+<ul>
+<li><strong>ASSERTIONS=1</strong> 用于为内存分配错误启用运行时检查(例如，写入比分配更多的内存)。它还定义了Emscripten如何处理程序流中的错误。可以将值设置为ASSERTIONS=2，以便运行额外的测试。<br>不优化编译时，ASSERTIONS=1是默认开启的。对于优化编译的代码(-01和以上级别)它是关闭的。</li>
+<li><strong>SAFE_HEAP= 1</strong>增加了额外的内存访问检查，并将为诸如非内联化0(dereferencing 0)和内存对齐等问题提供清晰的错误。你也可以设置<strong>SAFE_HEAP_LOG</strong>以打印SAFE_HEAP操作。</li>
+<li>通过<strong>STACK_OVERFLOW_CHECK =1</strong> 标记在堆栈的末尾添加一个运行时的令牌值，令牌值会在某些位置被检查，以验证用户代码是否意外地写出了堆栈的末尾。虽然溢出Emscripten堆栈不是一个安全问题(JavaScript已经被沙箱化了)，但写出堆栈将会导致全局数据内存损坏和Emscripten堆中动态分配的内存碎片化，这使得应用程序以意想不到的方式失败。值STACK_OVERFLOW_CHECK = 2启用了更详细的堆栈保护检查，它以牺牲一些性能的代价提供更精确的callstack。如果ASSERTIONS= 1，STACK_OVERFLOW_CHECK默认值为2，ASSERTIONS为其他值时STACK_OVERFLOW_CHECK默认不启用。</li>
+</ul>
+<p>在<a href="https://github.com/kripken/emscripten/blob/master/src/settings.js" target="_blank" rel="external">src/settings.js</a>中定义了许多其他有用的调试设置。有关更多信息，请搜索“check”和“debug”关键字的文件。</p>
+<h2 id="emcc详细输出"><a href="#emcc详细输出" class="headerlink" title="emcc详细输出"></a>emcc详细输出</h2><p>用emcc -v选项编译，将-v传递给LLVM，然后在工具链上运行Emscripten的内部完整性检查。</p>
+<p>verbose模式还能启动Emscripten的调试模式(EMCC_DEBUG)以生成编译器的各个阶段的中间文件。</p>
+<h2 id="手动打印调试"><a href="#手动打印调试" class="headerlink" title="手动打印调试"></a>手动打印调试</h2><p>您还可以用<strong>printf()语句手工编写源代码</strong>，然后编译并运行代码来研究问题。</p>
+<p><strong><em>如果你对问题行有很好的了解</em></strong>，你可以在JavaScript添加<strong>print(新的Error().stack)</strong>代码，以得到堆栈跟踪。另外还有<strong>stackTrace()</strong>，它发出堆栈跟踪，并尝试使用c++的去除改编的函数名(如果你不想或者不需要让c++ 函数名去除改编，你可以调用<strong>jsStackTrace()</strong>）。</p>
+<p>调试打印输出甚至可以执行任意的JavaScript。例如:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">function _addAndPrint($left, $right) &#123;</div><div class="line">        $left = $left | 0;</div><div class="line">        $right = $right | 0;</div><div class="line">        //---</div><div class="line">        if ($left &lt; $right) console.log(&apos;l&lt;r at &apos; + stackTrace());</div><div class="line">        //---</div><div class="line">        _printAnInteger($left + $right | 0);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="禁止优化"><a href="#禁止优化" class="headerlink" title="禁止优化"></a>禁止优化</h2><p>有时候，编译的时候，禁用LLVM优化(llvm-opts)或禁用JavaScript优化(js-opts)是很有用的。</p>
+<p>比如说,以下命令即允许调试信息又使用-O2优化（既llvm和js都优化），但是又明显关闭了js的优化器。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">./emcc -O2 --js-opts 0 -g4 tests/hello_world_loop.cpp</div></pre></td></tr></table></figure></p>
+<p>这样就能产生相对于llvm优化的代码来说更易调试的js代码：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">function _main() &#123;</div><div class="line">        var label = 0;</div><div class="line">        var $puts=_puts(((8)|0)); //@line 4 &quot;tests/hello_world.c&quot;</div><div class="line">        return 1; //@line 5 &quot;tests/hello_world.c&quot;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Emscripten特有问题"><a href="#Emscripten特有问题" class="headerlink" title="Emscripten特有问题"></a>Emscripten特有问题</h2><h3 id="内存对齐问题"><a href="#内存对齐问题" class="headerlink" title="内存对齐问题"></a>内存对齐问题</h3><p>Emscripten内存表示假定加载和存储是对齐的。在未对齐的地址上执行正常的加载或存储可能会失败。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">SAFE_HEAP可以用来显示内存对齐问题。</div></pre></td></tr></table></figure></p>
+<p>一般来说，最好避免不对齐的读写—–他们通常是由于未定义的行为导致的。然而，在某些情况下，它们是不可避免的——-例如，如果要移植的代码从一些预先存在的数据格式的打包结构(packed structure)中读取int。</p>
+<p>Emscripten支持未对齐的读写，但它们要慢得多，而且必须在绝对必要时使用。执行一个不对齐的读或写你可以:</p>
+<ul>
+<li>手动读取单个字节并重新构造全部值</li>
+<li>使用emscripten_align*类型，它定义了基本类型的不对齐版本(short，int，float，double)。这些类型的所有操作都是不完全对齐的(在大多数情况下使用1个variants，这意味着没有任何对齐)。</li>
+</ul>
+<h3 id="函数指针问题"><a href="#函数指针问题" class="headerlink" title="函数指针问题"></a>函数指针问题</h3><p>如果你的函数指针调用得到一个abort()，那么问题是在调用时，没有在预期的函数指针表中找到这个函数指针。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">nullFunc是函数指针表中用于填充空索引的函数（b0和b1是优化编译下它的别名）。指向无效索引的函数指针会调用这个函数，然后调用abort().</div></pre></td></tr></table></figure></p>
+<p>有几个可能的原因：</p>
+<ul>
+<li>您的代码调用了一个<strong>从另一个类型转换来的函数指针</strong>(这是未定义的行为，但它确实发生在真实的代码中)。在优化的Emscripten输出中，每个函数指针类型都基于它的原始签名，存储在一个单独的表中，因此您必须调用具有相同签名的函数指针以获得正确的行为(更多信息参见代码可移植性部分中的函数指针问题)。</li>
+<li>您的代码在<strong>空指针或者dereferencing 0</strong>上调用方法。这种bug可以由任何类型的编码错误引起，但表现为函数指针错误，因为在运行时的预期表中无法找到函数。</li>
+</ul>
+<p>为了调试这些问题：</p>
+<ul>
+<li>使用-Werror编译。这就把警告变成了错误，这些错误可能有用，因为一些未定义行为的情况会显示警告。</li>
+<li>使用-s ASSERTIONS=2，得到一些 关于被调用的函数指针和它的类型 有用的信息。</li>
+<li>查看浏览器堆栈跟踪，查看错误发生的地方以及应该调用哪个函数。</li>
+<li>使用SAFE_HEAP=1和禁用函数指针别名(aliasing_function_pointer = 0)编译。这使得错误类型的函数指针 不可能在不引起错误的情况下 调用，换句话说就是这样编译会使 错误类型的函数指针调用 一定会报错。调用命令:-s SAFE_HEAP=1 -s aliasing_function_pointer =0</li>
+</ul>
+<p>aliasing_function_pointer = 0也很有用，因为它确保调用错误表中的指针地址会导致明显的错误。如果没有这样的设置，这样的调用只执行地址上的任何函数，这将很难进行调试。</p>
+<h3 id="死循环"><a href="#死循环" class="headerlink" title="死循环"></a>死循环</h3><p>无限循环导致您的页面挂起。在一段时间之后，浏览器将通知用户该页面被卡住并提供停止或关闭它的选择。</p>
+<p>如果您的代码中有无限循环，那么找到问题代码的一个简单方法就是使用JavaScript profiler。在Firefox profiler中，如果代码进入无限循环，您将看到在profiler的末尾有一块代码重复执行相同的操作。</p>
+<h2 id="AutoDebugger"><a href="#AutoDebugger" class="headerlink" title="AutoDebugger"></a>AutoDebugger</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">警告：</div><div class="line">这个选项主要为Emscripten核心开发者提供使用。</div></pre></td></tr></table></figure>
+<hr>
+<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第二篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a><br>第六个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-debug-six">Emscripten如何调试代码</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/em-port-embind-three/" rel="next" title="Emscripten代码移植之embind（三）">
+                <i class="fa fa-chevron-left"></i> Emscripten代码移植之embind（三）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#调试信息"><span class="nav-text">调试信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调试模式（EMCC-DEBUG）"><span class="nav-text">调试模式（EMCC_DEBUG）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编译器设置"><span class="nav-text">编译器设置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#emcc详细输出"><span class="nav-text">emcc详细输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手动打印调试"><span class="nav-text">手动打印调试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#禁止优化"><span class="nav-text">禁止优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten特有问题"><span class="nav-text">Emscripten特有问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存对齐问题"><span class="nav-text">内存对齐问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数指针问题"><span class="nav-text">函数指针问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#死循环"><span class="nav-text">死循环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AutoDebugger"><span class="nav-text">AutoDebugger</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten代码移植系列文章"><span class="nav-text">Emscripten代码移植系列文章</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

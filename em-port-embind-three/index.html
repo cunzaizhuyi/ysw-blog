@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T13:47:20.577Z">
+<meta property="og:updated_time" content="2017-09-19T13:46:42.838Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之embind（三）">
 <meta name="twitter:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
@@ -526,7 +526,7 @@
 <h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>在撰写本文时，还没有对标准基准测试或相对于WebIDL Binder的全面的embind性能测试。</p>
 <p>简单函数的调用开销在200ns左右。虽然还有进一步优化的空间，但到目前为止，它在实际应用程序中的性能已经被证明是完全可以接受的。</p>
 <hr>
-<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第二篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a></p>
+<h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第二篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a><br>第六个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-debug-six">Emscripten如何调试代码</a></p>
 </script></p>
       
     </div>
@@ -590,6 +590,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/em-port-debug-six/" rel="prev" title="Emscripten教程之如何调试代码">
+                Emscripten教程之如何调试代码 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -677,7 +681,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
