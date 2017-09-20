@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-20T03:34:18.097Z">
+<meta property="og:updated_time" content="2017-09-20T03:38:16.080Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Emscripten代码移植之embind（三）">
 <meta name="twitter:description" content="翻译：云荒杯倾 Embind用于绑定C++函数和类到JavaScript，这样编译代码就能在js中以一种很自然的方式来使用。Embind也支持从C++调JavaScript的class。 Embind支持绑定大多数C++的结构，包括C++11和C++14中引入的。它只有一个明显的限制就是目前还不支持raw pointers with complicated lifetime semantics。">
@@ -422,7 +422,7 @@
 <a id="more"></a>
 <h2 id="一个简单例子"><a href="#一个简单例子" class="headerlink" title="一个简单例子"></a>一个简单例子</h2><p>下面的代码使用EMSCRIPTEN_BINDINGS()暴露了C++ lerp()函数给JavaScript。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">// quick_example.cpp</div><div class="line">#include &lt;emscripten/bind.h&gt;</div><div class="line"></div><div class="line">using namespace emscripten;</div><div class="line"></div><div class="line">float lerp(float a, float b, float t) &#123;</div><div class="line">    return (1 - t) * a + t * b;</div><div class="line">&#125;</div><div class="line"></div><div class="line">EMSCRIPTEN_BINDINGS(my_module) &#123;</div><div class="line">    function(&quot;lerp&quot;, &amp;lerp);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>为了使用embind编译上例，请调用emcc的bing选项：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">emcc --bind -o quick_example.js quick_example.cpp</div></pre></td></tr></table></figure></p>
-<p>生成的quick_example.js文件可以作为node模块加载，也可以使用<script>加载：</p>
+<p>生成的quick_example.js文件可以作为node模块加载，也可以使用script加载：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"> &lt;!doctype html&gt;</div><div class="line">&lt;html&gt;</div><div class="line">  &lt;script src=&quot;quick_example.js&quot;&gt;&lt;/script&gt;</div><div class="line">  &lt;script&gt;</div><div class="line">    console.log(&apos;lerp result: &apos; + Module.lerp(1, 2, 0.5));</div><div class="line">  &lt;/script&gt;</div><div class="line">&lt;/html&gt;</div></pre></td></tr></table></figure>
 <p>当quick_example.js文件初始化加载后， EMSCRIPTEN_BINDINGS()中代码会运行。</p>
 <p>所有通过Embind暴露的symblols都可以在Module对象获取。</p>
@@ -523,12 +523,12 @@
 </tr>
 </tbody>
 </table>
-<p>为了方便，embind还提供了工厂函数用来注册std::vector<T>（register_vector()）和std::map<K, V>（register_map()）类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">EMSCRIPTEN_BINDINGS(stl_wrappers) &#123;</div><div class="line">    register_vector&lt;int&gt;(&quot;VectorInt&quot;);</div><div class="line">    register_map&lt;int,int&gt;(&quot;MapIntInt&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>为了方便，embind还提供了工厂函数用来注册std::vector<t>（register_vector()）和std::map<k, v="">（register_map()）类型。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">EMSCRIPTEN_BINDINGS(stl_wrappers) &#123;</div><div class="line">    register_vector&lt;int&gt;(&quot;VectorInt&quot;);</div><div class="line">    register_map&lt;int,int&gt;(&quot;MapIntInt&quot;);</div><div class="line">&#125;</div></pre></td></tr></table></figure></k,></t></p>
 <h2 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h2><p>在撰写本文时，还没有对标准基准测试或相对于WebIDL Binder的全面的embind性能测试。</p>
 <p>简单函数的调用开销在200ns左右。虽然还有进一步优化的空间，但到目前为止，它在实际应用程序中的性能已经被证明是完全可以接受的。</p>
 <hr>
 <h2 id="Emscripten代码移植系列文章"><a href="#Emscripten代码移植系列文章" class="headerlink" title="Emscripten代码移植系列文章"></a>Emscripten代码移植系列文章</h2><p>Emscripten代码移植主题系列文章是emscripten中文站点的一部分内容。<br>本文是第三个主题第二篇文章。<br>第一个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-one/">代码可移植性与限制</a><br>第二个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/">Emscripten的运行时环境</a><br>第三个主题第一篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-codeinteract-three/">连接C++和JavaScript</a><br>第三个主题第二篇文章介绍<a href="https://cunzaizhuyi.github.io/em-port-embind-three/">embind</a><br>第四个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-filesystem-four/">文件和文件系统</a><br>第六个主题介绍<a href="https://cunzaizhuyi.github.io/em-port-debug-six">Emscripten如何调试代码</a></p>
-</script></p>
+
       
     </div>
     
@@ -763,7 +763,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单例子"><span class="nav-text">一个简单例子</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一个简单例子"><span class="nav-text">一个简单例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类"><span class="nav-text">类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存管理"><span class="nav-text">内存管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#值类型"><span class="nav-text">值类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高级类概念（todo）"><span class="nav-text">高级类概念（todo）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#重载函数"><span class="nav-text">重载函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#枚举"><span class="nav-text">枚举</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常量"><span class="nav-text">常量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存视图"><span class="nav-text">内存视图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用val将JavaScript翻译为C"><span class="nav-text">使用val将JavaScript翻译为C++</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内建类型转换"><span class="nav-text">内建类型转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能"><span class="nav-text">性能</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Emscripten代码移植系列文章"><span class="nav-text">Emscripten代码移植系列文章</span></a></li></ol></div>
             
 
           </div>
