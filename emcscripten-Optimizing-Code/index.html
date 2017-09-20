@@ -113,7 +113,7 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="翻译：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。 比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-18T12:51:55.200Z">
+<meta property="og:updated_time" content="2017-09-20T02:01:58.745Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="emscripten使用教程之优化你的代码">
 <meta name="twitter:description" content="翻译：云荒杯倾 译文地址 通常来说，你只要编译并运行你的代码，并不需要优化。一旦你能保证代码运行正确，你就可以使用本文提到的技术让你的代码加载和运行的更快。 1、怎么优化代码 在使用emcc时，通过指定优化标志来进行优化。优化有级别之分，分别是：-O0，-O1，-O2，-Os，-Oz，-O3。 比如，下面代码就是使用-O2级别进行优化编译1emcc -O2 file.cpp  随着优化级别增加，渐">
@@ -431,7 +431,7 @@
 </li>
 </ul>
 <h3 id="2、高级编译器设置"><a href="#2、高级编译器设置" class="headerlink" title="2、高级编译器设置"></a>2、高级编译器设置</h3><hr>
-<p>你可以给编译器传一些标志进去以影响代码的生成，同事这也影响性能。比如DISABLE_EXCEPTION_CATCHING，<br>这些可以在<a href="https://github.com/kripken/emscripten/blob/master/src/settings.js" target="_blank" rel="external">settings</a>  看到。</p>
+<p>你可以给编译器传一些标志进去以影响代码的生成，同时这也影响性能。比如DISABLE_EXCEPTION_CATCHING，<br>这些可以在<a href="https://github.com/kripken/emscripten/blob/master/src/settings.js" target="_blank" rel="external">settings</a>  看到。</p>
 <p>一些有用的标志是：</p>
 <ul>
 <li>NO_EXIT_RUNTIME: 编译时使用-s NO_EXIT_RUNTIME=1 ,这样编译器就知道你不想让<br>程序在运行完main（）函数后就结束。此时，编译器就会放弃atexit和全局析构这两个<br>函数的调用（如果你不设置-s NO_EXIT_RUNTIME=1，是会调用的），这样就减小了代码体积，<br>并且加快了启动速度。<br>当你的main（）函数完成但是你仍想要执行代码时，这是有用的，比如在app中使用main loop funciton<br>.<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">NOTE：</div><div class="line">如果你的C代码里面有emscripten_set_main_loop()，它被emscripten检测到的话，emscripten也不会</div><div class="line">在main结束调用后关闭运行时，但是呢，你最好还是在编译选项中加-s NO_EXIT_RUNTIME=1吧，</div><div class="line">毕竟这样可以减小生成不必要的代码，是不是？！</div></pre></td></tr></table></figure>

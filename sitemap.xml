@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/</loc>
+    
+    <lastmod>2017-09-20T02:01:58.745Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/em-port-one/</loc>
     
     <lastmod>2017-09-19T14:04:06.459Z</lastmod>
@@ -40,13 +47,6 @@
     <loc>https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/</loc>
     
     <lastmod>2017-09-19T13:46:42.801Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cunzaizhuyi.github.io/emcscripten-Optimizing-Code/</loc>
-    
-    <lastmod>2017-09-18T12:51:55.200Z</lastmod>
     
   </url>
   
