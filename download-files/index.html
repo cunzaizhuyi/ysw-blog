@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="HTML5+原生JS实现服务器端目录树中多文件下载作者：云荒杯倾作者博客 需求需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下所有文件的一键下载功能。 实现原理实现这个需求，本程序考虑到的知识点有html5 \标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="download-files">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/download-files/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="HTML5+原生JS实现服务器端目录树中多文件下载作者：云荒杯倾作者博客 需求需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下所有文件的一键下载功能。 实现原理实现这个需求，本程序考虑到的知识点有html5 \标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/1.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/2.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/3.png?raw=true">
+<meta property="og:updated_time" content="2017-09-28T02:08:32.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="download-files">
+<meta name="twitter:description" content="HTML5+原生JS实现服务器端目录树中多文件下载作者：云荒杯倾作者博客 需求需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下所有文件的一键下载功能。 实现原理实现这个需求，本程序考虑到的知识点有html5 \标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/1.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/download-files/"/>
+
+
+
+
+
+  <title>download-files | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/download-files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">download-files</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T18:43:20+08:00">
+                2017-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/download-files/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="download-files/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="HTML5-原生JS实现服务器端目录树中多文件下载"><a href="#HTML5-原生JS实现服务器端目录树中多文件下载" class="headerlink" title="HTML5+原生JS实现服务器端目录树中多文件下载"></a>HTML5+原生JS实现服务器端目录树中多文件下载</h1><p><strong>作者：云荒杯倾</strong><br><a href="https://cunzaizhuyi.github.io">作者博客</a></p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下<strong>所有文件的一键下载</strong>功能。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>实现这个需求，本程序考虑到的知识点有html5 \<a>标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。</a></p>
+<h3 id="HTML5-标签的下载功能"><a href="#HTML5-标签的下载功能" class="headerlink" title="HTML5 \标签的下载功能"></a>HTML5 \<a>标签的下载功能</a></h3><p>首先说<strong>HTML5 \<a>标签的下载功能</a></strong>，<br>HTML5的\<a>标签有一个download属性，如果你设置了这个属性，那么点击这个链接，就不再是跳转到这个\<a>标签href引用的地址了，而是直接去下载href所代表的一个文件。</a></a></p>
+<p>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
+<p>这样，点击<strong>这是超链接</strong>几个字，只能页面跳转到bbb.html。<br>而，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot; download=&quot;ccc.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
+<p>这样，加了download属性后，你再点击<strong>这是超链接</strong>几个字，就直接下载bbb.html到你的本地机器（客户端）了，且文件会改名为“ccc.html”。如果只写download，则是保持原始文件名下载。</p>
+<h3 id="一点http知识"><a href="#一点http知识" class="headerlink" title="一点http知识"></a>一点http知识</h3><p>http是不提供目录遍历的，所以暂时不知道其他实现方法是否碰到了这个点，所以导致程序失败。某种程度上，本文的程序算是避开了这个点？</p>
+<h3 id="一点JS局限性的知识"><a href="#一点JS局限性的知识" class="headerlink" title="一点JS局限性的知识"></a>一点JS局限性的知识</h3><p>JS语言跑在浏览器的话，是不能操作本地（客户端）太多东西的，其中就包括一些文件操作，而<strong>文件夹创建</strong>操作就包括在这些限制操作之内。这也是<strong>无法实现将服务器上的一个目录按照其目录结构原样拷贝到本地（客户端）</strong>的原因。</p>
+<p>看过一篇博文的举例很好，他说，如果我有一个网站，你是访客，你访问，点击了某个链接，我就把网站的一个目录树（假设有一百万个txt），拷贝到你的本地，你会不会恼火？而且，之所以浏览器不提供这些功能，主要是出于客户端安全方面的考虑。</p>
+<p>做这个需求的时候，看到IE上有一个activexObject对象，可以在本地创建文件夹。但是想想就只有IE支持，还是算了。</p>
+<p>综上，本程序是将服务器上一个有层次的目录树里面所有的文件，通过浏览器下载到本地同一个文件夹下的。</p>
+<p>不过因为<strong>下载一个目录树的功能，最主要的考察点还是树状数据结构的遍历</strong>，如果哪天浏览器都实现了本地创建文件夹，本程序的代码仍有参考价值。</p>
+<h3 id="目录树的广度优先遍历及本程序的实现思路"><a href="#目录树的广度优先遍历及本程序的实现思路" class="headerlink" title="目录树的广度优先遍历及本程序的实现思路"></a>目录树的广度优先遍历及本程序的实现思路</h3><p>本例的思路是，前后端定义一个目录树的接口。</p>
+<p>前端通过xhr拿到数据。</p>
+<p>一层一层遍历这颗目录树，直到遍历完这个目录树下所有文件，也就能拿到这所有文件的URL了。假设一共有n个文件，也就是n个URL。</p>
+<p>拿到n个URL后，注册这个目录对应的<strong>下载该目录下所有文件</strong>按钮的监听器，监听器内创建n个html5 \<a>标签，\<a>标签的href分别赋值url路径，所有\<a>标签设置download属性。</a></a></a></p>
+<p>如此，就实现了加载HTML，HTML上有一个代表着服务器上一个目录的目录名，目录名后面有一个<strong>下载该目录下所有文件</strong>的按钮，点击该按钮，就从服务器下载了该目录下所有文件到本地。</p>
+<h3 id="本文定义的目录树结构"><a href="#本文定义的目录树结构" class="headerlink" title="本文定义的目录树结构"></a>本文定义的目录树结构</h3><p>目录树接口定义如下，一个目录要有name(也就是URL)，file是该层目录下裸露的文件，childDir是该层有的下一层的目录，如此往复。。。如果到了某一目录，既没有文件有没有目录，那么name就定义为[]数组，childDir也定义为[]数组。</p>
+<p>本例中的目录树是：根目录./chrome61module，其下有三个文件，分别是aa.css,aa.js,module-test.html，还有一个目录bb；bb目录下只有两个文件bb.js和bb.html。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//假设这是从服务器取来的a链接的目录结构</div><div class="line">		var rootDir = &#123;</div><div class="line">			&quot;name&quot;:&quot;./chrome61module&quot;,</div><div class="line">			&quot;file&quot;:[&quot;/aa.css&quot;,&quot;/aa.js&quot;,&quot;/module-test.html&quot;],</div><div class="line">			&quot;childDir&quot;:[&#123;</div><div class="line">				&quot;name&quot;:&quot;./chrome61module/bb&quot;,</div><div class="line">				&quot;file&quot;:[&quot;/bb.js&quot;,&quot;/bb.html&quot;],</div><div class="line">				&quot;childDir&quot;:[]</div><div class="line">			&#125;,&#123;&#125;]</div><div class="line">		&#125;;</div></pre></td></tr></table></figure>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/1.png?raw=true" alt=""><br>图1 HTML页面</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/2.png?raw=true" alt=""><br>图2 点击<strong>下载该目录下所有文件</strong>Chrome会提示你是否要下载多个文件</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/3.png?raw=true" alt=""><br>图3 本例中下载成功的五个文件</p>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>代码比较简单，就直接放了，大家直接自己粘贴了，就能运行，<strong>注意修改目录树结构为你自己的</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&lt;body&gt;</div><div class="line">	&lt;a href=&quot;./chrome61module&quot; id=&quot;aDir&quot;&gt;chrome61module目录&lt;/a&gt;</div><div class="line">	&lt;button id=&quot;downloadDir&quot;&gt;下载目录下所有文件&lt;/button&gt;</div><div class="line">	&lt;script&gt;</div><div class="line">		//假设这是从服务器取来的a链接的目录结构</div><div class="line">		var rootDir = &#123;</div><div class="line">			&quot;name&quot;:&quot;./chrome61module&quot;,</div><div class="line">			&quot;file&quot;:[&quot;/aa.css&quot;,&quot;/aa.js&quot;,&quot;/module-test.html&quot;],</div><div class="line">			&quot;childDir&quot;:[&#123;</div><div class="line">				&quot;name&quot;:&quot;./chrome61module/bb&quot;,</div><div class="line">				&quot;file&quot;:[&quot;/bb.js&quot;,&quot;/bb.html&quot;],</div><div class="line">				&quot;childDir&quot;:[]</div><div class="line">			&#125;,&#123;&#125;]</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		//DOM</div><div class="line">		var btnDownload = document.getElementById(&quot;downloadDir&quot;);</div><div class="line">		var aDir = document.getElementById(&quot;aDir&quot;);</div><div class="line">		//按钮监听器</div><div class="line">		btnDownload.addEventListener(&quot;click&quot;,downloadDir);</div><div class="line">		function downloadDir() &#123;</div><div class="line">			//处理某一层</div><div class="line">			function oneTreeLayerProcess(dir) &#123;</div><div class="line">				if(JSON.stringify(dir) !== &quot;&#123;&#125;&quot;)&#123;</div><div class="line">					if(dir.file.length !== 0)&#123;</div><div class="line">						for(let i = 0; i&lt; dir.file.length; i++)&#123;</div><div class="line">							var j = document.createElement(&quot;a&quot;);</div><div class="line">							j.href = dir.name + dir.file[i];</div><div class="line">							j.download = dir.file[i].slice(1);</div><div class="line">							j.click();</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">					if(dir.childDir.length !== 0)&#123;</div><div class="line">						for(let i =0; i &lt; dir.childDir.length; i++)&#123;</div><div class="line">						    //递归</div><div class="line">							oneTreeLayerProcess(dir.childDir[i]);</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			oneTreeLayerProcess(rootDir);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1、由于http和JS能力的限制，目前仅能实现文件下载，不能实现文件夹下载或者文件夹本地创建，因此想原样拷贝服务器上一个目录到本地机器，使用JS目前较难做到。</p>
+<p>2、由于本例实现的将一个目录树下所有文件都平行下载到本地的同一个文件夹下。造成客户端即使下载了也无法理解服务器上原目录树的困难。<br>一点改进是，如果使用download=“”，将“”内的文件名改为<strong>包含路径</strong>的文件名，也许下载以后，客户端可以获悉其原来在服务器上的对应的目录层级，从而可以自己后续处理。</p>
+<p>3、如果可能，还是按照压缩包的形式下载一个目录也许更好。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/em-port-debug-six/" rel="next" title="Emscripten教程之如何调试代码（六）">
+                <i class="fa fa-chevron-left"></i> Emscripten教程之如何调试代码（六）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#HTML5-原生JS实现服务器端目录树中多文件下载"><span class="nav-text">HTML5+原生JS实现服务器端目录树中多文件下载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#需求"><span class="nav-text">需求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML5-标签的下载功能"><span class="nav-text">HTML5 \标签的下载功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一点http知识"><span class="nav-text">一点http知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#一点JS局限性的知识"><span class="nav-text">一点JS局限性的知识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录树的广度优先遍历及本程序的实现思路"><span class="nav-text">目录树的广度优先遍历及本程序的实现思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#本文定义的目录树结构"><span class="nav-text">本文定义的目录树结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果展示"><span class="nav-text">效果展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码展示"><span class="nav-text">代码展示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

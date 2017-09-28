@@ -308,6 +308,187 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/download-files/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/download-files/" itemprop="url">download-files</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-27T18:43:20+08:00">
+                2017-09-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/download-files/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::https://cunzaizhuyi.github.io/download-files/" class="cy_cmt_count" data-xid="download-files/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="HTML5-原生JS实现服务器端目录树中多文件下载"><a href="#HTML5-原生JS实现服务器端目录树中多文件下载" class="headerlink" title="HTML5+原生JS实现服务器端目录树中多文件下载"></a>HTML5+原生JS实现服务器端目录树中多文件下载</h1><p><strong>作者：云荒杯倾</strong><br><a href="https://cunzaizhuyi.github.io">作者博客</a></p>
+<h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下<strong>所有文件的一键下载</strong>功能。</p>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>实现这个需求，本程序考虑到的知识点有html5 \<a>标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。</a></p>
+<h3 id="HTML5-标签的下载功能"><a href="#HTML5-标签的下载功能" class="headerlink" title="HTML5 \标签的下载功能"></a>HTML5 \<a>标签的下载功能</a></h3><p>首先说<strong>HTML5 \<a>标签的下载功能</a></strong>，<br>HTML5的\<a>标签有一个download属性，如果你设置了这个属性，那么点击这个链接，就不再是跳转到这个\<a>标签href引用的地址了，而是直接去下载href所代表的一个文件。</a></a></p>
+<p>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
+<p>这样，点击<strong>这是超链接</strong>几个字，只能页面跳转到bbb.html。<br>而，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot; download=&quot;ccc.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
+<p>这样，加了download属性后，你再点击<strong>这是超链接</strong>几个字，就直接下载bbb.html到你的本地机器（客户端）了，且文件会改名为“ccc.html”。如果只写download，则是保持原始文件名下载。</p>
+<h3 id="一点http知识"><a href="#一点http知识" class="headerlink" title="一点http知识"></a>一点http知识</h3><p>http是不提供目录遍历的，所以暂时不知道其他实现方法是否碰到了这个点，所以导致程序失败。某种程度上，本文的程序算是避开了这个点？</p>
+<h3 id="一点JS局限性的知识"><a href="#一点JS局限性的知识" class="headerlink" title="一点JS局限性的知识"></a>一点JS局限性的知识</h3><p>JS语言跑在浏览器的话，是不能操作本地（客户端）太多东西的，其中就包括一些文件操作，而<strong>文件夹创建</strong>操作就包括在这些限制操作之内。这也是<strong>无法实现将服务器上的一个目录按照其目录结构原样拷贝到本地（客户端）</strong>的原因。</p>
+<p>看过一篇博文的举例很好，他说，如果我有一个网站，你是访客，你访问，点击了某个链接，我就把网站的一个目录树（假设有一百万个txt），拷贝到你的本地，你会不会恼火？而且，之所以浏览器不提供这些功能，主要是出于客户端安全方面的考虑。</p>
+<p>做这个需求的时候，看到IE上有一个activexObject对象，可以在本地创建文件夹。但是想想就只有IE支持，还是算了。</p>
+<p>综上，本程序是将服务器上一个有层次的目录树里面所有的文件，通过浏览器下载到本地同一个文件夹下的。</p>
+<p>不过因为<strong>下载一个目录树的功能，最主要的考察点还是树状数据结构的遍历</strong>，如果哪天浏览器都实现了本地创建文件夹，本程序的代码仍有参考价值。</p>
+<h3 id="目录树的广度优先遍历及本程序的实现思路"><a href="#目录树的广度优先遍历及本程序的实现思路" class="headerlink" title="目录树的广度优先遍历及本程序的实现思路"></a>目录树的广度优先遍历及本程序的实现思路</h3><p>本例的思路是，前后端定义一个目录树的接口。</p>
+<p>前端通过xhr拿到数据。</p>
+<p>一层一层遍历这颗目录树，直到遍历完这个目录树下所有文件，也就能拿到这所有文件的URL了。假设一共有n个文件，也就是n个URL。</p>
+<p>拿到n个URL后，注册这个目录对应的<strong>下载该目录下所有文件</strong>按钮的监听器，监听器内创建n个html5 \<a>标签，\<a>标签的href分别赋值url路径，所有\<a>标签设置download属性。</a></a></a></p>
+<p>如此，就实现了加载HTML，HTML上有一个代表着服务器上一个目录的目录名，目录名后面有一个<strong>下载该目录下所有文件</strong>的按钮，点击该按钮，就从服务器下载了该目录下所有文件到本地。</p>
+<h3 id="本文定义的目录树结构"><a href="#本文定义的目录树结构" class="headerlink" title="本文定义的目录树结构"></a>本文定义的目录树结构</h3><p>目录树接口定义如下，一个目录要有name(也就是URL)，file是该层目录下裸露的文件，childDir是该层有的下一层的目录，如此往复。。。如果到了某一目录，既没有文件有没有目录，那么name就定义为[]数组，childDir也定义为[]数组。</p>
+<p>本例中的目录树是：根目录./chrome61module，其下有三个文件，分别是aa.css,aa.js,module-test.html，还有一个目录bb；bb目录下只有两个文件bb.js和bb.html。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">//假设这是从服务器取来的a链接的目录结构</div><div class="line">		var rootDir = &#123;</div><div class="line">			&quot;name&quot;:&quot;./chrome61module&quot;,</div><div class="line">			&quot;file&quot;:[&quot;/aa.css&quot;,&quot;/aa.js&quot;,&quot;/module-test.html&quot;],</div><div class="line">			&quot;childDir&quot;:[&#123;</div><div class="line">				&quot;name&quot;:&quot;./chrome61module/bb&quot;,</div><div class="line">				&quot;file&quot;:[&quot;/bb.js&quot;,&quot;/bb.html&quot;],</div><div class="line">				&quot;childDir&quot;:[]</div><div class="line">			&#125;,&#123;&#125;]</div><div class="line">		&#125;;</div></pre></td></tr></table></figure>
+<h2 id="效果展示"><a href="#效果展示" class="headerlink" title="效果展示"></a>效果展示</h2><p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/1.png?raw=true" alt=""><br>图1 HTML页面</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/2.png?raw=true" alt=""><br>图2 点击<strong>下载该目录下所有文件</strong>Chrome会提示你是否要下载多个文件</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/3.png?raw=true" alt=""><br>图3 本例中下载成功的五个文件</p>
+<h2 id="代码展示"><a href="#代码展示" class="headerlink" title="代码展示"></a>代码展示</h2><p>代码比较简单，就直接放了，大家直接自己粘贴了，就能运行，<strong>注意修改目录树结构为你自己的</strong>。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">&lt;body&gt;</div><div class="line">	&lt;a href=&quot;./chrome61module&quot; id=&quot;aDir&quot;&gt;chrome61module目录&lt;/a&gt;</div><div class="line">	&lt;button id=&quot;downloadDir&quot;&gt;下载目录下所有文件&lt;/button&gt;</div><div class="line">	&lt;script&gt;</div><div class="line">		//假设这是从服务器取来的a链接的目录结构</div><div class="line">		var rootDir = &#123;</div><div class="line">			&quot;name&quot;:&quot;./chrome61module&quot;,</div><div class="line">			&quot;file&quot;:[&quot;/aa.css&quot;,&quot;/aa.js&quot;,&quot;/module-test.html&quot;],</div><div class="line">			&quot;childDir&quot;:[&#123;</div><div class="line">				&quot;name&quot;:&quot;./chrome61module/bb&quot;,</div><div class="line">				&quot;file&quot;:[&quot;/bb.js&quot;,&quot;/bb.html&quot;],</div><div class="line">				&quot;childDir&quot;:[]</div><div class="line">			&#125;,&#123;&#125;]</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		//DOM</div><div class="line">		var btnDownload = document.getElementById(&quot;downloadDir&quot;);</div><div class="line">		var aDir = document.getElementById(&quot;aDir&quot;);</div><div class="line">		//按钮监听器</div><div class="line">		btnDownload.addEventListener(&quot;click&quot;,downloadDir);</div><div class="line">		function downloadDir() &#123;</div><div class="line">			//处理某一层</div><div class="line">			function oneTreeLayerProcess(dir) &#123;</div><div class="line">				if(JSON.stringify(dir) !== &quot;&#123;&#125;&quot;)&#123;</div><div class="line">					if(dir.file.length !== 0)&#123;</div><div class="line">						for(let i = 0; i&lt; dir.file.length; i++)&#123;</div><div class="line">							var j = document.createElement(&quot;a&quot;);</div><div class="line">							j.href = dir.name + dir.file[i];</div><div class="line">							j.download = dir.file[i].slice(1);</div><div class="line">							j.click();</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">					if(dir.childDir.length !== 0)&#123;</div><div class="line">						for(let i =0; i &lt; dir.childDir.length; i++)&#123;</div><div class="line">						    //递归</div><div class="line">							oneTreeLayerProcess(dir.childDir[i]);</div><div class="line">						&#125;</div><div class="line">					&#125;</div><div class="line">				&#125;</div><div class="line">			&#125;</div><div class="line">			oneTreeLayerProcess(rootDir);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">	&lt;/script&gt;</div><div class="line">&lt;/body&gt;</div></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>1、由于http和JS能力的限制，目前仅能实现文件下载，不能实现文件夹下载或者文件夹本地创建，因此想原样拷贝服务器上一个目录到本地机器，使用JS目前较难做到。</p>
+<p>2、由于本例实现的将一个目录树下所有文件都平行下载到本地的同一个文件夹下。造成客户端即使下载了也无法理解服务器上原目录树的困难。<br>一点改进是，如果使用download=“”，将“”内的文件名改为<strong>包含路径</strong>的文件名，也许下载以后，客户端可以获悉其原来在服务器上的对应的目录层级，从而可以自己后续处理。</p>
+<p>3、如果可能，还是按照压缩包的形式下载一个目录也许更好。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/em-port-debug-six/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1751,166 +1932,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/webassembly/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="云荒杯倾">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/jiamiu.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="云荒杯倾">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/webassembly/" itemprop="url">webassembly介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-06T19:31:39+08:00">
-                2017-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/webassembly/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::https://cunzaizhuyi.github.io/webassembly/" class="cy_cmt_count" data-xid="webassembly/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="1、WebAssembly工作原理"><a href="#1、WebAssembly工作原理" class="headerlink" title="1、WebAssembly工作原理"></a>1、WebAssembly工作原理</h3><h4 id="分点介绍"><a href="#分点介绍" class="headerlink" title="分点介绍"></a>分点介绍</h4><h5 id="官方解读"><a href="#官方解读" class="headerlink" title="官方解读"></a>官方解读</h5><p>它可以从各类现有的其他高级语言写的业务库编译而来，比如下文提到的bullet库，就是一种C++语言编写的刚体动力学与<br>碰撞检测计算的库。根据调研，还有Haskell、Go、C#的语言的一些WebAssembly编译工具或者已经编译成的WebAssembly代码库，<br>OK，既然是经过编译而得来，可以将WebAssembly理解为是该库的低级语言代码版本，是一种类汇编语言。</p>
-<h5 id="另类理解"><a href="#另类理解" class="headerlink" title="另类理解"></a>另类理解</h5><p>可以把它理解成一个ES6语法写的js模块，既可以有导入又有导出，也可以没有导入只有导出。</p>
-<h5 id="两类文件"><a href="#两类文件" class="headerlink" title="两类文件"></a>两类文件</h5><p><strong>WebAssembly文件格式与源码阅读-&gt;.wasm文件和.wast文件</strong></p>
-<p>WebAssembly代码存储在.wasm文件内，这类文件是要浏览器直接执行的。<br>因为.wasm文件内是二进制文件，难以阅读，为了方便开发者查看，官方给出了对.wasm文件的阅读方法，<br>通过把.wasm文件通过工具转为.wast的文本格式，开发者可以在一定程度上理解这个.wast文件。<br>.wast文件是通过S-表达式（一种类似lisp语言的代码书写风格）来写成的，<br>至于怎么读懂S-表达式，请去看官方介绍。<br>.wast文件和.wasm文件的关系，他们之间的相互转化，可以通过工具wabt（<a href="https://github.com/WebAssembly/wabt）" target="_blank" rel="external">https://github.com/WebAssembly/wabt）</a><br>实现。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/webassembly/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1964,7 +1985,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
