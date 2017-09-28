@@ -116,7 +116,7 @@
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/1.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/2.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/downloadFiles/3.png?raw=true">
-<meta property="og:updated_time" content="2017-09-28T02:08:32.962Z">
+<meta property="og:updated_time" content="2017-09-28T02:09:53.186Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="download-files">
 <meta name="twitter:description" content="HTML5+原生JS实现服务器端目录树中多文件下载作者：云荒杯倾作者博客 需求需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下所有文件的一键下载功能。 实现原理实现这个需求，本程序考虑到的知识点有html5 \标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。">
@@ -421,6 +421,7 @@
         <h1 id="HTML5-原生JS实现服务器端目录树中多文件下载"><a href="#HTML5-原生JS实现服务器端目录树中多文件下载" class="headerlink" title="HTML5+原生JS实现服务器端目录树中多文件下载"></a>HTML5+原生JS实现服务器端目录树中多文件下载</h1><p><strong>作者：云荒杯倾</strong><br><a href="https://cunzaizhuyi.github.io">作者博客</a></p>
 <h2 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h2><p>需求是这样的，服务器上有一个目录，目录下面可能既有文件又有其他目录，其他目录下面也一样，既可能有文件也有目录；浏览器要显示有这个目录，并提供这个目录下<strong>所有文件的一键下载</strong>功能。</p>
 <h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>实现这个需求，本程序考虑到的知识点有html5 \<a>标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。</a></p>
+<a id="more"></a>
 <h3 id="HTML5-标签的下载功能"><a href="#HTML5-标签的下载功能" class="headerlink" title="HTML5 \标签的下载功能"></a>HTML5 \<a>标签的下载功能</a></h3><p>首先说<strong>HTML5 \<a>标签的下载功能</a></strong>，<br>HTML5的\<a>标签有一个download属性，如果你设置了这个属性，那么点击这个链接，就不再是跳转到这个\<a>标签href引用的地址了，而是直接去下载href所代表的一个文件。</a></a></p>
 <p>即<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
 <p>这样，点击<strong>这是超链接</strong>几个字，只能页面跳转到bbb.html。<br>而，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;a herf=&quot;./bbb.html&quot; download=&quot;ccc.html&quot;&gt;这是超链接&lt;/a&gt;</div></pre></td></tr></table></figure></p>
