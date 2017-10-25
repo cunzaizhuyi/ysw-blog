@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/about/index.html</loc>
+    
+    <lastmod>2017-10-25T07:37:21.087Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/download-files/</loc>
     
     <lastmod>2017-10-16T08:29:36.870Z</lastmod>
@@ -75,13 +82,6 @@
     <loc>https://cunzaizhuyi.github.io/WebAssembly-LinkError/</loc>
     
     <lastmod>2017-09-15T02:13:19.389Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cunzaizhuyi.github.io/about/index.html</loc>
-    
-    <lastmod>2017-09-10T12:56:09.741Z</lastmod>
     
   </url>
   
