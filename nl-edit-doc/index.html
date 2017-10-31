@@ -113,10 +113,13 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="定义或约定1、非编面板：非线性编辑面板    &amp;emsp;&amp;emsp;1.1、视频条块，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。2、canvas播放面板：canvas播放器播放面板    &amp;emsp;&amp;emsp;2.1、合成视频：指剪辑完成后，各个视频条块组合而成的新视频。3、div控制条：canvas播放器控制">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-31T10:20:42.408Z">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true">
+<meta property="og:updated_time" content="2017-10-31T10:26:48.214Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频非编开发文档">
 <meta name="twitter:description" content="定义或约定1、非编面板：非线性编辑面板    &amp;emsp;&amp;emsp;1.1、视频条块，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。2、canvas播放面板：canvas播放器播放面板    &amp;emsp;&amp;emsp;2.1、合成视频：指剪辑完成后，各个视频条块组合而成的新视频。3、div控制条：canvas播放器控制">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true">
 
 
 
@@ -416,14 +419,111 @@
       
         <h2 id="定义或约定"><a href="#定义或约定" class="headerlink" title="定义或约定"></a>定义或约定</h2><p>1、<strong>非编面板</strong>：非线性编辑面板<br>    &emsp;&emsp;1.1、<strong>视频条块</strong>，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。<br>2、<strong>canvas播放面板</strong>：canvas播放器播放面板<br>    &emsp;&emsp;2.1、<strong>合成视频</strong>：指剪辑完成后，各个<strong>视频条块</strong>组合而成的新视频。<br>3、<strong>div控制条</strong>：canvas播放器控制条，因为是用div做的，就称div控制条<br>    包括的功能：（1）播放/暂停切换，（2）拖动到某一位置播放，（3）全屏播放/退出全屏播放。<br>4、<strong>视频源</strong>:待做非线性编辑的视频源</p>
 <a id="more"></a>
-<p>图示如下:<br>!()[<a href="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true" target="_blank" rel="external">https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true</a>]</p>
+<p>图示如下:<br><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true" alt=""></p>
 <h2 id="使用到的两个JS库"><a href="#使用到的两个JS库" class="headerlink" title="使用到的两个JS库"></a>使用到的两个JS库</h2><p>1、Seriously.js<br>    用于实现canvas播放面板，同步播放源的画面。<br>2、easelJS<br>    用于实现<strong>非编面板</strong>，创建<strong>视频条块</strong>、切割<strong>视频条块</strong>，移动<strong>视频条块</strong>等。</p>
 <h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>1、<strong>视频源</strong>部分<br>    A 获取每个<strong>视频源</strong>的清晰度、时长信息</p>
 <p>2、<strong>非编面板</strong>部分<br>    A 创建和视频源同样数量的<strong>视频条块</strong>，显示在<strong>非编面板</strong>中；<br>    B 将非编信息变量或对象 置0、[]或null等；<br>    C 非编面板事件监听器的设置；<br>    D 非编面板中的进度条位置置为0；</p>
 <p>3、<strong>canvas播放器</strong>部分<br>    A 获取到播放器控制条各个HTML元素的引用<br>    B 初始化seriously主类</p>
-<h2 id="数据部分"><a href="#数据部分" class="headerlink" title="数据部分"></a>数据部分</h2><p>1、<strong>视频源</strong>部分<br>|名称|类型|描述|<br>|-|-|-|<br>|videos|array|存放每个<strong>视频源</strong>的引用|<br>|videosSize|二维array|存放每个<strong>视频源</strong>的清晰度，如[[1280, 720], [1920,1080]]|<br>|video1duration|number|<strong>视频源</strong>1的时长|<br>|video2duration|number|<strong>视频源</strong>2的时长|<br>|allVideoDuration|number|局部变量，所有<strong>视频源</strong>时长之和|<br>|videosduration|array|局部变量，存放每个<strong>视频源</strong>时长|</p>
+<h2 id="数据部分"><a href="#数据部分" class="headerlink" title="数据部分"></a>数据部分</h2><p>1、<strong>视频源</strong>部分</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>videos</td>
+<td>array</td>
+<td>存放每个<strong>视频源</strong>的引用</td>
+</tr>
+<tr>
+<td>videosSize</td>
+<td>二维array</td>
+<td>存放每个<strong>视频源</strong>的清晰度，如[[1280, 720], [1920,1080]]</td>
+</tr>
+<tr>
+<td>video1duration</td>
+<td>number</td>
+<td><strong>视频源</strong>1的时长</td>
+</tr>
+<tr>
+<td>video2duration</td>
+<td>number</td>
+<td><strong>视频源</strong>2的时长</td>
+</tr>
+<tr>
+<td>allVideoDuration</td>
+<td>number</td>
+<td>局部变量，所有<strong>视频源</strong>时长之和</td>
+</tr>
+<tr>
+<td>videosduration</td>
+<td>array</td>
+<td>局部变量，存放每个<strong>视频源</strong>时长</td>
+</tr>
+</tbody>
+</table>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Note：</div><div class="line">allVideoDuration和videosduration依赖每个视频源的时长；也可以将videosduration升级为全局变量。</div></pre></td></tr></table></figure>
-<p>2、<strong>非编面板</strong>部分<br>|名称|类型|描述|<br>|-|-|-|<br>|slicingBarCanvas|canvas元素|<strong>非编面板</strong>的原生对象|<br>|stage|类似于ctx|<strong>非编面板</strong>绘图场景|<br>|videoBars|array|重要。存放已剪辑的<strong>视频条块</strong>的引用；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|percentOfVideoBarWidth|array|存放每个<strong>视频条块</strong>占对应<strong>视频源</strong>的百分比，用来生成secOfVideoBars；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|secOfVideoBars|array|存放每个<strong>视频条块</strong>（为它代表的<strong>视频源</strong>）的播放秒数；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|videoIDOfVideoBars|array|每个<strong>视频条块</strong>对应的<strong>视频源</strong>ID号；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|timeRange|array|重要。以每个<strong>视频条块</strong>的播放时间为分割的<strong>合成视频</strong>的时间段；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|videoBarsWidth|number|videoBars中所有<strong>视频条块</strong>宽度之和；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组|<br>|progressLine|shape对象|用于在<strong>非编面板</strong>上观察播放进度，涉及cerateLine()和modifyLinePos()函数|</p>
+<p>2、<strong>非编面板</strong>部分</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>slicingBarCanvas</td>
+<td>canvas元素</td>
+<td><strong>非编面板</strong>的原生对象</td>
+</tr>
+<tr>
+<td>stage</td>
+<td>类似于ctx</td>
+<td><strong>非编面板</strong>绘图场景</td>
+</tr>
+<tr>
+<td>videoBars</td>
+<td>array</td>
+<td>重要。存放已剪辑的<strong>视频条块</strong>的引用；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>percentOfVideoBarWidth</td>
+<td>array</td>
+<td>存放每个<strong>视频条块</strong>占对应<strong>视频源</strong>的百分比，用来生成secOfVideoBars；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>secOfVideoBars</td>
+<td>array</td>
+<td>存放每个<strong>视频条块</strong>（为它代表的<strong>视频源</strong>）的播放秒数；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>videoIDOfVideoBars</td>
+<td>array</td>
+<td>每个<strong>视频条块</strong>对应的<strong>视频源</strong>ID号；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>timeRange</td>
+<td>array</td>
+<td>重要。以每个<strong>视频条块</strong>的播放时间为分割的<strong>合成视频</strong>的时间段；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>videoBarsWidth</td>
+<td>number</td>
+<td>videoBars中所有<strong>视频条块</strong>宽度之和；无论是裁剪新<strong>视频条块</strong>还是移动<strong>视频条块</strong>都会重新生成数组</td>
+</tr>
+<tr>
+<td>progressLine</td>
+<td>shape对象</td>
+<td>用于在<strong>非编面板</strong>上观察播放进度，涉及cerateLine()和modifyLinePos()函数</td>
+</tr>
+</tbody>
+</table>
 <p>3、canvas播放面板部分<br>|名称|类型|描述|<br>|-|-|-|<br>|playerCanvas|canvas元素|canvas播放器原生对象|<br>|seriously|object|seriously.js的主类，用于同步视频画面到canvas播放器|</p>
 <p>4、div控制条部分</p>
 <p>使用div实现的canvas控制条，包括播放/暂停切换、进度条、全屏/退出全屏、查看总时长和已播时间等功能。<br>图标采用font awesome。</p>
@@ -468,7 +568,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="交互逻辑"><a href="#交互逻辑" class="headerlink" title="交互逻辑"></a>交互逻辑</h2><p>大体上的流程见下图<br>!()[<a href="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true" target="_blank" rel="external">https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true</a>]</p>
+<h2 id="交互逻辑"><a href="#交互逻辑" class="headerlink" title="交互逻辑"></a>交互逻辑</h2><p>大体上的流程见下图<br><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true" alt=""></p>
 <p>下面是一些数据逻辑的说明</p>
 <h3 id="非编面板交互interaction"><a href="#非编面板交互interaction" class="headerlink" title="非编面板交互interaction"></a><strong>非编面板</strong>交互interaction</h3><p>1、初始化工作：开发<strong>非编面板</strong>的底层工具函数，包括创建面板、创建矩形条块（<strong>视频条块</strong>）、修改条块、删除条块、创建直线、修改直线位置等。<br>2、初始化工作：提供各种事件监听，有事件发生就刷新场景。<br>3、设置三种事件的监听器：<br>stage.on(“mousedown”, mousedownHandle);<br>stage.on(“pressmove”, pressmoveHandle);<br>stage.on(“pressup”, pressupHandle);<br>4、因为三种事件最后的落脚点都是pressup事件，所以在此区分出三种事件，并在此做非编信息处理逻辑。<br>5、处理坐标系统的逻辑。包括条块重排，条块越界纠正，拖动条块随鼠标移动等。<br>6、在<strong>视频条块</strong>对象上挂载一些可以指代<strong>视频源</strong>含义的属性，比如videoID，pos，offset等。<br>7、禁止鼠标右键默认菜单弹出。<br>8、设置<strong>视频条块</strong>在<strong>拖动时</strong>的显示样式（修改颜色和透明度）和修改<strong>拖动后</strong>的显示层级。</p>
 <h3 id="非编信息处理"><a href="#非编信息处理" class="headerlink" title="非编信息处理"></a>非编信息处理</h3><p>将非编信息处理整理成函数nlEditInfoCollect();</p>
