@@ -115,7 +115,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true">
-<meta property="og:updated_time" content="2017-10-31T10:26:48.214Z">
+<meta property="og:updated_time" content="2017-10-31T10:31:59.606Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频非编开发文档">
 <meta name="twitter:description" content="定义或约定1、非编面板：非线性编辑面板    &amp;emsp;&amp;emsp;1.1、视频条块，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。2、canvas播放面板：canvas播放器播放面板    &amp;emsp;&amp;emsp;2.1、合成视频：指剪辑完成后，各个视频条块组合而成的新视频。3、div控制条：canvas播放器控制">
@@ -524,8 +524,29 @@
 </tr>
 </tbody>
 </table>
-<p>3、canvas播放面板部分<br>|名称|类型|描述|<br>|-|-|-|<br>|playerCanvas|canvas元素|canvas播放器原生对象|<br>|seriously|object|seriously.js的主类，用于同步视频画面到canvas播放器|</p>
-<p>4、div控制条部分</p>
+<p>3、<strong>canvas播放面板</strong>部分</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>playerCanvas</td>
+<td>canvas元素</td>
+<td>canvas播放器原生对象</td>
+</tr>
+<tr>
+<td>seriously</td>
+<td>object</td>
+<td>seriously.js的主类，用于同步视频画面到canvas播放器</td>
+</tr>
+</tbody>
+</table>
+<p>4、<strong>div控制条</strong>部分</p>
 <p>使用div实现的canvas控制条，包括播放/暂停切换、进度条、全屏/退出全屏、查看总时长和已播时间等功能。<br>图标采用font awesome。</p>
 <table>
 <thead>
@@ -576,13 +597,13 @@
 <h3 id="定时器"><a href="#定时器" class="headerlink" title="定时器"></a>定时器</h3><p>充当<strong>合成视频</strong>的时间轴。<br>主要的逻辑都是一秒（995ms）执行一次。<br>包括：<br>1、每秒都判断一次是否达到非编播放的终止条件，达到就执行内部逻辑：停掉所有<strong>视频源</strong>。<br>2、每秒都使<strong>非编面板</strong>上的进度条前进1个step。<br>3、每秒都判断现在的“秒”是在<strong>合成视频</strong>的哪个区间段，在哪个区间段播放对应的那个<strong>视频源</strong>，并在此时将播放画面同步到canvas播放器上。<br>4、每秒都要判断现在的“秒”是否是关键时间分割点，如果是，需要找到下一个待播剪辑视频段的videoID，并将其的currentTime修改到正确的位置。<br>5、每秒都要判断是否用户拖动了div控制条上的进度条，如果是：如4，也要修改某个<strong>视频源</strong>的currentTime。修改<strong>非编面板</strong>中进度条的位置。并重新将是否拖动进度条的变量设为false。</p>
 <h3 id="非编面板中的进度条"><a href="#非编面板中的进度条" class="headerlink" title="非编面板中的进度条"></a><strong>非编面板</strong>中的进度条</h3><p>要注意区分该进度条与<strong>非编面板</strong>中的<strong>视频条块</strong>；它们是两类东西。<br>主要是算面板中有多少剪辑的<strong>视频条块</strong>的时候，可能会误把该进度条也算进去，导致出错。</p>
 <p>1、开发两个函数，一个是创建一个直线充当该进度条（createLine），一个是修改一条线的位置保证进度条实例不断前进（modifyLinePos）。<br>2、初始化时，将进度条位置置0；<br>3、每播放一秒，进度条前进1个step，这个step = 所有<strong>视频条块</strong>的宽度和/<strong>合成视频</strong>的时长；<br>4、div控制条中的进度条被拖动时，该进度条也要跳转到正确的位置。<br>5、让<strong>非编面板</strong>上的进度线始终显示在面板最顶层，不能被<strong>视频条块</strong>压盖。</p>
-<h3 id="div控制条上的播放-暂停切换"><a href="#div控制条上的播放-暂停切换" class="headerlink" title="div控制条上的播放/暂停切换"></a>div控制条上的播放/暂停切换</h3><p>1、根据用户点击图标的名称判断该执行“播放”还是“暂停”的逻辑；<br>2、如果是播放，A、图标切换为“暂停”；B、div控制条上的总时长赋值；C、每秒刷新已播时间；D、每条刷新进度条上的值。</p>
+<h3 id="div控制条上的播放-暂停切换"><a href="#div控制条上的播放-暂停切换" class="headerlink" title="div控制条上的播放/暂停切换"></a><strong>div控制条</strong>上的播放/暂停切换</h3><p>1、根据用户点击图标的名称判断该执行“播放”还是“暂停”的逻辑；<br>2、如果是播放，A、图标切换为“暂停”；B、div控制条上的总时长赋值；C、每秒刷新已播时间；D、每条刷新进度条上的值。</p>
 <p>   如果是暂停，A、图标切换为“播放”；B、循环“视频源数组”找出那个在播<strong>视频源</strong>，停掉它；C、停掉定时器，tick不再增长；D、因为只是暂停，需要记住进度条上的值，赋给定时器的tick变量，待再次点击“播放”时能够续播。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Note：</div><div class="line">为了实现暂停功能，相当于要给定时器设状态。或者说定时器相当于有了记忆。</div></pre></td></tr></table></figure>
-<h3 id="div控制条上的进度条"><a href="#div控制条上的进度条" class="headerlink" title="div控制条上的进度条"></a>div控制条上的进度条</h3><p>使用input range实现</p>
-<p>1、点击div控制条上播放按钮时，进度条value要+1；<br>2、要能判断进度条上的用户拖动事件，拖动后影响：A、<strong>合成视频</strong>的播放点，要找到当前拖动到的位置是哪个<strong>视频源</strong>的哪一段的第多少秒的位置；B、<strong>非编面板</strong>上的进度条的位置。</p>
-<h3 id="div控制条上的全屏-退出全屏切换"><a href="#div控制条上的全屏-退出全屏切换" class="headerlink" title="div控制条上的全屏/退出全屏切换"></a>div控制条上的全屏/退出全屏切换</h3><p>基本不涉及数据处理。</p>
-<p>0、写好canvas播放器的全屏样式。<br>1、根据用户点击图标的名称判断该执行“全屏”还是“退出全屏”的逻辑；<br>2、全屏后，修改div控制条上的图标为“退出全屏”；<br>3、退出全屏后，修改div控制条上的图标为“全屏”；<br>4、监听webkitfullscreenchange事件，满足“用户是按ESC退出全屏的而非按了‘退出全屏’按钮退出全屏模式的”逻辑。</p>
+<h3 id="div控制条上的进度条"><a href="#div控制条上的进度条" class="headerlink" title="div控制条上的进度条"></a><strong>div控制条</strong>上的进度条</h3><p>使用input range实现</p>
+<p>1、点击<strong>div控制条</strong>上播放按钮时，进度条value要+1；<br>2、要能判断进度条上的用户拖动事件，拖动后影响：A、<strong>合成视频</strong>的播放点，要找到当前拖动到的位置是哪个<strong>视频源</strong>的哪一段的第多少秒的位置；B、<strong>非编面板</strong>上的进度条的位置。</p>
+<h3 id="div控制条上的全屏-退出全屏切换"><a href="#div控制条上的全屏-退出全屏切换" class="headerlink" title="div控制条上的全屏/退出全屏切换"></a><strong>div控制条</strong>上的全屏/退出全屏切换</h3><p>基本不涉及数据处理。</p>
+<p>0、写好<strong>canvas播放器</strong>的全屏样式。<br>1、根据用户点击图标的名称判断该执行“全屏”还是“退出全屏”的逻辑；<br>2、全屏后，修改div控制条上的图标为“退出全屏”；<br>3、退出全屏后，修改div控制条上的图标为“全屏”；<br>4、监听webkitfullscreenchange事件，满足“用户是按ESC退出全屏的而非按了‘退出全屏’按钮退出全屏模式的”逻辑。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">Note：</div><div class="line">全屏/退出全屏功能使用的document.webkitCancelFullScreen，webkitRequestFullScreen()，以及带有:-webkit-full-screen的样式，需要做兼容性处理。</div></pre></td></tr></table></figure>
 <h2 id="开发的功能列表"><a href="#开发的功能列表" class="headerlink" title="开发的功能列表"></a>开发的功能列表</h2><ol>
 <li><p><strong>视频源</strong>：</p>
