@@ -115,7 +115,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true">
 <meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/liucheng.png?raw=true">
-<meta property="og:updated_time" content="2017-11-01T02:32:11.829Z">
+<meta property="og:updated_time" content="2017-11-01T02:34:25.937Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="视频非编开发文档">
 <meta name="twitter:description" content="定义或约定1、非编面板：非线性编辑面板    &amp;emsp;&amp;emsp;1.1、视频条块，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。2、canvas播放器：canvas播放器播放面板与div控制条的合称    &amp;emsp;&amp;emsp;2.1、合成视频：指剪辑完成后，各个视频条块组合而成的新视频。虚概念，页面上没有对应">
@@ -420,7 +420,7 @@
         <h2 id="定义或约定"><a href="#定义或约定" class="headerlink" title="定义或约定"></a>定义或约定</h2><p>1、<strong>非编面板</strong>：非线性编辑面板<br>    &emsp;&emsp;1.1、<strong>视频条块</strong>，或者面板条块，两层含义，既指非编面板上一段一段的意指视频片段的面板条块（表面含义），也指即某播放源的某段播放区间（指代含义）。<br>2、<strong>canvas播放器</strong>：<strong>canvas播放器播放面板</strong>与<strong>div控制条</strong>的合称<br>    &emsp;&emsp;2.1、<strong>合成视频</strong>：指剪辑完成后，各个<strong>视频条块</strong>组合而成的新视频。虚概念，页面上没有对应的组件，播放载体是<strong>canvas播放器</strong>。<br>    &emsp;&emsp;2.2、<strong>canvas播放器播放面板</strong>：简称canvas播放面板。<br>3、<strong>div控制条</strong>：canvas播放器控制条，因为是用div做的，就称div控制条<br>    包括的功能：（1）播放/暂停切换，（2）拖动到某一位置播放，（3）全屏播放/退出全屏播放。<br>4、<strong>视频源</strong>:待做非线性编辑的视频源</p>
 <a id="more"></a>
 <p>图示如下:<br><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/tushi.png?raw=true" alt=""></p>
-<h2 id="使用到的两个JS库"><a href="#使用到的两个JS库" class="headerlink" title="使用到的两个JS库"></a>使用到的两个JS库</h2><p>1、Seriously.js<br>    用于实现canvas播放面板，同步播放源的画面。<br>2、easelJS<br>    用于实现<strong>非编面板</strong>，创建<strong>视频条块</strong>、切割<strong>视频条块</strong>，移动<strong>视频条块</strong>等。</p>
+<h2 id="使用到的两个JS库"><a href="#使用到的两个JS库" class="headerlink" title="使用到的两个JS库"></a>使用到的两个JS库</h2><p>1、Seriously.js<br>    用于实现<strong>canvas播放面板</strong>，<strong>canvas播放面板</strong>用于同步<strong>视频源</strong>的画面。<br>2、easelJS<br>    用于实现<strong>非编面板</strong>，创建<strong>视频条块</strong>、切割<strong>视频条块</strong>，移动<strong>视频条块</strong>，删除<strong>视频条块</strong>等。</p>
 <h2 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h2><p>1、<strong>视频源</strong>部分<br>    A 获取每个<strong>视频源</strong>的清晰度、时长信息</p>
 <p>2、<strong>非编面板</strong>部分<br>    A 创建和视频源同样数量的<strong>视频条块</strong>，显示在<strong>非编面板</strong>中；<br>    B 将非编信息变量或对象 置0、[]或null等；<br>    C 非编面板事件监听器的设置；<br>    D 非编面板中的进度条位置置为0；</p>
 <p>3、<strong>canvas播放器</strong>部分<br>    A 获取到播放器控制条各个HTML元素的引用<br>    B 初始化seriously主类</p>
