@@ -105,18 +105,18 @@
 
 
 
-<meta name="description" content="基于canvas的视频遮罩插件视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在">
+<meta name="description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mask-plugin">
+<meta property="og:title" content="基于canvas的视频遮罩插件">
 <meta property="og:url" content="https://cunzaizhuyi.github.io/mask-plugin/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="基于canvas的视频遮罩插件视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在">
+<meta property="og:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-03T10:16:21.777Z">
+<meta property="og:updated_time" content="2018-01-03T10:17:59.209Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mask-plugin">
-<meta name="twitter:description" content="基于canvas的视频遮罩插件视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在">
+<meta name="twitter:title" content="基于canvas的视频遮罩插件">
+<meta name="twitter:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
 
 
 
@@ -152,7 +152,7 @@
 
 
 
-  <title>mask-plugin | 云荒杯倾</title>
+  <title>基于canvas的视频遮罩插件 | 云荒杯倾</title>
   
 
 
@@ -326,7 +326,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mask-plugin</h1>
+          <h1 class="post-title" itemprop="name headline">基于canvas的视频遮罩插件</h1>
         
 
         <div class="post-meta">
@@ -414,7 +414,7 @@
       
 
       
-        <h1 id="基于canvas的视频遮罩插件"><a href="#基于canvas的视频遮罩插件" class="headerlink" title="基于canvas的视频遮罩插件"></a>基于canvas的视频遮罩插件</h1><h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
+        <h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
 <p>一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。</p>
 <h2 id="前端实现视频遮罩"><a href="#前端实现视频遮罩" class="headerlink" title="前端实现视频遮罩"></a>前端实现视频遮罩</h2><p>有<strong>基于div</strong>和<strong>基于canvas</strong>两种技术方案，本文是使用canvas完成的。</p>
 <p>主要原理是在HTML的video标签上贴上一个透明的canvas图层，然后响应mousedown、mousemove、mouseup事件。<br>由于canvas事件只是基于canvas元素，所以canvas内部每个元素（一个矩形，一个圆等）的事件响应要利用坐标来自己代码完成。</p>
@@ -718,7 +718,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于canvas的视频遮罩插件"><span class="nav-text">基于canvas的视频遮罩插件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#视频遮罩介绍"><span class="nav-text">视频遮罩介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端实现视频遮罩"><span class="nav-text">前端实现视频遮罩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件GitHub地址"><span class="nav-text">插件GitHub地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看演示"><span class="nav-text">查看演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的功能点"><span class="nav-text">实现的功能点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#视频遮罩介绍"><span class="nav-text">视频遮罩介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端实现视频遮罩"><span class="nav-text">前端实现视频遮罩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件GitHub地址"><span class="nav-text">插件GitHub地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看演示"><span class="nav-text">查看演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的功能点"><span class="nav-text">实现的功能点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></div>
             
 
           </div>

@@ -327,7 +327,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/mask-plugin/" itemprop="url">mask-plugin</a></h1>
+                <a class="post-title-link" href="/mask-plugin/" itemprop="url">基于canvas的视频遮罩插件</a></h1>
         
 
         <div class="post-meta">
@@ -411,7 +411,7 @@
 
       
         
-          <h1 id="基于canvas的视频遮罩插件"><a href="#基于canvas的视频遮罩插件" class="headerlink" title="基于canvas的视频遮罩插件"></a>基于canvas的视频遮罩插件</h1><h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
+          <h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
 <p>一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。</p>
 <h2 id="前端实现视频遮罩"><a href="#前端实现视频遮罩" class="headerlink" title="前端实现视频遮罩"></a>前端实现视频遮罩</h2><p>有<strong>基于div</strong>和<strong>基于canvas</strong>两种技术方案，本文是使用canvas完成的。</p>
 <p>主要原理是在HTML的video标签上贴上一个透明的canvas图层，然后响应mousedown、mousemove、mouseup事件。<br>由于canvas事件只是基于canvas元素，所以canvas内部每个元素（一个矩形，一个圆等）的事件响应要利用坐标来自己代码完成。</p>
