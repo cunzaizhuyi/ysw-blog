@@ -2,6 +2,20 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/mask-plugin/</loc>
+    
+    <lastmod>2018-01-03T10:16:21.777Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/</loc>
+    
+    <lastmod>2017-11-27T01:59:12.616Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/nl-edit-doc/</loc>
     
     <lastmod>2017-11-01T02:47:21.414Z</lastmod>
@@ -19,13 +33,6 @@
     <loc>https://cunzaizhuyi.github.io/download-files/</loc>
     
     <lastmod>2017-10-16T08:29:36.870Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/</loc>
-    
-    <lastmod>2017-09-20T09:06:45.003Z</lastmod>
     
   </url>
   

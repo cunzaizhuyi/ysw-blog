@@ -308,6 +308,167 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/mask-plugin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/mask-plugin/" itemprop="url">mask-plugin</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T18:14:54+08:00">
+                2018-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/mask-plugin/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::https://cunzaizhuyi.github.io/mask-plugin/" class="cy_cmt_count" data-xid="mask-plugin/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h1 id="基于canvas的视频遮罩插件"><a href="#基于canvas的视频遮罩插件" class="headerlink" title="基于canvas的视频遮罩插件"></a>基于canvas的视频遮罩插件</h1><h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
+<p>一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。</p>
+<h2 id="前端实现视频遮罩"><a href="#前端实现视频遮罩" class="headerlink" title="前端实现视频遮罩"></a>前端实现视频遮罩</h2><p>有<strong>基于div</strong>和<strong>基于canvas</strong>两种技术方案，本文是使用canvas完成的。</p>
+<p>主要原理是在HTML的video标签上贴上一个透明的canvas图层，然后响应mousedown、mousemove、mouseup事件。<br>由于canvas事件只是基于canvas元素，所以canvas内部每个元素（一个矩形，一个圆等）的事件响应要利用坐标来自己代码完成。</p>
+<h2 id="插件GitHub地址"><a href="#插件GitHub地址" class="headerlink" title="插件GitHub地址"></a>插件GitHub地址</h2><p><a href="https://github.com/cunzaizhuyi/maskPlugin" target="_blank" rel="external">https://github.com/cunzaizhuyi/maskPlugin</a></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/mask-plugin/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/nl-edit-doc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -419,7 +580,7 @@
 </ul>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/nl-edit-doc/#далее" rel="contents">
+            <a class="btn" href="/nl-edit-doc/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -578,7 +739,7 @@
 <h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>实现这个需求，本程序考虑到的知识点有html5 \<a>标签的下载功能、数据结构中树的广度优先遍历算法、一点http知识和一点JS局限性的知识。</a></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/download-files/#далее" rel="contents">
+            <a class="btn" href="/download-files/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -745,7 +906,7 @@
 <p>本文描述了由Emscripten提供的用于调试的主要工具和设置，以及如何调试一些Emscripten特有的问题。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-debug-six/#далее" rel="contents">
+            <a class="btn" href="/em-port-debug-six/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -906,7 +1067,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">note:</div><div class="line">Embind的灵感来自 Boost.Python，他们使用非常相似的方法定义绑定。</div></pre></td></tr></table></figure>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-embind-three/#далее" rel="contents">
+            <a class="btn" href="/em-port-embind-three/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1065,7 +1226,7 @@
 <h2 id="JavaScript使用ccall-cwrap调用编译的c函数"><a href="#JavaScript使用ccall-cwrap调用编译的c函数" class="headerlink" title="JavaScript使用ccall/cwrap调用编译的c函数"></a>JavaScript使用ccall/cwrap调用编译的c函数</h2><p>JavaScript中调用编译的C函数的最简单的方法是使用ccall()和cwrap()。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-codeinteract-three/#далее" rel="contents">
+            <a class="btn" href="/em-port-codeinteract-three/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1232,7 +1393,7 @@
 <h3 id="Emscripten的文件系统运行环境"><a href="#Emscripten的文件系统运行环境" class="headerlink" title="Emscripten的文件系统运行环境"></a>Emscripten的文件系统运行环境</h3>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-filesystem-four/#далее" rel="contents">
+            <a class="btn" href="/em-port-filesystem-four/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1392,7 +1553,7 @@
 <h3 id="1、输入-输出"><a href="#1、输入-输出" class="headerlink" title="1、输入/输出"></a>1、输入/输出</h3><p>Emscripten为浏览器环境实现了简单的DirectMedia Layer API(SDL)，它提供了对音频、键盘、鼠标、操纵杆和图形硬件的底层访问。使用了SDL的应用程序通常不需要为了在浏览器中运行做输入/输出方面的更改。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-RuntimeEnv-two/#далее" rel="contents">
+            <a class="btn" href="/em-port-RuntimeEnv-two/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1552,7 +1713,7 @@
 <h3 id="代码可移植性与限制"><a href="#代码可移植性与限制" class="headerlink" title="代码可移植性与限制"></a>代码可移植性与限制</h3><p>Emscripten几乎可以编译任何可移植的c/c++代码到JavaScript。但由于浏览器环境限制和Emscripten编译出来的代码的限制，一些代码为了能被编译需要做改动，本文就帮我们找出这部分代码。</p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/em-port-one/#далее" rel="contents">
+            <a class="btn" href="/em-port-one/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1715,167 +1876,7 @@
 <p> 随着优化级别增加，渐进引入更加激进的优化方式，从而导致更高的性能和更大的代码体积<br> ，代价是编译时间会增加。<strong>优化项也会引发一些问题。</strong></p>
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/emcscripten-Optimizing-Code/#далее" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="云荒杯倾">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/uploads/jiamiu.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="云荒杯倾">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/WebAssemblyCanvasDemo/" itemprop="url">WebAssembly Demo之Canvas中随机运动圆球</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T09:58:58+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/前端/" itemprop="url" rel="index">
-                    <span itemprop="name">前端</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-              <span class="post-meta-divider">|</span>
-              <span class="post-meta-item-icon">
-                <i class="fa fa-comment-o"></i>
-              </span>
-              
-                <a href="/WebAssemblyCanvasDemo/#SOHUCS" itemprop="discussionUrl">
-                  <span id="url::https://cunzaizhuyi.github.io/WebAssemblyCanvasDemo/" class="cy_cmt_count" data-xid="WebAssemblyCanvasDemo/" itemprop="commentsCount" ></span>
-                </a>
-              
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h3 id="1、Demo功能介绍"><a href="#1、Demo功能介绍" class="headerlink" title="1、Demo功能介绍"></a>1、Demo功能介绍</h3><p>实现了一个圆球在800px <em> 600px画布内随机运动，固定时间间隔随机运动一次，运动方向由x和y轴组成的<br>向量决定，这个向量是随机值（后面会称它为 <em>*随机向量</em></em> ），从C语言代码中的随机函数获取，JS代码<br>实现小球的画布渲染、越界纠正、设置运动频率等工作。</p>
-<p>Demo同时实现了纯JS（即不使用WebAssembly）和WebAssembly两个版本，都在Demo地址中。</p>
-<h3 id="2、Demo地址"><a href="#2、Demo地址" class="headerlink" title="2、Demo地址"></a>2、Demo地址</h3><p>github : <a href="https://github.com/cunzaizhuyi/wasm-canvasDemo" target="_blank" rel="external">https://github.com/cunzaizhuyi/wasm-canvasDemo</a></p>
-<h3 id="3、Demo目录结构"><a href="#3、Demo目录结构" class="headerlink" title="3、Demo目录结构"></a>3、Demo目录结构</h3><p>因为demo比较简单，也没有什么js库依赖，所以本库的所有demo都是按照目录区分的（一个目录是一个demo），而没有使用诸如src、doc、dist<br>之类的结构。</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/WebAssemblyCanvasDemo/#далее" rel="contents">
+            <a class="btn" href="/emcscripten-Optimizing-Code/#more" rel="contents">
               阅读全文 &raquo;
             </a>
           </div>
@@ -1966,7 +1967,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2054,7 +2055,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
