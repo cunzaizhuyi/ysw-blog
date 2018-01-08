@@ -113,10 +113,12 @@
 <meta property="og:site_name" content="云荒杯倾">
 <meta property="og:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-01-03T10:17:59.209Z">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true">
+<meta property="og:updated_time" content="2018-01-08T10:53:28.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于canvas的视频遮罩插件">
 <meta name="twitter:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true">
 
 
 
@@ -485,6 +487,8 @@
 </tbody>
 </table>
 <p>masksTime举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[&#123;</div><div class="line">    maskId: 1,</div><div class="line">    startTime: 0,</div><div class="line">    endTime: 10,</div><div class="line">&#125;, &#123;maskId: 2,</div><div class="line">    startTime: 3,</div><div class="line">    endTime: 13,</div><div class="line">&#125;]</div></pre></td></tr></table></figure></p>
+<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>有两个遮罩类，mask.js和mask2.js。<br>他们的区别是是否需要点击button才能生成一个新的遮罩。<br>其中，mask.js不需要，mask2.js需要每次点击按钮才能画新遮罩。</p>
+<h2 id="应用效果图"><a href="#应用效果图" class="headerlink" title="应用效果图"></a>应用效果图</h2><p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true" alt=""></p>
 <h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个基于原生canvas的700多行的小插件，对于探索canvas的世界可能仅仅是一个开始。</p>
 <p>关于这个小插件有任何疑问，欢迎大家交流。</p>
 
@@ -718,7 +722,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#视频遮罩介绍"><span class="nav-text">视频遮罩介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端实现视频遮罩"><span class="nav-text">前端实现视频遮罩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件GitHub地址"><span class="nav-text">插件GitHub地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看演示"><span class="nav-text">查看演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的功能点"><span class="nav-text">实现的功能点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#视频遮罩介绍"><span class="nav-text">视频遮罩介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端实现视频遮罩"><span class="nav-text">前端实现视频遮罩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件GitHub地址"><span class="nav-text">插件GitHub地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看演示"><span class="nav-text">查看演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的功能点"><span class="nav-text">实现的功能点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件说明"><span class="nav-text">文件说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用效果图"><span class="nav-text">应用效果图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></div>
             
 
           </div>
