@@ -4,6 +4,26 @@
 
     
   <url>
+    <loc>https://cunzaizhuyi.github.io/vuex-hello/</loc>
+    <lastmod>2018-01-18T09:03:13.520Z</lastmod>
+    <data>
+        <display>
+        <title>超简单入门Vuex小示例</title>
+        <pubTime>2018-01-18T09:02:22.000Z</pubTime>
+        
+        <tag>前端</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="https://cunzaizhuyi.github.io/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://cunzaizhuyi.github.io/mask-plugin/</loc>
     <lastmod>2018-01-08T10:53:28.021Z</lastmod>
     <data>
@@ -45,7 +65,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/nl-edit-doc/</loc>
-    <lastmod>2017-11-01T02:47:21.414Z</lastmod>
+    <lastmod>2017-11-01T02:47:21.415Z</lastmod>
     <data>
         <display>
         <title>视频非编开发文档</title>
@@ -146,7 +166,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/em-port-one/</loc>
-    <lastmod>2017-09-19T14:04:06.459Z</lastmod>
+    <lastmod>2017-09-19T14:04:06.460Z</lastmod>
     <data>
         <display>
         <title>Emscripten代码移植之代码可移植性与限制（一）</title>
@@ -166,7 +186,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/em-port-debug-six/</loc>
-    <lastmod>2017-09-19T13:48:41.084Z</lastmod>
+    <lastmod>2017-09-19T13:48:41.085Z</lastmod>
     <data>
         <display>
         <title>Emscripten教程之如何调试代码（六）</title>
@@ -186,7 +206,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/em-port-filesystem-four/</loc>
-    <lastmod>2017-09-19T13:46:42.918Z</lastmod>
+    <lastmod>2017-09-19T13:46:42.919Z</lastmod>
     <data>
         <display>
         <title>Emscripten代码移植之文件和文件系统（四）</title>
@@ -206,7 +226,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/em-port-RuntimeEnv-two/</loc>
-    <lastmod>2017-09-19T13:46:42.801Z</lastmod>
+    <lastmod>2017-09-19T13:46:42.802Z</lastmod>
     <data>
         <display>
         <title>Emscripten代码移植之Emscripten的运行时环境（二）</title>
@@ -224,7 +244,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/webassembly/</loc>
-    <lastmod>2017-09-16T08:43:42.083Z</lastmod>
+    <lastmod>2017-09-16T08:43:42.084Z</lastmod>
     <data>
         <display>
         <title>webassembly介绍</title>
@@ -262,7 +282,7 @@
     
   <url>
     <loc>https://cunzaizhuyi.github.io/hls/</loc>
-    <lastmod>2017-09-05T11:45:08.079Z</lastmod>
+    <lastmod>2017-09-05T11:45:08.080Z</lastmod>
     <data>
         <display>
         <title>从事件链角度解析video-dev/hls.js库</title>
