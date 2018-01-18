@@ -105,20 +105,23 @@
 
 
 
-<meta name="description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
+<meta name="description" content="基于JS快速生成网格布局工具Grid.js作者：云荒杯倾 写在前面这两天了解了一下css的grid布局，发现确实很好用。看了几篇博客，了解了它的几个常用属性后，可以快速生成一个网格布局。相较于传统的float、定位等显得更成体系，更规范，不需要一些hack做法。 虽然grid布局已经很好，前端工程师中有一些更多是喜欢通过动态创建div，使用js给div加样式这种方式来完成自己的工作的。 同样是出于">
 <meta name="keywords" content="前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="基于canvas的视频遮罩插件">
-<meta property="og:url" content="https://cunzaizhuyi.github.io/mask-plugin/index.html">
+<meta property="og:title" content="基于JS快速生成网格布局工具Grid.js">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/gridjs/index.html">
 <meta property="og:site_name" content="云荒杯倾">
-<meta property="og:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
+<meta property="og:description" content="基于JS快速生成网格布局工具Grid.js作者：云荒杯倾 写在前面这两天了解了一下css的grid布局，发现确实很好用。看了几篇博客，了解了它的几个常用属性后，可以快速生成一个网格布局。相较于传统的float、定位等显得更成体系，更规范，不需要一些hack做法。 虽然grid布局已经很好，前端工程师中有一些更多是喜欢通过动态创建div，使用js给div加样式这种方式来完成自己的工作的。 同样是出于">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true">
-<meta property="og:updated_time" content="2018-01-08T10:53:28.021Z">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/13/160eb7bfa86664ac?w=762&h=759&f=png&s=6115">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c2c6d5ccfb?w=763&h=759&f=png&s=9973">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c3ffc85aab?w=761&h=761&f=png&s=8403">
+<meta property="og:image" content="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c5bd1157fd?w=763&h=761&f=png&s=12126">
+<meta property="og:updated_time" content="2018-01-18T09:05:29.699Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="基于canvas的视频遮罩插件">
-<meta name="twitter:description" content="视频遮罩介绍为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括遮挡卫视图标、遮挡视频右下角广告、充当马赛克等。 一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。 前端实现视频遮罩有基于div和基于canvas两种技术方案，本文是使用canvas完成的。 主要原理是在HTML的video标签上贴上">
-<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true">
+<meta name="twitter:title" content="基于JS快速生成网格布局工具Grid.js">
+<meta name="twitter:description" content="基于JS快速生成网格布局工具Grid.js作者：云荒杯倾 写在前面这两天了解了一下css的grid布局，发现确实很好用。看了几篇博客，了解了它的几个常用属性后，可以快速生成一个网格布局。相较于传统的float、定位等显得更成体系，更规范，不需要一些hack做法。 虽然grid布局已经很好，前端工程师中有一些更多是喜欢通过动态创建div，使用js给div加样式这种方式来完成自己的工作的。 同样是出于">
+<meta name="twitter:image" content="https://user-gold-cdn.xitu.io/2018/1/13/160eb7bfa86664ac?w=762&h=759&f=png&s=6115">
 
 
 
@@ -148,13 +151,13 @@
 
 
 
-  <link rel="canonical" href="https://cunzaizhuyi.github.io/mask-plugin/"/>
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/gridjs/"/>
 
 
 
 
 
-  <title>基于canvas的视频遮罩插件 | 云荒杯倾</title>
+  <title>基于JS快速生成网格布局工具Grid.js | 云荒杯倾</title>
   
 
 
@@ -311,7 +314,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/mask-plugin/">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/gridjs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="云荒杯倾">
@@ -328,7 +331,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">基于canvas的视频遮罩插件</h1>
+          <h1 class="post-title" itemprop="name headline">基于JS快速生成网格布局工具Grid.js</h1>
         
 
         <div class="post-meta">
@@ -340,8 +343,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-03T18:14:54+08:00">
-                2018-01-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T17:04:50+08:00">
+                2018-01-18
               </time>
             
 
@@ -382,8 +385,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/mask-plugin/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="mask-plugin/" itemprop="commentsCount"></span>
+                <a href="/gridjs/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="gridjs/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -416,81 +419,106 @@
       
 
       
-        <h2 id="视频遮罩介绍"><a href="#视频遮罩介绍" class="headerlink" title="视频遮罩介绍"></a>视频遮罩介绍</h2><p>为一个视频添加一个覆盖物，从而挡住视频某区域，在视频的某一时间段，比如第10到第20分钟不显示划定的这块区域。应用场景包括<strong>遮挡卫视图标</strong>、<strong>遮挡视频右下角广告</strong>、<strong>充当马赛克</strong>等。</p>
-<p>一个长视频可能包含多个遮罩，每个遮罩有特定的显示时间（在此时间外，隐藏该遮罩）。</p>
-<h2 id="前端实现视频遮罩"><a href="#前端实现视频遮罩" class="headerlink" title="前端实现视频遮罩"></a>前端实现视频遮罩</h2><p>有<strong>基于div</strong>和<strong>基于canvas</strong>两种技术方案，本文是使用canvas完成的。</p>
-<p>主要原理是在HTML的video标签上贴上一个透明的canvas图层，然后响应mousedown、mousemove、mouseup事件。<br>由于canvas事件只是基于canvas元素，所以canvas内部每个元素（一个矩形，一个圆等）的事件响应要利用坐标来自己代码完成。</p>
-<h2 id="插件GitHub地址"><a href="#插件GitHub地址" class="headerlink" title="插件GitHub地址"></a>插件GitHub地址</h2><p><a href="https://github.com/cunzaizhuyi/maskPlugin" target="_blank" rel="external">https://github.com/cunzaizhuyi/maskPlugin</a></p>
+        <h1 id="基于JS快速生成网格布局工具Grid-js"><a href="#基于JS快速生成网格布局工具Grid-js" class="headerlink" title="基于JS快速生成网格布局工具Grid.js"></a>基于JS快速生成网格布局工具Grid.js</h1><p>作者：云荒杯倾</p>
+<h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>这两天了解了一下css的grid布局，发现确实很好用。看了几篇博客，了解了它的几个常用属性后，可以快速生成一个网格布局。相较于传统的float、定位等显得更成体系，更规范，不需要一些hack做法。</p>
+<p>虽然grid布局已经很好，前端工程师中有一些更多是喜欢通过动态创建div，使用js给div加样式这种方式来完成自己的工作的。</p>
+<p>同样是出于使用JavaScript动态生成grid布局的需要，诞生了Grid.js这个小工具。</p>
+<h2 id="Grid简介"><a href="#Grid简介" class="headerlink" title="Grid简介"></a>Grid简介</h2><p>Grid.js是一个使用JavaScript动态创建<strong>规则网格布局、非规则网格布局</strong>的模块。FE可以通过new Grird(option)创建一个Grid实例, 该实例的UI就呈现为css grid布局。</p>
 <a id="more"></a>
-<h2 id="查看演示"><a href="#查看演示" class="headerlink" title="查看演示"></a>查看演示</h2><p><a href="http://htmlpreview.github.io/?https://github.com/cunzaizhuyi/maskPlugin/blob/master/mask/mask.html" target="_blank" rel="external">http://htmlpreview.github.io/?https://github.com/cunzaizhuyi/maskPlugin/blob/master/mask/mask.html</a></p>
-<h2 id="实现的功能点"><a href="#实现的功能点" class="headerlink" title="实现的功能点"></a>实现的功能点</h2><ul>
-<li>画遮罩（矩形）</li>
-<li>设置遮罩样式（提供API）</li>
-<li>遮罩移动</li>
-<li>遮罩缩放</li>
-<li>canvas上鼠标样式变换</li>
-</ul>
-<h2 id="API"><a href="#API" class="headerlink" title="API"></a>API</h2><table>
+<h2 id="效果图"><a href="#效果图" class="headerlink" title="效果图"></a>效果图</h2><p>先来几张使用Grid.js生成的效果图吧。<br>以下四张效果图父容器的大小都是600*600像素。</p>
+<p>第一张是一个4X4的网格，其中有3个网格是非原子大小（1X1）的，即2X2, 2X2, 2X1。<br><img src="https://user-gold-cdn.xitu.io/2018/1/13/160eb7bfa86664ac?w=762&amp;h=759&amp;f=png&amp;s=6115" alt=""></p>
+<p>第二张是一个5X5的规则网格，所谓规则网格就是所有子元素都是1X1的大小。<br><img src="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c2c6d5ccfb?w=763&amp;h=759&amp;f=png&amp;s=9973" alt=""></p>
+<p>第三张是一个6X5的网格，其中有5个非原子大小的网格。<br><img src="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c3ffc85aab?w=761&amp;h=761&amp;f=png&amp;s=8403" alt=""></p>
+<p>第四张是一个7X7的网格，其中有4个非原子大小的网格。<br><img src="https://user-gold-cdn.xitu.io/2018/1/13/160eb7c5bd1157fd?w=763&amp;h=761&amp;f=png&amp;s=12126" alt=""></p>
+<h2 id="Grid-js使用"><a href="#Grid-js使用" class="headerlink" title="Grid.js使用"></a>Grid.js使用</h2><p>Grid.js使用es6 class语法完成，所以使用方式很简单。<br>通过new Grid(option)即可生成一个网格实例。就以效果图第二张图生成的5X5网格来说，它的代码就是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">let grid = new Grid(&#123;</div><div class="line">            container:document.getElementsByClassName(&apos;grid&apos;)[0],// 必须项</div><div class="line">            colCount:5,</div><div class="line">            rowCount:5,</div><div class="line">            width:600,</div><div class="line">            height:600,</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>如果你想给每个网格设置不同的样式，就是用对外API方法<strong>setGridStyleByIndex()</strong>; 同样拿效果图5X5网格来说，那五个对角线上网格就做了背景的样式设置，它们是通过如下代码完成的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">grid.setGridStyleByIndex(0, &#123;&quot;background&quot;: &quot;red&quot;&#125;);</div><div class="line">grid.setGridStyleByIndex(6, &#123;&quot;background&quot;: &quot;green&quot;&#125;);</div><div class="line">grid.setGridStyleByIndex(12, &#123;&quot;background&quot;: &quot;yellow&quot;&#125;);</div><div class="line">grid.setGridStyleByIndex(18, &#123;&quot;background&quot;: &quot;blue&quot;&#125;);</div><div class="line">grid.setGridStyleByIndex(24, &#123;&quot;background&quot;: &quot;orange&quot;&#125;);</div></pre></td></tr></table></figure>
+<p>还有一个问题是怎么拿每个子元素（小格子）的引用？通过对外API方法 <strong>getGrid(n)</strong>。<br>还有一个问题是怎么拿所有子元素（小格子）的引用？通过对外API方法 <strong>getGrids()</strong>。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">let grids = grid.getGrids();</div><div class="line">for(let i = 0; i &lt; grids.length; i++)&#123;</div><div class="line">    grids[i].innerHTML = i + 1;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面这段代码就是拿了所有小网格的引用，然后给网格填充文本内容的。示例中每个小格子的文本内容就是每个小格子在div列表中的索引+1。</p>
+<h2 id="Grid-js-API"><a href="#Grid-js-API" class="headerlink" title="Grid.js API"></a>Grid.js API</h2><p>考虑到最核心的需求有两点，一个是较为简单地（至少和直接使用css同样方便）生成网格布局，第二是生成网格布局后拿到每个格子的引用，给格子添加内容。所以主要说这两方面。</p>
+<h3 id="传参生成网格实例"><a href="#传参生成网格实例" class="headerlink" title="传参生成网格实例"></a>传参生成网格实例</h3><p>怎么生成不同的、规则的、不规则的网格实例，主要看new Grid(option)的时候你传的参数，提供可传的参数包括以下。</p>
+<table>
 <thead>
 <tr>
 <th>名称</th>
-<th>值类型</th>
-<th>说明</th>
+<th>类型</th>
+<th>简介</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>1、矩形相关设置</strong></td>
-<td></td>
-<td></td>
+<td>container</td>
+<td>htmlDomElement</td>
+<td>父容器，必须项</td>
 </tr>
 <tr>
-<td>fillStyle</td>
-<td>颜色值</td>
-<td>矩形填充色, 默认为’#eeeeee’</td>
-</tr>
-<tr>
-<td>strokeStyle</td>
-<td>颜色值</td>
-<td>矩形边界线颜色, 默认为’#0000ff’</td>
-</tr>
-<tr>
-<td>inRectCursor</td>
-<td>字符串</td>
-<td>当鼠标处于某个小矩形内部时鼠标样式，默认为’move’。可以设置为’pointer’之类的。</td>
-</tr>
-<tr>
-<td><strong>2、矩形边界上的八个小矩形 相关设置</strong></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>bRectsStrokeStyle</td>
-<td>颜色值</td>
-<td>矩形边界上的小矩形的颜色，默认为’#0000ff’</td>
-</tr>
-<tr>
-<td>bSideLength</td>
+<td>rowCount</td>
 <td>number</td>
-<td>矩形边界上小矩形的边长值，默认为6</td>
+<td>网格行数</td>
 </tr>
 <tr>
-<td><strong>3、遮罩时间相关</strong></td>
-<td></td>
-<td></td>
+<td>colCount</td>
+<td>number</td>
+<td>网格列数</td>
 </tr>
 <tr>
-<td>masksTime</td>
-<td></td>
-<td>每个遮罩的开始显示时间和结束显示时间，一个遮罩对应一个矩形</td>
+<td>width</td>
+<td>number、%</td>
+<td>父容器宽度</td>
+</tr>
+<tr>
+<td>height</td>
+<td>number、%</td>
+<td>父容器高度</td>
+</tr>
+<tr>
+<td>divCount</td>
+<td>number</td>
+<td>实际格子的多少</td>
+</tr>
+<tr>
+<td>gridArea</td>
+<td>Array</td>
+<td>那些非1X1格子的占位表示</td>
 </tr>
 </tbody>
 </table>
-<p>masksTime举例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[&#123;</div><div class="line">    maskId: 1,</div><div class="line">    startTime: 0,</div><div class="line">    endTime: 10,</div><div class="line">&#125;, &#123;maskId: 2,</div><div class="line">    startTime: 3,</div><div class="line">    endTime: 13,</div><div class="line">&#125;]</div></pre></td></tr></table></figure></p>
-<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><p>有两个遮罩类，mask.js和mask2.js。<br>他们的区别是是否需要点击button才能生成一个新的遮罩。<br>其中，mask.js不需要，mask2.js需要每次点击按钮才能画新遮罩。</p>
-<h2 id="应用效果图"><a href="#应用效果图" class="headerlink" title="应用效果图"></a>应用效果图</h2><p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/nledit/mask2.png?raw=true" alt=""></p>
-<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个基于原生canvas的700多行的小插件，对于探索canvas的世界可能仅仅是一个开始。</p>
-<p>关于这个小插件有任何疑问，欢迎大家交流。</p>
+<p><strong>关于divCount和gridArea数组的说明</strong>：<br>这两个参数用来生成不规则网格布局，所以是本模块的关键。否则，你就只能用本模块生成n*m的规则网格了。</p>
+<p>我们拿第一张效果图4X4网格举例，本来如果不是1、2、3那三个网格有跨行、跨列的行为，就不需要传divCount，也不用传gridArea，模块会为你生成4X4=16个一模一样的格子。但是由于这三个较大网格存在，所以，这个父容器是容不下16个子元素的，所以，你传的divCount是什么呢，<strong>是在存在非1X1子网格的情况下，父容器正好填满时，子网格的数量，因此就是9.</strong>。一般在你拿到设计图的时候，你就知道这个布局了，子网格数目很好算（因为实际场景也不需要创建好几十乘以好几十那么琐碎的格子）。</p>
+<p>针对这三个非1X1的子网格，我们需要为其每一个传一个数组，来表示这个子网格是在父网格的第几行开始、第几列开始、跨几行、跨几列。即每个非1X1的子网格，都要传一个length为4的数组。然后把这些数组再放到一个外包数组里面，这个外包数组就是gridArea。</p>
+<p>对于效果图1，gridArea = [[1,1,2,2],[2,3,2,2],[4,1,1,2]]。<br>整个4X4网格共有3个非1X1大小的子网格。<br>其中[1,1,2,2]就说明这个4X4的网格中有一个从第一行第一列开始，跨行跨列都为2的子网格。</p>
+<h3 id="API接口"><a href="#API接口" class="headerlink" title="API接口"></a>API接口</h3><p>目前暴露的API</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>参数类型</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>setGridStyleByIndex(n,style)</td>
+<td>number,obj</td>
+<td>设置小格子样式，第一个参数是小格子索引;style是对象，举例style={“color”:”red”}</td>
+</tr>
+<tr>
+<td>getGrids()</td>
+<td>无</td>
+<td>获取所有子网格div引用</td>
+</tr>
+<tr>
+<td>getGrid(n)</td>
+<td>number</td>
+<td>获取某个子网格</td>
+</tr>
+</tbody>
+</table>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>这个模块可能还不完善，希望大家能提出意见，包括但不限于代码风格、API暴露、新功能加入等等。</p>
+<p>欢迎关注，GitHub地址，</p>
+<p><a href="https://github.com/cunzaizhuyi/gridLayout" target="_blank" rel="external">请戳这里</a></p>
+<p>另附： <a href="https://cunzaizhuyi.github.io">作者博客</a></p>
 
       
     </div>
@@ -545,8 +573,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/nl-edit-doc/" rel="next" title="视频非编开发文档">
-                <i class="fa fa-chevron-left"></i> 视频非编开发文档
+              <a href="/vuex-hello/" rel="next" title="超简单入门Vuex小示例">
+                <i class="fa fa-chevron-left"></i> 超简单入门Vuex小示例
               </a>
             
           </div>
@@ -554,10 +582,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/vuex-hello/" rel="prev" title="超简单入门Vuex小示例">
-                超简单入门Vuex小示例 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -726,7 +750,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#视频遮罩介绍"><span class="nav-text">视频遮罩介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#前端实现视频遮罩"><span class="nav-text">前端实现视频遮罩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插件GitHub地址"><span class="nav-text">插件GitHub地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看演示"><span class="nav-text">查看演示</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现的功能点"><span class="nav-text">实现的功能点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API"><span class="nav-text">API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件说明"><span class="nav-text">文件说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#应用效果图"><span class="nav-text">应用效果图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#基于JS快速生成网格布局工具Grid-js"><span class="nav-text">基于JS快速生成网格布局工具Grid.js</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grid简介"><span class="nav-text">Grid简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#效果图"><span class="nav-text">效果图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grid-js使用"><span class="nav-text">Grid.js使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Grid-js-API"><span class="nav-text">Grid.js API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#传参生成网格实例"><span class="nav-text">传参生成网格实例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#API接口"><span class="nav-text">API接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a></li></ol></li></ol></div>
             
 
           </div>

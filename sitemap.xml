@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/gridjs/</loc>
+    
+    <lastmod>2018-01-18T09:05:29.699Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/vuex-hello/</loc>
     
     <lastmod>2018-01-18T09:03:13.520Z</lastmod>
