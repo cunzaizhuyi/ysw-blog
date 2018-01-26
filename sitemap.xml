@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://cunzaizhuyi.github.io/vue-slot/</loc>
+    
+    <lastmod>2018-01-26T10:56:17.125Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://cunzaizhuyi.github.io/vue-koa2/</loc>
     
     <lastmod>2018-01-22T10:36:42.185Z</lastmod>

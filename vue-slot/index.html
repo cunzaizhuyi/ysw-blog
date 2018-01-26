@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+<meta name="baidu-site-verification" content="57k91WhSCr" />
+
+
+<meta name="google-site-verification" content="lAErO5BdBTZC9JO7rHjlffc400bDBkt_vjHRbhPPCC0" />
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+  <meta name="google-site-verification" content="true" />
+
+
+
+
+
+
+
+
+  <meta name="baidu-site-verification" content="true" />
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="前端," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="深入理解vue中的slot与slot-scope写在前面vue中关于插槽的文档说明很短，语言又写的很凝练，再加上其和methods，data，computed等常用选项使用频率、使用先后上的差别，这就有可能造成初次接触插槽的开发者容易产生“算了吧，回头再学，反正已经可以写基础组件了”，于是就关闭了vue说明文档。 实际上，插槽的概念很简单，下面通过分三部分来讲。这个部分也是按照vue说明文档的顺序">
+<meta name="keywords" content="前端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入理解vue中的slot与slot-scope">
+<meta property="og:url" content="https://cunzaizhuyi.github.io/vue-slot/index.html">
+<meta property="og:site_name" content="云荒杯倾">
+<meta property="og:description" content="深入理解vue中的slot与slot-scope写在前面vue中关于插槽的文档说明很短，语言又写的很凝练，再加上其和methods，data，computed等常用选项使用频率、使用先后上的差别，这就有可能造成初次接触插槽的开发者容易产生“算了吧，回头再学，反正已经可以写基础组件了”，于是就关闭了vue说明文档。 实际上，插槽的概念很简单，下面通过分三部分来讲。这个部分也是按照vue说明文档的顺序">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot1.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot2.png?raw=true">
+<meta property="og:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot3.png?raw=true">
+<meta property="og:updated_time" content="2018-01-26T10:56:17.125Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入理解vue中的slot与slot-scope">
+<meta name="twitter:description" content="深入理解vue中的slot与slot-scope写在前面vue中关于插槽的文档说明很短，语言又写的很凝练，再加上其和methods，data，computed等常用选项使用频率、使用先后上的差别，这就有可能造成初次接触插槽的开发者容易产生“算了吧，回头再学，反正已经可以写基础组件了”，于是就关闭了vue说明文档。 实际上，插槽的概念很简单，下面通过分三部分来讲。这个部分也是按照vue说明文档的顺序">
+<meta name="twitter:image" content="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot1.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.2',
+    sidebar: {"position":"left"},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://cunzaizhuyi.github.io/vue-slot/"/>
+
+
+
+
+
+  <title>深入理解vue中的slot与slot-scope | 云荒杯倾</title>
+  
+
+
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?61279f625aae266f1716259a9f00b583";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">云荒杯倾</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">一切伟大的思想和行动，都有一个微不足道的开始</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于我
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            所有文章
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/随笔" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-book"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-video">
+          <a href="/categories/音视频" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-video-camera"></i> <br />
+            
+            音视频
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-fe">
+          <a href="/categories/前端" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-television"></i> <br />
+            
+            前端
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://cunzaizhuyi.github.io/vue-slot/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="云荒杯倾">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/jiamiu.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="云荒杯倾">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入理解vue中的slot与slot-scope</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-26T18:54:21+08:00">
+                2018-01-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/vue-slot/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="vue-slot/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">文章阅读数：
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="深入理解vue中的slot与slot-scope"><a href="#深入理解vue中的slot与slot-scope" class="headerlink" title="深入理解vue中的slot与slot-scope"></a>深入理解vue中的slot与slot-scope</h1><h2 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h2><p>vue中关于插槽的文档说明很短，语言又写的很凝练，再加上其和methods，data，computed等常用选项使用频率、使用先后上的差别，这就有可能造成初次接触插槽的开发者容易产生“算了吧，回头再学，反正已经可以写基础组件了”，于是就关闭了vue说明文档。</p>
+<p>实际上，插槽的概念很简单，下面通过分三部分来讲。这个部分也是按照vue说明文档的顺序来写的。</p>
+<a id="more"></a>
+<p>进入三部分之前，先让还没接触过插槽的同学对什么是插槽有一个简单的概念：<strong>插槽，也就是slot，是组件的一块HTML模板，这块模板显示不显示、以及怎样显示由父组件来决定。</strong> 实际上，一个slot最核心的两个问题这里就点出来了，是<strong>显示不显示</strong>和<strong>怎样显示</strong>。</p>
+<p>由于插槽是一块模板，所以，对于任何一个组件，从模板种类的角度来分，其实都可以分为<strong>非插槽模板</strong>和<strong>插槽模板</strong>两大类。<br>非插槽模板指的是<strong>html模板</strong>，指的是‘div、span、ul、table’这些，非插槽模板的显示与隐藏以及怎样显示由插件自身控制；插槽模板是slot，它是一个空壳子，因为它显示与隐藏以及最后用什么样的<strong>html模板</strong>显示由父组件控制。<strong>但是插槽显示的位置确由子组件自身决定，slot写在组件template的哪块，父组件传过来的模板将来就显示在哪块</strong>。</p>
+<h2 id="单个插槽-默认插槽-匿名插槽"><a href="#单个插槽-默认插槽-匿名插槽" class="headerlink" title="单个插槽 | 默认插槽 | 匿名插槽"></a>单个插槽 | 默认插槽 | 匿名插槽</h2><p>首先是单个插槽，<strong>单个插槽</strong>是vue的官方叫法，但是其实也可以叫它默认插槽，或者与具名插槽相对，我们可以叫它匿名插槽。因为它不用设置name属性。</p>
+<p>单个插槽可以放置在组件的任意位置，但是就像它的名字一样，一个组件中只能有一个该类插槽。相对应的，具名插槽就可以有很多个，只要名字（name属性）不同就可以了。</p>
+<p>下面通过一个例子来展示。</p>
+<p>父组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div class=&quot;father&quot;&gt;</div><div class="line">        &lt;h3&gt;这里是父组件&lt;/h3&gt;</div><div class="line">        &lt;child&gt;</div><div class="line">            &lt;div class=&quot;tmpl&quot;&gt;</div><div class="line">              &lt;span&gt;菜单1&lt;/span&gt;</div><div class="line">              &lt;span&gt;菜单2&lt;/span&gt;</div><div class="line">              &lt;span&gt;菜单3&lt;/span&gt;</div><div class="line">              &lt;span&gt;菜单4&lt;/span&gt;</div><div class="line">              &lt;span&gt;菜单5&lt;/span&gt;</div><div class="line">              &lt;span&gt;菜单6&lt;/span&gt;</div><div class="line">            &lt;/div&gt;</div><div class="line">        &lt;/child&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure></p>
+<p>子组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">    &lt;div class=&quot;child&quot;&gt;</div><div class="line">        &lt;h3&gt;这里是子组件&lt;/h3&gt;</div><div class="line">        &lt;slot&gt;&lt;/slot&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure></p>
+<p>在这个例子里，因为父组件在<child></child>里面写了html模板，那么子组件的<strong>匿名插槽</strong>这块模板就是下面这样。也就是说，子组件的匿名插槽被使用了，是被下面这块模板使用了。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;tmpl&quot;&gt;</div><div class="line">  &lt;span&gt;菜单1&lt;/span&gt;</div><div class="line">  &lt;span&gt;菜单2&lt;/span&gt;</div><div class="line">  &lt;span&gt;菜单3&lt;/span&gt;</div><div class="line">  &lt;span&gt;菜单4&lt;/span&gt;</div><div class="line">  &lt;span&gt;菜单5&lt;/span&gt;</div><div class="line">  &lt;span&gt;菜单6&lt;/span&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>最终的渲染结果如图所示：<br><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot1.png?raw=true" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">注：所有demo都加了样式，以方便观察。其中，父组件以灰色背景填充，子组件都以浅蓝色填充。</div></pre></td></tr></table></figure>
+<h2 id="具名插槽"><a href="#具名插槽" class="headerlink" title="具名插槽"></a>具名插槽</h2><p>匿名插槽没有name属性，所以是匿名插槽，那么，插槽加了name属性，就变成了具名插槽。具名插槽可以在一个组件中出现N次。出现在不同的位置。下面的例子，就是一个有两个<strong>具名插槽</strong>和<strong>单个插槽</strong>的组件，这三个插槽被父组件用同一套css样式显示了出来，不同的是内容上略有区别。</p>
+<p>父组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div class=&quot;father&quot;&gt;</div><div class="line">    &lt;h3&gt;这里是父组件&lt;/h3&gt;</div><div class="line">    &lt;child&gt;</div><div class="line">      &lt;div class=&quot;tmpl&quot; slot=&quot;up&quot;&gt;</div><div class="line">        &lt;span&gt;菜单1&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单2&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单3&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单4&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单5&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单6&lt;/span&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div class=&quot;tmpl&quot; slot=&quot;down&quot;&gt;</div><div class="line">        &lt;span&gt;菜单-1&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-2&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-3&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-4&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-5&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-6&lt;/span&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">      &lt;div class=&quot;tmpl&quot;&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;1&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;2&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;3&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;4&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;5&lt;/span&gt;</div><div class="line">        &lt;span&gt;菜单-&gt;6&lt;/span&gt;</div><div class="line">      &lt;/div&gt;</div><div class="line">    &lt;/child&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure></p>
+<p>子组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div class=&quot;child&quot;&gt;</div><div class="line">    // 具名插槽</div><div class="line">    &lt;slot name=&quot;up&quot;&gt;&lt;/slot&gt;</div><div class="line">    &lt;h3&gt;这里是子组件&lt;/h3&gt;</div><div class="line">    // 具名插槽</div><div class="line">    &lt;slot name=&quot;down&quot;&gt;&lt;/slot&gt;</div><div class="line">    // 匿名插槽</div><div class="line">    &lt;slot&gt;&lt;/slot&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure></p>
+<p>显示结果如图：<br><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot2.png?raw=true" alt=""></p>
+<p>可以看到，父组件通过html模板上的slot属性关联具名插槽。没有slot属性的html模板默认关联匿名插槽。</p>
+<h2 id="作用域插槽-带数据的插槽"><a href="#作用域插槽-带数据的插槽" class="headerlink" title="作用域插槽 | 带数据的插槽"></a>作用域插槽 | 带数据的插槽</h2><p>最后，就是我们的作用域插槽。这个稍微难理解一点。官方叫它作用域插槽，实际上，对比前面两种插槽，我们可以叫它带数据的插槽。什么意思呢，就是前面两种，都是在组件的template里面写<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">匿名插槽</div><div class="line">&lt;slot&gt;&lt;/slot&gt;</div><div class="line">具名插槽</div><div class="line">&lt;slot name=&quot;up&quot;&gt;&lt;/slot&gt;</div></pre></td></tr></table></figure></p>
+<p>但是<strong>作用域插槽要求，在slot上面绑定数据</strong>。也就是你得写成大概下面这个样子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&lt;slot name=&quot;up&quot; :data=&quot;data&quot;&gt;&lt;/slot&gt;</div><div class="line"> export default &#123;</div><div class="line">    data: function()&#123;</div><div class="line">      return &#123;</div><div class="line">        data: [&apos;zhangsan&apos;,&apos;lisi&apos;,&apos;wanwu&apos;,&apos;zhaoliu&apos;,&apos;tianqi&apos;,&apos;xiaoba&apos;]</div><div class="line">      &#125;</div><div class="line">    &#125;,</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们前面说了，插槽最后显示不显示是看父组件有没有在child下面写模板，像下面那样。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&lt;child&gt;</div><div class="line">   html模板</div><div class="line">&lt;/child&gt;</div></pre></td></tr></table></figure></p>
+<p>写了，插槽就总得在浏览器上显示点东西，东西就是html该有的模样，没写，插槽就是空壳子，啥都没有。<br>OK，我们说有html模板的情况，就是父组件会往子组件插模板的情况，那到底插一套什么样的样式呢，这由父组件的html+css共同决定，但是这套样式里面的内容呢？</p>
+<p>正因为作用域插槽绑定了一套数据，父组件可以拿来用。于是，情况就变成了这样：样式父组件说了算，但内容可以显示子组件插槽绑定的。</p>
+<p>我们再来对比，作用域插槽和单个插槽和具名插槽的区别，因为单个插槽和具名插槽不绑定数据，所以父组件是提供的模板要既包括样式由包括内容的，上面的例子中，你看到的文字，“菜单1”，“菜单2”都是父组件自己提供的内容；而作用域插槽，父组件只需要提供一套样式（在确实用作用域插槽绑定的数据的前提下）。</p>
+<p>下面的例子，你就能看到，父组件提供了三种样式(分别是flex、ul、直接显示)，都没有提供数据，数据使用的都是子组件插槽自己绑定的那个人名数组。</p>
+<p>父组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div class=&quot;father&quot;&gt;</div><div class="line">    &lt;h3&gt;这里是父组件&lt;/h3&gt;</div><div class="line">    &lt;!--第一次使用：用flex展示数据--&gt;</div><div class="line">    &lt;child&gt;</div><div class="line">      &lt;template slot-scope=&quot;user&quot;&gt;</div><div class="line">        &lt;div class=&quot;tmpl&quot;&gt;</div><div class="line">          &lt;span v-for=&quot;item in user.data&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/span&gt;</div><div class="line">        &lt;/div&gt;</div><div class="line">      &lt;/template&gt;</div><div class="line"></div><div class="line">    &lt;/child&gt;</div><div class="line"></div><div class="line">    &lt;!--第二次使用：用列表展示数据--&gt;</div><div class="line">    &lt;child&gt;</div><div class="line">      &lt;template slot-scope=&quot;user&quot;&gt;</div><div class="line">        &lt;ul&gt;</div><div class="line">          &lt;li v-for=&quot;item in user.data&quot;&gt;&#123;&#123;item&#125;&#125;&lt;/li&gt;</div><div class="line">        &lt;/ul&gt;</div><div class="line">      &lt;/template&gt;</div><div class="line"></div><div class="line">    &lt;/child&gt;</div><div class="line"></div><div class="line">    &lt;!--第三次使用：直接显示数据--&gt;</div><div class="line">    &lt;child&gt;</div><div class="line">      &lt;template slot-scope=&quot;user&quot;&gt;</div><div class="line">       &#123;&#123;user.data&#125;&#125;</div><div class="line">      &lt;/template&gt;</div><div class="line"></div><div class="line">    &lt;/child&gt;</div><div class="line"></div><div class="line">    &lt;!--第四次使用：不使用其提供的数据, 作用域插槽退变成匿名插槽--&gt;</div><div class="line">    &lt;child&gt;</div><div class="line">      我就是模板</div><div class="line">    &lt;/child&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure></p>
+<p>子组件：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">  &lt;div class=&quot;child&quot;&gt;</div><div class="line"></div><div class="line">    &lt;h3&gt;这里是子组件&lt;/h3&gt;</div><div class="line">    // 作用域插槽</div><div class="line">    &lt;slot  :data=&quot;data&quot;&gt;&lt;/slot&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/template&gt;</div><div class="line"></div><div class="line"> export default &#123;</div><div class="line">    data: function()&#123;</div><div class="line">      return &#123;</div><div class="line">        data: [&apos;zhangsan&apos;,&apos;lisi&apos;,&apos;wanwu&apos;,&apos;zhaoliu&apos;,&apos;tianqi&apos;,&apos;xiaoba&apos;]</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>结果如图所示：</p>
+<p><img src="https://github.com/cunzaizhuyi/blog-assets/blob/master/vue-slot/slot3.png?raw=true" alt=""></p>
+<h2 id="github"><a href="#github" class="headerlink" title="github"></a>github</h2><p>以上三个demo就放在GitHub了，有需要的可以去取。使用非常方便，是基于vue-cli搭建工程。</p>
+<p><a href="https://github.com/cunzaizhuyi/vue-slot-demo" target="_blank" rel="external">地址点这里</a></p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>如果本文对你理解slot和scope-slot有帮助，请不要吝啬手中的点赞哟。<br>编程贵在实践，赶紧行动起来吧！</p>
+<h3 id="关于作者"><a href="#关于作者" class="headerlink" title="关于作者"></a>关于作者</h3><p><a href="https://cunzaizhuyi.github.io">技术博客</a>  || <a href="https://github.com/cunzaizhuyi" target="_blank" rel="external">GitHub</a>  || <a href="https://juejin.im/user/5934c9f5fe88c20061cc7058/posts" target="_blank" rel="external">掘金主页</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div></div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>赞赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/uploads/weixinpay.png" alt="云荒杯倾 WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"><i class="fa fa-tag"></i> 前端</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/vue-koa2/" rel="next" title="vue + koa2交互实例">
+                <i class="fa fa-chevron-left"></i> vue + koa2交互实例
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        
+<script>
+  with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='//bdimg.share.baidu.com/static/api/js/share.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="SOHUCS"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          
+            <img class="site-author-image" itemprop="image"
+              src="/uploads/jiamiu.png"
+              alt="云荒杯倾" />
+          
+            <p class="site-author-name" itemprop="name">云荒杯倾</p>
+            <p class="site-description motion-element" itemprop="description">前端工程师</p>
+        </div>
+
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cunzaizhuyi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/9786a01122ae" target="_blank" title="jianshu">
+                  
+                    <i class="fa fa-fw fa-book"></i>
+                  
+                    
+                      jianshu
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#深入理解vue中的slot与slot-scope"><span class="nav-text">深入理解vue中的slot与slot-scope</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#写在前面"><span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单个插槽-默认插槽-匿名插槽"><span class="nav-text">单个插槽 | 默认插槽 | 匿名插槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具名插槽"><span class="nav-text">具名插槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#作用域插槽-带数据的插槽"><span class="nav-text">作用域插槽 | 带数据的插槽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#github"><span class="nav-text">github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#最后"><span class="nav-text">最后</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关于作者"><span class="nav-text">关于作者</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">云荒杯倾</span>
+
+  
+</div>
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访客数：
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站阅读数：
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cytcETy05';
+      var conf = '613aaea2f54070e81ff37486197810be';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
